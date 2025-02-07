@@ -10,9 +10,9 @@
             public float Health { get; set; }  // 현재 체력
             public float MaxHealth { get; set; }  // 최대 체력
             public int Mana { get; set; }  // 마나
-            public int AtkSpeed { get; set; }  // 속도
+            public int Speed { get; set; }  // 속도
 
-            public BaseCharacter(string name, int atk, int defen, float health, float maxHealth, int mana, int atkSpeed)
+            public BaseCharacter(string name, int atk, int defen, float health, float maxHealth, int mana, int speed)
             {
                 Name = name;
                 Atk = atk;
@@ -20,7 +20,7 @@
                 Health = health;
                 MaxHealth = maxHealth;
                 Mana = mana;
-                AtkSpeed = atkSpeed;
+                Speed = speed;
             }
 
             public void TakeDamage(int damage)
@@ -37,14 +37,14 @@
             public string Job { get; set; }  // 직업
             public int Gold { get; set; }  // 돈
             public string Betray { get; set; }  // 배신받은 사람
-            public float CritHit { get; set; }  // 치명타 확률
-            public float CritDmg { get; set; }  // 치명타 피해
+            public int CritHit { get; set; }  // 치명타 확률
+            public int CritDmg { get; set; }  // 치명타 피해
             public float Miss { get; set; }  // 회피 확률
             public string Skill { get; set; }  // 스킬
 
-            public Player(string name, string job, int atk, int defen, float health, float maxHealth, int mana, int atkSpeed,
-                          int gold, string betray, float critHit, float critDmg, float miss, string skill)
-                : base(name, atk, defen, health, maxHealth, mana, atkSpeed)
+            public Player(string name, string job, int atk, int defen, float health, float maxHealth, int mana, int speed,
+                          int gold, string betray, int critHit, int critDmg, float miss, string skill)
+                : base(name, atk, defen, health, maxHealth, mana, speed)
             {
                 Job = job;
                 Gold = gold;
@@ -74,7 +74,7 @@
 
             public class Mercenary : BaseCharacter
             {
-                public Mercenary(string name, int atk, int defn, float health, float maxHealth, int mana, int atkspeed) : base(name, atk, defn, health, maxHealth, mana, atkspeed)
+                public Mercenary(string name, int atk, int defn, float health, float maxHealth, int mana, int speed) : base(name, atk, defn, health, maxHealth, mana, speed)
                 {
 
                 }
@@ -82,8 +82,8 @@
 
             public class Monster : BaseCharacter
                 {
-                public Monster(string name, int atk, int defen, float health, float maxHealth, int mana, int atkSpeed)
-                        : base(name, atk, defen, health, maxHealth, mana, atkSpeed)
+                public Monster(string name, int atk, int defen, float health, float maxHealth, int mana, int speed)
+                        : base(name, atk, defen, health, maxHealth, mana, speed)
                 {
                 }
             }
