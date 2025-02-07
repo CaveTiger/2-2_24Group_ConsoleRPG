@@ -20,7 +20,7 @@
         dge,
         gold,
         spd,
-        store
+        shop
     }
 
     internal partial class Item
@@ -35,12 +35,15 @@
         public int CritHit { get; set; }                    //치확
         public int CritDmg { get; set; }                    //치피
         public int Mana { get; set; }                       //마나
-        public int Dodge { get; set; }                      //회피
+        public int Miss { get; set; }                       //회피
         public int Gold { get; set; }                       //골드
         public int Speed { get; set; }                      //속도
         public int ItemPrice { get; set; }                  //가격
         public Rank ItemRank { get; set; }                  //등급
         public Division ItemDivision { get; set; }          //분류
+
+        public bool IsOwned { get; set; }                   //소유 여부
+        public bool IsEquipped { get; set; }                //착용 여부
 
         //기본 생성자
         public Item()
@@ -55,7 +58,7 @@
             CritHit = 0;
             CritDmg = 0;
             Mana = 0;
-            Dodge = 0;
+            Miss = 0;
             Gold = 0;
             Speed = 0;
             ItemPrice = 0;
@@ -80,11 +83,10 @@
                 case Division.hp: MaxHealth = percentAmount; break;
                 case Division.cHit: CritHit = percentAmount; break;
                 case Division.cDmg: CritDmg = percentAmount; break;
-                case Division.dge: Dodge = percentAmount; break;
+                case Division.dge: Miss = percentAmount; break;
                 //case Division.gold: Gold = percentAmount; break;
                 case Division.spd: Speed = percentAmount; break;
             }
         }
-
     }
 }
