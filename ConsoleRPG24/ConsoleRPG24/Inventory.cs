@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace ConsoleRPG24
 {
-    internal class Inventory
+    internal static class Inventory
     {
         public List<Item> Inven { get; set; }
-        public void OpenInventory()
+        public static void OpenInventory()
         {
             while (true)
             {
@@ -39,7 +40,7 @@ namespace ConsoleRPG24
             }
 
         }
-        public void ManageEquipment()
+        public static void ManageEquipment()
         {
             while (true)
             {
@@ -67,7 +68,7 @@ namespace ConsoleRPG24
                 }
             }
         }
-        private void ToggleEquip(int index)
+        private static void ToggleEquip(int index)
         {
             var item = Inven[index];
             item.IsEquipped = !item.IsEquipped;
