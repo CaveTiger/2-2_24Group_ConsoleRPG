@@ -71,6 +71,22 @@
 
                 TakeDamage(damage); // 기본 데미지 처리 함수 호출
             }
+
+            public class Mercenary : BaseCharacter
+            {
+                public Mercenary(string name, int atk, int defn, float health, float maxHealth, int mana, int atkspeed) : base(name, atk, defn, health, maxHealth, mana, atkspeed)
+                {
+
+                }
+            }
+
+            public class Monster : BaseCharacter
+                {
+                public Monster(string name, int atk, int defen, float health, float maxHealth, int mana, int atkSpeed)
+                        : base(name, atk, defen, health, maxHealth, mana, atkSpeed)
+                {
+                }
+            }
         }
     }
 }
