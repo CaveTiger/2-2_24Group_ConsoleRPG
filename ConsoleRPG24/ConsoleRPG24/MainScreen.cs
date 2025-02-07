@@ -40,7 +40,6 @@ public class MainScreen
 
     public void InventoryScreen()
     {
-        List<Item> itemlist = new List<Item>();
 
     }
 
