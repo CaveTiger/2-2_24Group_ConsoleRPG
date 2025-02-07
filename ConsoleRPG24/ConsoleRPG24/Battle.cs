@@ -61,7 +61,10 @@ namespace ConsoleRPG24
             static void BattleAttack()
             {
                 Console.WriteLine("일반 공격");
-                Console.WriteLine("일반 공격");
+                if(monster.turnChance == )
+                {
+
+                }
             }
             static void BattleSkill()
             {
