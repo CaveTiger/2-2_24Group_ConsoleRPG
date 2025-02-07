@@ -102,7 +102,7 @@
 
             public class Mercenary : BaseCharacter
             {
-                public Mercenary(string name, int atk, int defn, float health, float maxHealth, int mana, int speed) : base(name, atk, defn, health, maxHealth, mana, speed)
+                public Mercenary(string name, int atk, int defn, float health, float maxHealth, int speed) : base(name, atk, defn, health, maxHealth, mana, speed)
                 {
 
                 }
@@ -117,7 +117,7 @@
             public class Monster : BaseCharacter
             {
                 public Monster(string name, int atk, int defen, float health, float maxHealth, int mana, int speed)
-                        : base(name, atk, defen, health, maxHealth, mana, speed)
+                        : base(name, atk, defen, health, maxHealth, speed)
                 {
 
                 }
