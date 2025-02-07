@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using System.Reflection.PortableExecutable;
 using System.Threading;
+
 /*
 namespace ConsoleRPG24
 {
@@ -12,6 +13,7 @@ namespace ConsoleRPG24
 
     public class DungeonStage
     {
+        
         private ICharacter player;
         private ICharacter monster;
 
@@ -25,9 +27,13 @@ namespace ConsoleRPG24
             this.monster = monster;
             OnCharacterDeath += StageClear;
         }
+        
 
         public void Start()
         {
+            BattleSystem battleSystem = new BattleSystem();
+            battleSystem.Chance();
+
             Console.WriteLine(new string('=', 20));
             Console.WriteLine($"전투 개시! \n플레이어 {player.name} \n체력: {player.health}\n 마나: {player.mana}\n공격력/방어력: {player.atk}/{player.defen}");
             Console.WriteLine();
@@ -62,6 +68,7 @@ namespace ConsoleRPG24
             }
         }
 
+
         private void StageClear(Icharacter character)
         {
             if (character is monster)
@@ -81,15 +88,19 @@ namespace ConsoleRPG24
 
         static void Main(string[] args)
         {
+
             player = new player;
-            monster = new monster; //monster는 랜덤 생성(?
+            monster = new monster; //monster는 랜덤 생성
 
             for ()
-            {
+            {   
+                
+                
                 Stage stage = new Stage(player, monster, rewards);
                 stage.Start();
 
                 if (player.IsDead) return;
+                
             }
 
 

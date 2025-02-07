@@ -77,7 +77,8 @@ namespace ConsoleRPG24
                         DungeonStage dungeonStage = new DungeonStage();
                         dungeonStage.Start();
                         break;
-                        */
+                    */
+                        
 
                     default:
                         Console.WriteLine("올바른 숫자를 입력해 주십시오.");
@@ -148,7 +149,7 @@ namespace ConsoleRPG24
                 {
                     case ("1"):
 
-                        VillageShop();
+                        //VillageShop();
                         break;
 
                     ////case ("2"):
@@ -168,12 +169,13 @@ namespace ConsoleRPG24
             }
         }
 
-
+        /*
         public void VillageShop()
         {
             Shop shop = new Shop();
             shop.ShowVillageShop();
         }
+        */
 
         //public void MercenaryShop()
 
