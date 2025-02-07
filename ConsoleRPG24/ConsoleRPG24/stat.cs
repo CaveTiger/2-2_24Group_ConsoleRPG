@@ -12,6 +12,7 @@
             public float MaxHealth { get; set; }  // 최대 체력
             public int Mana { get; set; }  // 마나
             public int Speed { get; set; }  // 속도
+            public bool IsTraitor { get; set; } //배신 여부 파악 >  기본값 false
 
             public BaseCharacter(string name, int atk, int defen, float health, float maxHealth, int mana, int speed)
             {
@@ -22,6 +23,26 @@
                 MaxHealth = maxHealth;
                 Mana = mana;
                 Speed = speed;
+                IsTraitor = false; //기본적으로 배신하지 안함
+            }
+
+            // 배신 여부를 설정하는 함수
+            public void Betray()
+            {
+                IsTraitor = true;
+                Console.WriteLine($"{Name}가 배신했습니다! 이제 적이 되었습니다.");
+            }
+
+            // 아군 여부 확인 (배신한 경우 false 반환)
+            public virtual bool IsAlly()
+            {
+                return !IsTraitor; // 배신한 경우 아군이 아님
+            }
+
+            // 적 여부 확인
+            public bool IsEnemy()
+            {
+                return IsTraitor; // 배신한 경우 적이 됨
             }
 
             public void TakeDamage(int damage)
@@ -56,6 +77,12 @@
                 Skill = skill;
             }
 
+            // 플레이어는 항상 아군
+            public override bool IsAlly()
+            {
+                return true;
+            }
+
             public bool EvadeAttack() // 회피 여부를 판단하는 함수
             {
                 Random rand = new Random();
@@ -79,13 +106,27 @@
                 {
 
                 }
+
+                // 용병은 아군이지만 배신하면 적이 됨
+                public override bool IsAlly()
+                {
+                    return !IsTraitor; // 배신하면 적이 됨
+                }
             }
 
             public class Monster : BaseCharacter
-                {
+            {
                 public Monster(string name, int atk, int defen, float health, float maxHealth, int mana, int speed)
                         : base(name, atk, defen, health, maxHealth, mana, speed)
                 {
+
+                }
+
+
+                /// 몬스터는 적이므로 아군이 아님
+                public override bool IsAlly()
+                {
+                    return false;
                 }
             }
         }
