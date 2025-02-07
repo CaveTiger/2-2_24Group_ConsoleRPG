@@ -8,10 +8,10 @@ using static ConsoleRPG24.Stat;
 
 namespace ConsoleRPG24
 {
-    internal static class Inventory
+    internal class Inventory
     {
-        public static List<Item> Inven { get; set; } = new List<Item>();
-        public static void OpenInventory()
+        public List<Item> Inven { get; set; } = new List<Item>();
+        public void OpenInventory()
         {
             while (true)
             {
@@ -41,13 +41,13 @@ namespace ConsoleRPG24
             }
         }
 
-        public static void AddItem(Item item)
+        public void AddItem(Item item)
         {
             Inven.Add(item);
             Console.WriteLine($"{item.ItemName}을(를) 인벤토리에 추가했습니다!");
         }
 
-        public static void ManageEquipment()
+        public void ManageEquipment()
         {
             while (true)
             {
@@ -75,7 +75,7 @@ namespace ConsoleRPG24
                 }
             }
         }
-        private static void ToggleEquip(int index)
+        private void ToggleEquip(int index)
         {
             var item = Inven[index];
             item.IsEquipped = !item.IsEquipped;
