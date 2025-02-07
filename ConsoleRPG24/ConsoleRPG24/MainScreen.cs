@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 
 public class MainScreen
 {
+    List<Item> itemlist = new List<Item>();
+
     public void GameStart()
     {
         string userName;

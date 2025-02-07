@@ -8,8 +8,6 @@ namespace StartGame
         {
             MainScreen game = new MainScreen();
 
-            List<Item> itemlist = new List<Item>();
-
             game.GameStart();
             game.InventoryScreen();
         }
