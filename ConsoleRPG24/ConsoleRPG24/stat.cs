@@ -10,8 +10,8 @@
             public int Defen { get; set; }  // 방어력
             public float Health { get; set; }  // 현재 체력
             public float MaxHealth { get; set; }  // 최대 체력
-            public int Mana { get; set; }  // 마나
             public int Speed { get; set; }  // 속도
+            public bool IsDead { get; set; } //사망 여부
             public bool IsTraitor { get; set; } //배신 여부 파악 >  기본값 false
 
             public BaseCharacter(string name, int atk, int defen, float health, float maxHealth, int speed)
@@ -22,7 +22,31 @@
                 Health = health;
                 MaxHealth = maxHealth;
                 Speed = speed;
+                IsDead = false //처음 생성할때 살아 있음
                 IsTraitor = false; //기본적으로 배신하지 안함
+            }
+
+             // 🔹 데미지를 받는 함수 (사망 여부 체크 포함)
+            public void TakeDamage(int damage)
+            {
+                if (IsDead)
+                {
+                    Console.WriteLine($"{Name}는 이미 사망했습니다!");
+                    return;
+                }
+
+                    int reducedDamage = Math.Max(damage - Defen, 0);
+                    Health -= reducedDamage;
+                if (Health <= 0)
+                {
+                    Health = 0;
+                    IsDead = true;
+                    Console.WriteLine($"{Name}가 사망했습니다!");
+                }
+                else
+                {
+                    Console.WriteLine($"{Name}가 {reducedDamage}의 피해를 입었습니다. 남은 HP: {Health}");
+                }
             }
 
             // 배신 여부를 설정하는 함수
@@ -61,6 +85,7 @@
             public int CritHit { get; set; }  // 치명타 확률
             public int CritDmg { get; set; }  // 치명타 피해
             public float Miss { get; set; }  // 회피 확률
+            public int mana { get; set; } //마나
             public string Skill { get; set; }  // 스킬
 
             public Player(string name, string job, int atk, int defen, float health, float maxHealth, int mana, int speed,
@@ -73,6 +98,7 @@
                 CritHit = critHit;
                 CritDmg = critDmg;
                 Miss = miss;
+                Mana = mana;
                 Skill = skill;
             }
 
@@ -114,17 +140,17 @@
             }
 
             public class Monster : BaseCharacter
-            {
+                {
                 public Monster(string name, int atk, int defen, float health, float maxHealth, int speed)
                         : base(name, atk, defen, health, maxHealth, speed)
                 {
 
                 }
-
-
+               
+                
                 /// 몬스터는 적이므로 아군이 아님
-                public override bool IsAlly()
-                {
+                public override bool IsAlly() 
+                { 
                     return false;
                 }
             }
