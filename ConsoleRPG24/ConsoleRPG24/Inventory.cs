@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ConsoleRPG24.Stat;
 
 
 namespace ConsoleRPG24
@@ -15,7 +16,7 @@ namespace ConsoleRPG24
             while (true)
             {
                 Console.WriteLine("[인벤토리]");
-                Console.WriteLine("1. 장착 관리");
+                Console.WriteLine("1. 장비 관리");
                 Console.WriteLine("2. 용병 관리");
                 Console.WriteLine("0. 뒤로 가기");
                 Console.Write(">> ");
@@ -82,4 +83,4 @@ namespace ConsoleRPG24
         }
     }
 }
-
+    
