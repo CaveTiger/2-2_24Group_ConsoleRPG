@@ -9,7 +9,7 @@ namespace ConsoleRPG24
 {
     internal static class Inventory
     {
-        public List<Item> Inven { get; set; }
+        public static List<Item> Inven { get; set; } = new List<Item>();
         public static void OpenInventory()
         {
             while (true)
@@ -38,8 +38,14 @@ namespace ConsoleRPG24
                     Console.WriteLine("잘못된 입력입니다. 다시 입력하세요.");
                 }
             }
-
         }
+
+        public static void AddItem(Item item)
+        {
+            Inven.Add(item);
+            Console.WriteLine($"{item.ItemName}을(를) 인벤토리에 추가했습니다!");
+        }
+
         public static void ManageEquipment()
         {
             while (true)
@@ -49,11 +55,11 @@ namespace ConsoleRPG24
                 {
                     var item = Inven[i];
                     string equippedMark = item.IsEquipped ? "[E]" : "   ";
-                    Console.WriteLine($"- {i + 1} {equippedMark}{item.Name} | {item.Type} +{item.Stat} | {item.Description}");
+                    Console.WriteLine($"- {i + 1}{item.ItemName} | {item.ItemDivision} +{item.Attack}{item.Defense}{item.Health} | {item.Description}");
                 }
                 Console.WriteLine("0. 나가기");
-
-                Console.Write("원하시는 행동을 입력해주세요: ");
+                Console.WriteLine("원하시는 행동을 입력해주세요: ");
+                Console.Write(">>");
                 string input = Console.ReadLine();
 
                 if (input == "0") return;
@@ -72,7 +78,7 @@ namespace ConsoleRPG24
         {
             var item = Inven[index];
             item.IsEquipped = !item.IsEquipped;
-            Console.WriteLine(item.IsEquipped ? $"{item.Name}을(를) 장착했습니다!" : $"{item.Name}을(를) 해제했습니다!");
+            Console.WriteLine(item.IsEquipped ? $"{item.ItemName}을(를) 장착했습니다!" : $"{item.ItemName}을(를) 해제했습니다!");
         }
     }
 }
