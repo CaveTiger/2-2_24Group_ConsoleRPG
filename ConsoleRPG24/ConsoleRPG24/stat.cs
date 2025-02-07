@@ -14,14 +14,13 @@
             public int Speed { get; set; }  // 속도
             public bool IsTraitor { get; set; } //배신 여부 파악 >  기본값 false
 
-            public BaseCharacter(string name, int atk, int defen, float health, float maxHealth, int mana, int speed)
+            public BaseCharacter(string name, int atk, int defen, float health, float maxHealth, int speed)
             {
                 Name = name;
                 Atk = atk;
                 Defen = defen;
                 Health = health;
                 MaxHealth = maxHealth;
-                Mana = mana;
                 Speed = speed;
                 IsTraitor = false; //기본적으로 배신하지 안함
             }
