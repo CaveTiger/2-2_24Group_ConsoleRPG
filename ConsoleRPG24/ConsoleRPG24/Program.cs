@@ -1,10 +1,10 @@
-﻿namespace ConsoleRPG24
+﻿namespace Dungeon
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, boy!!!!");
+            Console.WriteLine("Hello, World!");
         }
     }
 }
