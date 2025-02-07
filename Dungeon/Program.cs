@@ -62,8 +62,6 @@ namespace Dungeon
                     }
 
                 }
-
-                
             }
 
             private void StageClear(Icharacter character)
@@ -88,10 +86,14 @@ namespace Dungeon
             player = new player;
             monster = new monster; //monster는 랜덤 생성(?
 
-            Stage stage = new Stage(player, monster, rewards);
-            stage.Start();
+            for ()
+            {
+                Stage stage = new Stage(player, monster, rewards);
+                stage.Start();
 
-            if (player.IsDead) return;
+                if (player.IsDead) return;
+            }
+
 
             //스테이지가 끝날때마다 랜덤하게 전투 || 랜덤 이벤트 || 상점 출현
         }
