@@ -2,17 +2,17 @@
 using System.Reflection.PortableExecutable;
 using System.Threading;
 
-namespace Dungeon
+/*
+namespace ConsoleRPG24
+    
 {
-    internal class Program
-    {
         public void TakeDamege(int damage)
         {
             health -= damage;
         }
 
 
-        public class Stage
+        public class DungeonStage
         {
             private ICharacter player;
             private ICharacter monster;
@@ -99,3 +99,5 @@ namespace Dungeon
         }
     } 
 } //git organazation
+
+    */

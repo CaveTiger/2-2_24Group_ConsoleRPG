@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace StartGame
+namespace ConsoleRPG24
 {
     internal class Program
     {
@@ -9,7 +9,7 @@ namespace StartGame
             MainScreen game = new MainScreen();
 
             game.GameStart();
-            game.InventoryScreen();
+            //game.InventoryScreen();
         }
     }
 }
