@@ -1,8 +1,9 @@
-﻿namespace ConsoleRPG24
+﻿using System;
+
+namespace ConsoleRPG24
 {
     internal class Stat
     {
-
         public class BaseCharacter
         {
             public string Name { get; set; }
@@ -12,7 +13,7 @@
             public float MaxHealth { get; set; }  // 최대 체력
             public int Speed { get; set; }  // 속도
             public bool IsDead { get; set; } //사망 여부
-            public bool IsTraitor { get; set; } //배신 여부 파악 >  기본값 false
+            public bool IsTraitor { get; set; } // 배신 여부 (기본값 false)
 
             public BaseCharacter(string name, int atk, int defen, float health, float maxHealth, int speed)
             {
@@ -22,11 +23,11 @@
                 Health = health;
                 MaxHealth = maxHealth;
                 Speed = speed;
-                IsDead = false //처음 생성할때 살아 있음
-                IsTraitor = false; //기본적으로 배신하지 안함
+                IsDead = false;  // 처음 생성 시 살아 있음
+                IsTraitor = false;  // 기본적으로 배신하지 않음
             }
 
-             // 🔹 데미지를 받는 함수 (사망 여부 체크 포함)
+            // 🔹 데미지를 받는 함수 (사망 여부 체크 포함)
             public void TakeDamage(int damage)
             {
                 if (IsDead)
@@ -35,8 +36,9 @@
                     return;
                 }
 
-                    int reducedDamage = Math.Max(damage - Defen, 0);
-                    Health -= reducedDamage;
+                int reducedDamage = Math.Max(damage - Defen, 0);
+                Health -= reducedDamage;
+
                 if (Health <= 0)
                 {
                     Health = 0;
@@ -49,71 +51,62 @@
                 }
             }
 
-            // 배신 여부를 설정하는 함수
+            // 🔹 배신 이벤트
             public void Betray()
             {
                 IsTraitor = true;
                 Console.WriteLine($"{Name}가 배신했습니다! 이제 적이 되었습니다.");
             }
 
-            // 아군 여부 확인 (배신한 경우 false 반환)
+            // 🔹 아군 여부 확인 (배신한 경우 false 반환)
             public virtual bool IsAlly()
             {
-                return !IsTraitor; // 배신한 경우 아군이 아님
+                return !IsTraitor;
             }
 
-            // 적 여부 확인
+            // 🔹 적 여부 확인
             public bool IsEnemy()
             {
-                return IsTraitor; // 배신한 경우 적이 됨
-            }
-
-            public void TakeDamage(int damage)
-            {
-                float reducedDamage = Math.Max(damage - Defen, 0);
-                Health -= reducedDamage;
-                if (Health < 0) Health = 0;
-                Console.WriteLine($"{Name}가 {reducedDamage}의 피해를 입었습니다. 남은 HP: {Health}");
+                return IsTraitor;
             }
         }
 
+        // 🔹 플레이어 클래스 (Player)
         public class Player : BaseCharacter
         {
             public string Job { get; set; }  // 직업
             public int Gold { get; set; }  // 돈
             public string Betray { get; set; }  // 배신받은 사람
-            public int CritHit { get; set; }  // 치명타 확률
-            public int CritDmg { get; set; }  // 치명타 피해
             public float Miss { get; set; }  // 회피 확률
-            public int mana { get; set; } //마나
+            public int Mana { get; set; } // 마나
             public string Skill { get; set; }  // 스킬
 
             public Player(string name, string job, int atk, int defen, float health, float maxHealth, int mana, int speed,
-                          int gold, string betray, int critHit, int critDmg, float miss, string skill)
-                : base(name, atk, defen, health, maxHealth, mana, speed)
+                          int gold, string betray, float miss, string skill)
+                : base(name, atk, defen, health, maxHealth, speed)
             {
                 Job = job;
                 Gold = gold;
                 Betray = betray;
-                CritHit = critHit;
-                CritDmg = critDmg;
                 Miss = miss;
                 Mana = mana;
                 Skill = skill;
             }
 
-            // 플레이어는 항상 아군
+            // 🔹 플레이어는 항상 아군
             public override bool IsAlly()
             {
                 return true;
             }
 
-            public bool EvadeAttack() // 회피 여부를 판단하는 함수
+            // 🔹 회피 여부를 판단하는 함수
+            public bool EvadeAttack()
             {
                 Random rand = new Random();
-                return rand.NextDouble() < Miss; // Miss 확률에 따라 회피
+                return rand.NextDouble() < Miss;
             }
 
+            // 🔹 회피 기능을 포함한 데미지 처리
             public void TakeDamageWithEvade(int damage)
             {
                 if (EvadeAttack())
@@ -122,37 +115,37 @@
                     return;
                 }
 
-                TakeDamage(damage); // 기본 데미지 처리 함수 호출
+                TakeDamage(damage);
             }
+        }
 
-            public class Mercenary : BaseCharacter
+        // 🔹 용병 클래스 (Mercenary)
+        public class Mercenary : BaseCharacter
+        {
+            public Mercenary(string name, int atk, int defen, float health, float maxHealth, int speed)
+                : base(name, atk, defen, health, maxHealth, speed)
             {
-                public Mercenary(string name, int atk, int defn, float health, float maxHealth, int speed) : base(name, atk, defn, health, maxHealth, speed)
-                {
-
-                }
-
-                // 용병은 아군이지만 배신하면 적이 됨
-                public override bool IsAlly()
-                {
-                    return !IsTraitor; // 배신하면 적이 됨
-                }
             }
 
-            public class Monster : BaseCharacter
-                {
-                public Monster(string name, int atk, int defen, float health, float maxHealth, int speed)
-                        : base(name, atk, defen, health, maxHealth, speed)
-                {
+            // 🔹 용병은 아군이지만 배신하면 적이 됨
+            public override bool IsAlly()
+            {
+                return !IsTraitor;
+            }
+        }
 
-                }
-               
-                
-                /// 몬스터는 적이므로 아군이 아님
-                public override bool IsAlly() 
-                { 
-                    return false;
-                }
+        // 🔹 몬스터 클래스 (Monster)
+        public class Monster : BaseCharacter
+        {
+            public Monster(string name, int atk, int defen, float health, float maxHealth, int speed)
+                : base(name, atk, defen, health, maxHealth, speed)
+            {
+            }
+
+            // 🔹 몬스터는 항상 적
+            public override bool IsAlly()
+            {
+                return false;
             }
         }
     }
