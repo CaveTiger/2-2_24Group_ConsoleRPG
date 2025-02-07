@@ -42,22 +42,31 @@ namespace ConsoleRPG24
 
                         int randomIndex = rand.Next(skillCheck.Length);
                         int randomSkill = skillCheck[randomIndex];
-                        Console.WriteLine($"랜덤으로 선택된 스킬 사용 여부 : {randomSkill}");
-
-
-                        //if (skillCheck[0] == Range.Length)
+                        Console.WriteLine($"랜덤으로 선택된 스킬 사용 눈 : {randomSkill}");
+                        
+                        if (randomSkill >= 7)
+                        {
+                            BattleSkill();
+                        }
+                        else
+                        {
+                            BattleAttack();
+                        }
                         break;
                     }
                 }
 
             }
 
-            static void Battle(bool turn)
+            static void BattleAttack()
             {
-                if (turn)
-                {
-
-                }
+                Console.WriteLine("일반 공격");
+                Console.WriteLine("일반 공격");
+            }
+            static void BattleSkill()
+            {
+                Console.WriteLine("스킬 사용");
+                Console.WriteLine("스킬 사용");
             }
 
         }
