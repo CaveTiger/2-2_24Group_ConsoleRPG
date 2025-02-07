@@ -116,8 +116,8 @@
 
             public class Monster : BaseCharacter
             {
-                public Monster(string name, int atk, int defen, float health, float maxHealth, int mana, int speed)
-                        : base(name, atk, defen, health, maxHealth, mana, speed)
+                public Monster(string name, int atk, int defen, float health, float maxHealth, int speed)
+                        : base(name, atk, defen, health, maxHealth, speed)
                 {
 
                 }
