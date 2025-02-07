@@ -1,6 +1,6 @@
 ﻿namespace ConsoleRPG24
 {
-    internal class Program
+    internal class Stat
     {
 
         public class BaseCharacter
