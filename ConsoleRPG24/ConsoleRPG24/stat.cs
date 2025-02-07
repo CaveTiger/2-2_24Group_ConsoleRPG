@@ -2,6 +2,7 @@
 {
     internal class Program
     {
+
         public class BaseCharacter
         {
             public string Name { get; set; }
