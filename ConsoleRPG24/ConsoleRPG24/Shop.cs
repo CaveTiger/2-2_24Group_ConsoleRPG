@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static ConsoleRPG24.Stat;
+using static ConsoleRPG24.MercenaryManager;
+using static ConsoleRPG24.Stat.Player;
 
 namespace ConsoleRPG24
 {
@@ -115,18 +117,11 @@ namespace ConsoleRPG24
                 Console.WriteLine("잘못된 입력입니다.");
             }
         }
-        public void BuyMercenary(Player player, Mercenary merc, int price)
+        public void BuyMercenary(Mercenary merc, int price)
         {
-            if (player.Gold >= price)
-            {
-                player.Gold -= price;
-                Console.WriteLine($"용병을 {price} 골드에 고용했습니다!");
-                // MercenaryManager를 통해 용병 추가
-            }
-            else
-            {
-                Console.WriteLine("골드가 부족합니다.");
-            }
+            Console.WriteLine($"{merc.Name} 용병을 {price} 골드에 고용했습니다!");
+            mercenaryManager.AddMercenary(merc);
         }
+    
     }
 }
