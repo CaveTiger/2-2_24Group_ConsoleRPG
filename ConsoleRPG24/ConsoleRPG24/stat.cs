@@ -210,7 +210,7 @@ namespace ConsoleRPG24
             }
         }
 
-        public class Goblin : Monster
+        public class Goblin : Monster ///고블린:속도가 빠름
         {
             public Goblin(string name) : base(name, 8, 3, 30f, 30f, 7) { }
 
@@ -221,7 +221,7 @@ namespace ConsoleRPG24
             }
         }
 
-        public class Orc : Monster
+        public class Orc : Monster ///오크:강한 공격력
         {
             public Orc(string name) : base(name, 15, 5, 60f, 60f, 4) { }
 
@@ -232,7 +232,7 @@ namespace ConsoleRPG24
             }
         }
 
-        public class Dragon : Monster
+        public class Dragon : Monster ///드레곤:강력한 브레스 공격
         {
             public Dragon(string name) : base(name, 30, 10, 200f, 200f, 5) { }
 
@@ -240,6 +240,37 @@ namespace ConsoleRPG24
             {
                 Console.WriteLine($"{Name}이 불을 뿜습니다! (광역 공격)");
                 target.TakeDamage(Atk * 2);
+            }
+        }
+
+        public class Slime : Monster // 🔹 슬라임:피격 시 일정 확률로 분열
+        {
+            public Slime(string name) : base(name, 5, 2, 20f, 20f, 2) { }
+
+            public override void TakeDamage(int damage)
+            {
+                base.TakeDamage(damage);
+
+                Random rand = new Random();
+                if (Health <= 0 && rand.NextDouble() < 0.5)
+                {
+                    Console.WriteLine($"{Name}이 분열하여 새로운 슬라임이 생성되었습니다!");
+                    Slime newSlime = new Slime($"{Name} 분열체");
+                }
+            }
+        }
+        
+        public class Vampire : Monster ///뱀파이어:공격시 흡혈
+        {
+            public Vampire(string name) : base(name, 18, 6, 70f, 70f, 6) { }
+
+            public override void Attack(BaseCharacter target)
+            {
+                Console.WriteLine($"{Name}이 {target.Name}을(를) 공격하며 피를 흡수합니다!");
+                target.TakeDamage(Atk);
+                Health += 5; // 흡혈 효과
+                if (Health > MaxHealth) Health = MaxHealth;
+                Console.WriteLine($"{Name}의 체력이 {Health}로 회복되었습니다!");
             }
         }
     }
