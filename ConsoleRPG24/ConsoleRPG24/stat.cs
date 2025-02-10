@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using ConsoleRPG24;
 
 namespace ConsoleRPG24
 {
@@ -24,6 +26,95 @@ namespace ConsoleRPG24
             Speed = speed;
             IsDead = false;
             IsTraitor = false;
+        }
+
+        // 🔹 인벤토리 클래스
+        public class Inventory
+        {
+            public List<Item> Inven { get; set; } = new List<Item>();
+
+            // 🔹 인벤토리 열기
+            public void OpenInventory()
+            {
+                while (true)
+                {
+                    Console.WriteLine("[인벤토리]");
+                    Console.WriteLine("1. 장비 관리");
+                    Console.WriteLine("0. 뒤로 가기");
+                    Console.Write(">> ");
+                    string input = Console.ReadLine();
+
+                    if (input == "1")
+                    {
+                        ManageEquipment();
+                    }
+                    else if (input == "0")
+                    {
+                        Console.Clear();
+                        return;
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("잘못된 입력입니다. 다시 입력하세요.");
+                    }
+                }
+            }
+
+            // 🔹 아이템 추가
+            public void AddItem(Item item)
+            {
+                Inven.Add(item);
+                Console.WriteLine($"{item.ItemName}을(를) 인벤토리에 추가했습니다!");
+            }
+            public void RemoveItem(Item item)
+            {
+                if (Inven.Contains(item))
+                {
+                    Inven.Remove(item);
+                    Console.WriteLine($"{item.ItemName}을(를) 인벤토리에서 제거했습니다.");
+                }
+                else
+                {
+                    Console.WriteLine($"{item.ItemName}이(가) 인벤토리에 없습니다.");
+                }
+            }
+            // 🔹 장비 관리 (아이템 목록 출력 및 장착/해제 기능)
+            public void ManageEquipment()
+            {
+                while (true)
+                {
+                    Console.WriteLine("[아이템 목록]");
+                    for (int i = 0; i < Inven.Count; i++)
+                    {
+                        var item = Inven[i];
+                        string equippedMark = item.IsEquipped ? "[E]" : "   ";
+                        Console.WriteLine($"- {i + 1} {equippedMark} {item.ItemName} | {item.ItemDivision} +{item.Attack}/{item.Defense}/{item.Health} | {item.Description}");
+                    }
+                    Console.WriteLine("0. 나가기");
+                    Console.WriteLine("원하시는 행동을 입력해주세요: ");
+                    Console.Write(">> ");
+                    string input = Console.ReadLine();
+
+                    if (input == "0") return;
+
+                    if (int.TryParse(input, out int itemIndex) && itemIndex > 0 && itemIndex <= Inven.Count)
+                    {
+                        ToggleEquip(itemIndex - 1);
+                    }
+                    else
+                    {
+                        Console.WriteLine("잘못된 입력입니다. 다시 입력하세요.");
+                    }
+                }
+            }
+                // 🔹 장착/해제 기능
+            private void ToggleEquip(int index)
+            {
+                var item = Inven[index];
+                item.IsEquipped = !item.IsEquipped;
+                Console.WriteLine(item.IsEquipped ? $"{item.ItemName}을(를) 장착했습니다!" : $"{item.ItemName}을(를) 해제했습니다!");
+            }
         }
 
         // 🔹 데미지를 받는 함수 (사망 여부 체크 포함)
@@ -90,14 +181,49 @@ namespace ConsoleRPG24
         public string Skill { get; set; }  // 스킬
         public float CritHit { get; set; }  // 치명타 확률 (%)
         public float CritDmg { get; set; }  // 치명타 피해 배율
+        public Inventory Inventory { get; private set; } // 🔹 인벤토리를 Player에서 직접 보유
+
 
         public Player(string name, string job)
-            : base(name, 0, 0, 0, 0, 0) // 스탯을 0으로 초기화하고 아래에서 설정
+           : base(name, 0, 0, 0, 0, 0) 
         {
             Gold = 100;
             Miss = 0.1f;
             Mana = 100;
+            Inventory = new Inventory(); // 🔹 인벤토리 초기화 (중요)
             SetJobStats(job);
+        }
+
+        public void EquipItem(Item item)
+        {
+            // 🔹 Inventory.Items → Inventory.Inven으로 수정
+            if (Inventory != null && Inventory.Inven.Contains(item))
+            {
+                Atk += item.Attack;
+                Defen += item.Defense;
+                MaxHealth += item.Health;
+                Console.WriteLine($"{Name}이(가) {item.ItemName}을(를) 장착했습니다!");
+                Inventory.RemoveItem(item);
+            }
+            else
+            {
+                Console.WriteLine($"{item.ItemName}이(가) 인벤토리에 없습니다.");
+            }
+        }
+
+        public void UseItem(Item item)
+        {
+            if (Inventory.Items.Contains(item))
+            {
+                Health += item.HealthBoost;
+                if (Health > MaxHealth) Health = MaxHealth;
+                Console.WriteLine($"{Name}이(가) {item.Name}을(를) 사용하여 체력이 {Health}이 되었습니다!");
+                Inventory.RemoveItem(item);
+            }
+            else
+            {
+                Console.WriteLine($"{item.Name}이(가) 인벤토리에 없습니다.");
+            }
         }
 
         // 🔹 직업 선택 시 스탯 설정
@@ -243,28 +369,30 @@ namespace ConsoleRPG24
             }
         }
 
-        public class Slime : Monster // 🔹 슬라임:피격 시 일정 확률로 분열
+        public class Slime : Monster
         {
             public static List<Slime> SlimeList = new List<Slime>(); 
 
             public Slime(string name) : base(name, 5, 2, 20f, 20f, 2) { }
 
+            // 🔹 BaseCharacter의 TakeDamage()를 override하여 분열 기능 추가
             public override void TakeDamage(int damage)
             {
-                base.TakeDamage(damage);
+                base.TakeDamage(damage); 
 
                 Random rand = new Random();
-                if (Health <= 0 && rand.NextDouble() < 0.5)
+                if (Health <= 0 && rand.NextDouble() < 0.5) 
                 {
                     string newSlimeName = $"{Name} 분열체";
                     Slime newSlime = new Slime(newSlimeName);
-                    SlimeList.Add(newSlime);
+                    SlimeList.Add(newSlime); 
                     Console.WriteLine($"{Name}이 분열하여 {newSlimeName}이 생성되었습니다!");
                 }
             }
         }
-        
-        public class Vampire : Monster ///뱀파이어:공격시 흡혈
+
+
+    public class Vampire : Monster ///뱀파이어:공격시 흡혈
         {
             public Vampire(string name) : base(name, 18, 6, 70f, 70f, 6) { }
 
