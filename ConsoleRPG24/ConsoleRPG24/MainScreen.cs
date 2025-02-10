@@ -1,45 +1,105 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using static ConsoleRPG24.Stat;
+using System.Threading.Tasks.Dataflow;
 
 namespace ConsoleRPG24
 {
+
     internal partial class MainScreen
     {
         List<Item> itemList = new List<Item>();
 
+        private Player player;
+
         private MercenaryManager mercenaryManager = new MercenaryManager();
-        private Inventory inventory;
+        //private Inventory inventory;
 
 
         public MainScreen()
         {
-            inventory = new Inventory(mercenaryManager);
-        }
 
+            //inventory = new Inventory(mercenaryManager);
+        }
 
 
         public void GameStart()
         {
+            InitItem();
+            //DisplayItems();
 
-            
             string userName;
 
-            /*
             Thread.Sleep(1000);
             Console.WriteLine("당신은 눈을 떴다.");
             Thread.Sleep(2500);
             Console.WriteLine("아주 긴 잠에서 깨어난 듯 하다.");
             Thread.Sleep(2500);
-            */
 
             Console.Write("당신의 성함을 입력해 주십시오: ");
             userName = Console.ReadLine();
+
+
             Console.Clear();
 
             Console.WriteLine($"그래. 당신의 이름은 {userName}(이)다.");
             Thread.Sleep(2000);
+
+
+            while (true)
+            {
+
+                string input;
+                string yourJob;
+                Console.WriteLine("당신은 이전부터 어떤 일을 해왔지?");
+                Thread.Sleep(2000);
+                Console.WriteLine();
+                Console.WriteLine("1. 전사");
+                Console.WriteLine("2. 마법사");
+                Console.WriteLine("3. 궁수");
+                Console.WriteLine("4. 암살자");
+                Console.WriteLine();
+                Console.Write(">>");
+                input = Console.ReadLine();
+
+                if (input == "1")
+                {
+                    yourJob = "전사";
+                }
+
+                else if (input == "2")
+                {
+                    yourJob = "마법사";
+                }
+
+                else if (input == "3")
+                {
+                    yourJob = "궁수";
+                }
+
+                else if (input == "4")
+                {
+                    yourJob = "암살자";
+                }
+
+                else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("자신이 했을만한 직업은 저 네가지 이외엔 없다는 확신이 든다.");
+                    continue;
+                }
+
+                player = new Player(userName, yourJob);
+
+
+                break;
+
+            }
+
+
+            Console.WriteLine($"당신의 직업은 {player.Job}(이)다.");
+            Thread.Sleep(2000);
+
 
             while (true)
             {
@@ -74,33 +134,26 @@ namespace ConsoleRPG24
                         InventoryScreen();
                         break;
 
-                    //case ("3"):
-
-                    //    MercenaryManager mercenaryManager = new MercenaryManager();
-                    //    mercenaryManager.ShowMercenaries();
-                    //    break;
-
                     case ("3"):
 
                         Village();
-                        break ;
+                        break;
 
-                    /*
+
                     case ("0"):
 
-                        DungeonStage dungeonStage = new DungeonStage();
-                        dungeonStage.Start();
+                        DungeonScreen();
                         break;
-                    */
-                        
+
+
 
                     default:
                         Console.WriteLine("올바른 숫자를 입력해 주십시오.");
                         continue;
                 }
             }
-            
         }
+
 
         public void StatusScreen()
         {
@@ -110,8 +163,11 @@ namespace ConsoleRPG24
                 Console.WriteLine("캐릭터의 정보가 표시됩니다.");
                 Console.WriteLine();
 
-
-
+                Console.WriteLine($"{player.Name} ({player.Job})");
+                Console.WriteLine($"공격력: {player.Atk}");
+                Console.WriteLine($"방어력: {player.Defen}");
+                Console.WriteLine($"체력: {player.Health}");
+                Console.WriteLine($"Gold: {player.Gold}");
 
                 Console.WriteLine("0. 나가기");
                 Console.WriteLine();
@@ -137,9 +193,12 @@ namespace ConsoleRPG24
 
         public void InventoryScreen()
         {
-            inventory.OpenInventory(); // 기존 인벤토리를 유지하며 사용
-        }
 
+            //inventory.OpenInventory(); // 기존 인벤토리를 유지하며 사용
+            Inventory inventory = new Inventory();
+            inventory.OpenInventory();
+
+        }
 
 
         public void Village()
@@ -150,7 +209,6 @@ namespace ConsoleRPG24
                 Console.WriteLine("무엇을 할까?");
                 Console.WriteLine(new string('=', 20));
                 Console.WriteLine("1. 상점");
-                //Console.WriteLine("2. 용병소");
                 Console.WriteLine();
                 Console.WriteLine("0. 나가기");
                 Console.WriteLine(new string('=', 20));
@@ -164,18 +222,13 @@ namespace ConsoleRPG24
                 {
                     case ("1"):
 
-                        //VillageShop();
+                        VillageShop();
                         break;
-
-                    ////case ("2"):
-
-                    //    MercenaryShop();
-                    //    break;
 
                     case ("0"):
 
-                        GameStart();
-                        break;
+                        Console.Clear();
+                        return;
 
                     default:
                         Console.WriteLine("올바른 숫자를 입력해 주십시오.");
@@ -184,19 +237,19 @@ namespace ConsoleRPG24
             }
         }
 
-        /*
+
         public void VillageShop()
         {
             Shop shop = new Shop();
             shop.ShowVillageShop();
         }
-        */
 
-        //public void MercenaryShop()
+
 
         public void DungeonScreen()
         {
-
+            Stage stage = new Stage();
+            stage.DungeonStart();
         }
     }
 }
