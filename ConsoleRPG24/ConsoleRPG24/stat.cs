@@ -26,6 +26,53 @@ namespace ConsoleRPG24
             IsTraitor = false;
         }
 
+        // 🔹 인벤토리 클래스
+        public class Inventory
+        {
+            public List<Item> Items { get; set; }
+
+            public Inventory()
+            {
+                Items = new List<Item>();
+            }
+
+            public void AddItem(Item item)
+            {
+                Items.Add(item);
+                Console.WriteLine($"{item.Name}을(를) 인벤토리에 추가했습니다.");
+            }
+
+            public void RemoveItem(Item item)
+            {
+                if (Items.Contains(item))
+                {
+                    Items.Remove(item);
+                    Console.WriteLine($"{item.Name}을(를) 인벤토리에서 제거했습니다.");
+                }
+                else
+                {
+                    Console.WriteLine($"{item.Name}이(가) 인벤토리에 없습니다.");
+                }
+            }
+        }
+
+            // 🔹 아이템 클래스
+            public class Item
+            {
+                public string Name { get; set; }
+                public int AttackBoost { get; set; }
+                public int DefenseBoost { get; set; }
+                public float HealthBoost { get; set; }
+
+                public Item(string name, int attackBoost, int defenseBoost, float healthBoost)
+                {
+                    Name = name;
+                    AttackBoost = attackBoost;
+                    DefenseBoost = defenseBoost;
+                    HealthBoost = healthBoost;
+                }
+            }
+
         // 🔹 데미지를 받는 함수 (사망 여부 체크 포함)
         public virtual void TakeDamage(int damage)
         {
@@ -90,6 +137,7 @@ namespace ConsoleRPG24
         public string Skill { get; set; }  // 스킬
         public float CritHit { get; set; }  // 치명타 확률 (%)
         public float CritDmg { get; set; }  // 치명타 피해 배율
+        public Inventory Inventory { get; set; }
 
         public Player(string name, string job)
             : base(name, 0, 0, 0, 0, 0) // 스탯을 0으로 초기화하고 아래에서 설정
@@ -97,7 +145,39 @@ namespace ConsoleRPG24
             Gold = 100;
             Miss = 0.1f;
             Mana = 100;
+            Inventory = new Inventory();
             SetJobStats(job);
+        }
+
+        public void EquipItem(Item item)
+        {
+            if (Inventory.Items.Contains(item))
+            {
+                Atk += item.AttackBoost;
+                Defen += item.DefenseBoost;
+                MaxHealth += item.HealthBoost;
+                Console.WriteLine($"{Name}이(가) {item.Name}을(를) 장착했습니다!");
+                Inventory.RemoveItem(item);
+            }
+            else
+            {
+                Console.WriteLine($"{item.Name}이(가) 인벤토리에 없습니다.");
+            }
+        }
+
+        public void UseItem(Item item)
+        {
+            if (Inventory.Items.Contains(item))
+            {
+                Health += item.HealthBoost;
+                if (Health > MaxHealth) Health = MaxHealth;
+                Console.WriteLine($"{Name}이(가) {item.Name}을(를) 사용하여 체력이 {Health}이 되었습니다!");
+                Inventory.RemoveItem(item);
+            }
+            else
+            {
+                Console.WriteLine($"{item.Name}이(가) 인벤토리에 없습니다.");
+            }
         }
 
         // 🔹 직업 선택 시 스탯 설정
