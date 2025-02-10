@@ -1,16 +1,26 @@
-﻿using System;
+﻿using ConsoleRPG24;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static ConsoleRPG24.Stat;
+using static ConsoleRPG24.MercenaryManager;
 
 
 namespace ConsoleRPG24
 {
     internal class Inventory
     {
+        private MercenaryManager mercenaryManager;
+
+        public Inventory(MercenaryManager mercenaryManager)
+        {
+            this.mercenaryManager = mercenaryManager;
+        }
+
         public List<Item> Inven { get; set; } = new List<Item>();
+
         public void OpenInventory()
         {
             while (true)
@@ -28,14 +38,16 @@ namespace ConsoleRPG24
                 }
                 else if (input == "2")
                 {
-
+                    MercenariesScreen();
                 }
                 else if (input == "0")
                 {
+                    Console.Clear();
                     return;
                 }
                 else
                 {
+                    Console.Clear();
                     Console.WriteLine("잘못된 입력입니다. 다시 입력하세요.");
                 }
             }
@@ -81,6 +93,11 @@ namespace ConsoleRPG24
             item.IsEquipped = !item.IsEquipped;
             Console.WriteLine(item.IsEquipped ? $"{item.ItemName}을(를) 장착했습니다!" : $"{item.ItemName}을(를) 해제했습니다!");
         }
+
+        public void MercenariesScreen()
+        {
+            mercenaryManager.ShowMercenaries(); // 인스턴스를 새로 생성하지 않고 기존 객체 사용
+        }
     }
+
 }
-    
