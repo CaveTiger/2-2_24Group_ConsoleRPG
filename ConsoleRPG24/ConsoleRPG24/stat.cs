@@ -107,7 +107,7 @@ namespace ConsoleRPG24
 
             switch (job)
             {
-                case "Warrior":
+                case "전사":
                     Atk = 20;
                     Defen = 15;
                     MaxHealth = 150;
@@ -115,10 +115,10 @@ namespace ConsoleRPG24
                     Speed = 5;
                     CritHit = 0.1f;
                     CritDmg = 1.5f;
-                    Skill = "Power Slash";
+                    Skill = "강력한 일격!";
                     break;
 
-                case "Mage":
+                case "마법사":
                     Atk = 25;
                     Defen = 5;
                     MaxHealth = 100;
@@ -127,10 +127,10 @@ namespace ConsoleRPG24
                     Mana = 200;
                     CritHit = 0.15f;
                     CritDmg = 1.8f;
-                    Skill = "Fireball";
+                    Skill = "파이어 볼!";
                     break;
 
-                case "Archer":
+                case "궁수":
                     Atk = 18;
                     Defen = 10;
                     MaxHealth = 120;
@@ -138,10 +138,10 @@ namespace ConsoleRPG24
                     Speed = 7;
                     CritHit = 0.2f;
                     CritDmg = 2.0f;
-                    Skill = "Piercing Arrow";
+                    Skill = "관통의 화살!";
                     break;
 
-                case "Assassin":
+                case "암살자":
                     Atk = 22;
                     Defen = 8;
                     MaxHealth = 110;
@@ -149,7 +149,7 @@ namespace ConsoleRPG24
                     Speed = 9;
                     CritHit = 0.3f;
                     CritDmg = 2.5f;
-                    Skill = "Shadow Strike";
+                    Skill = "그림자 일격!";
                     break;
 
                 default:
