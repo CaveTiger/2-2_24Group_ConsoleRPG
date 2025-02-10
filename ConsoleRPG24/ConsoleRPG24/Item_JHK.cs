@@ -17,17 +17,18 @@
         hp,
         cHit,
         cDmg,
-        dge,
+        miss,
         gold,
         spd,
-        shop
+        shop,
+        mer
     }
 
     internal partial class Item
     {
-        public int Id { get; set; }                         //고유 아이디
         public string ItemName { get; set; }                //이름
         public string Description { get; set; }             //설명
+        public string EffectDescription { get; set; }       //효과 설명
         public int Attack { get; set; }                     //공격력
         public int Defense { get; set; }                    //방어력
         public int Health { get; set; }                     //체력
@@ -48,9 +49,9 @@
         //기본 생성자
         public Item()
         {
-            Id = 100;
             ItemName = "기본 아이템";
             Description = "기본 설명";
+            EffectDescription = "기본 효과 설명";
             Attack = 0;
             Defense = 0;
             Health = 0;
@@ -64,29 +65,52 @@
             ItemPrice = 0;
             ItemRank = Rank.common;
             ItemDivision = Division.atk;
+
+            IsOwned = false;
+            IsEquipped = false;
         }
 
         //생성자 -> 아이템의 분류에 따라 어떤 값에 단순 변동을 줄지 정한다.
-        public Item(int _id, string _itemName, string _description, int _itemPrice, Rank _itemRank, Division _itemDivision, int percentAmount)
+        public Item(string _itemName, string _description, string _effectdescription, Rank _itemRank, Division _itemDivision, int percentAmount)
         {
-            Id = _id;
             ItemName = _itemName;
             Description = _description;
-            ItemPrice = _itemPrice;
+            EffectDescription = _effectdescription;
             ItemRank = _itemRank;
             ItemDivision = _itemDivision;
+
+            switch (_itemRank)
+            {
+                case Rank.common: ItemPrice = 100; break;
+
+                case Rank.rare: ItemPrice = 180; break;
+
+                case Rank.epic: ItemPrice = 240; break;
+
+                case Rank.legend: ItemPrice = 300; break;
+            }
 
             switch (_itemDivision)
             {
                 case Division.atk: Attack = percentAmount; break;
+
                 case Division.def: Defense = percentAmount; break;
+
                 case Division.hp: MaxHealth = percentAmount; break;
+
                 case Division.cHit: CritHit = percentAmount; break;
+
                 case Division.cDmg: CritDmg = percentAmount; break;
-                case Division.dge: Miss = percentAmount; break;
-                //case Division.gold: Gold = percentAmount; break;
+
+                case Division.miss: Miss = percentAmount; break;
+
+                case Division.gold: break;
+
                 case Division.spd: Speed = percentAmount; break;
             }
+
+            IsOwned = false;
+            IsEquipped = false;
         }
     }
 }
