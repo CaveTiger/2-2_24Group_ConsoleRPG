@@ -4,6 +4,98 @@ using ConsoleRPG24;
 
 namespace ConsoleRPG24
 {
+    // 인벤토리 클래스
+    public class Inventory
+    {
+        public List<Item> Inven { get; set; } = new List<Item>();
+
+        //인벤토리 열기
+        public void OpenInventory()
+        {
+            while (true)
+            {
+                Console.WriteLine("[인벤토리]");
+                Console.WriteLine("1. 장비 관리");
+                Console.WriteLine("0. 뒤로 가기");
+                Console.Write(">> ");
+                string input = Console.ReadLine();
+
+                if (input == "1")
+                {
+                    ManageEquipment();
+                }
+                else if (input == "0")
+                {
+                    Console.Clear();
+                    return;
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("잘못된 입력입니다. 다시 입력하세요.");
+                }
+            }
+        }
+        /// 아이템 추가
+        public void AddItem(Item item)
+        {
+            Inven.Add(item);
+            Console.WriteLine($"{item.ItemName}을(를) 인벤토리에 추가했습니다!");
+        }
+        public void RemoveItem(Item item)
+        {
+            if (Inven.Contains(item))
+            {
+                Inven.Remove(item);
+                Console.WriteLine($"{item.ItemName}을(를) 인벤토리에서 제거했습니다.");
+            }
+            else
+            {
+                Console.WriteLine($"{item.ItemName}이(가) 인벤토리에 없습니다.");
+            }
+        }
+        // 🔹 장비 관리 (아이템 목록 출력 및 장착/해제 기능)
+        public void ManageEquipment()
+        {
+            while (true)
+            {
+                Console.WriteLine("[아이템 목록]");
+                for (int i = 0; i < Inven.Count; i++)
+                {
+                    var item = Inven[i];
+                    string equippedMark = item.IsEquipped ? "[E]" : "   ";
+                    Console.WriteLine($"- {i + 1} {equippedMark} {item.ItemName} | {item.ItemDivision} +{item.Attack}/{item.Defense}/{item.Health} | {item.Description}");
+                }
+                Console.WriteLine("0. 나가기");
+                Console.WriteLine("원하시는 행동을 입력해주세요: ");
+                Console.Write(">> ");
+                string input = Console.ReadLine();
+
+                if (input == "0")
+                {
+                    Console.Clear();
+                    break;
+                }
+
+
+                if (int.TryParse(input, out int itemIndex) && itemIndex > 0 && itemIndex <= Inven.Count)
+                {
+                    ToggleEquip(itemIndex - 1);
+                }
+                else
+                {
+                    Console.WriteLine("잘못된 입력입니다. 다시 입력하세요.");
+                }
+            }
+        }
+        // 🔹 장착/해제 기능
+        private void ToggleEquip(int index)
+        {
+            var item = Inven[index];
+            item.IsEquipped = !item.IsEquipped;
+            Console.WriteLine(item.IsEquipped ? $"{item.ItemName}을(를) 장착했습니다!" : $"{item.ItemName}을(를) 해제했습니다!");
+        }
+    }
     // 🔹 기본 캐릭터 클래스 (부모 클래스)
     public class BaseCharacter
     {
@@ -16,6 +108,7 @@ namespace ConsoleRPG24
         public bool IsDead { get; set; } // 사망 여부
         public bool IsTraitor { get; set; } // 배신 여부
 
+        
         public BaseCharacter(string name, int atk, int defen, float health, float maxHealth, int speed)
         {
             Name = name;
@@ -26,95 +119,6 @@ namespace ConsoleRPG24
             Speed = speed;
             IsDead = false;
             IsTraitor = false;
-        }
-
-        // 🔹 인벤토리 클래스
-        public class Inventory
-        {
-            public List<Item> Inven { get; set; } = new List<Item>();
-
-            // 🔹 인벤토리 열기
-            public void OpenInventory()
-            {
-                while (true)
-                {
-                    Console.WriteLine("[인벤토리]");
-                    Console.WriteLine("1. 장비 관리");
-                    Console.WriteLine("0. 뒤로 가기");
-                    Console.Write(">> ");
-                    string input = Console.ReadLine();
-
-                    if (input == "1")
-                    {
-                        ManageEquipment();
-                    }
-                    else if (input == "0")
-                    {
-                        Console.Clear();
-                        return;
-                    }
-                    else
-                    {
-                        Console.Clear();
-                        Console.WriteLine("잘못된 입력입니다. 다시 입력하세요.");
-                    }
-                }
-            }
-
-            // 🔹 아이템 추가
-            public void AddItem(Item item)
-            {
-                Inven.Add(item);
-                Console.WriteLine($"{item.ItemName}을(를) 인벤토리에 추가했습니다!");
-            }
-            public void RemoveItem(Item item)
-            {
-                if (Inven.Contains(item))
-                {
-                    Inven.Remove(item);
-                    Console.WriteLine($"{item.ItemName}을(를) 인벤토리에서 제거했습니다.");
-                }
-                else
-                {
-                    Console.WriteLine($"{item.ItemName}이(가) 인벤토리에 없습니다.");
-                }
-            }
-            // 🔹 장비 관리 (아이템 목록 출력 및 장착/해제 기능)
-            public void ManageEquipment()
-            {
-                while (true)
-                {
-                    Console.WriteLine("[아이템 목록]");
-                    for (int i = 0; i < Inven.Count; i++)
-                    {
-                        var item = Inven[i];
-                        string equippedMark = item.IsEquipped ? "[E]" : "   ";
-                        Console.WriteLine($"- {i + 1} {equippedMark} {item.ItemName} | {item.ItemDivision} +{item.Attack}/{item.Defense}/{item.Health} | {item.Description}");
-                    }
-                    Console.WriteLine("0. 나가기");
-                    Console.WriteLine("원하시는 행동을 입력해주세요: ");
-                    Console.Write(">> ");
-                    string input = Console.ReadLine();
-
-                    if (input == "0") return;
-
-                    if (int.TryParse(input, out int itemIndex) && itemIndex > 0 && itemIndex <= Inven.Count)
-                    {
-                        ToggleEquip(itemIndex - 1);
-                    }
-                    else
-                    {
-                        Console.WriteLine("잘못된 입력입니다. 다시 입력하세요.");
-                    }
-                }
-            }
-                // 🔹 장착/해제 기능
-            private void ToggleEquip(int index)
-            {
-                var item = Inven[index];
-                item.IsEquipped = !item.IsEquipped;
-                Console.WriteLine(item.IsEquipped ? $"{item.ItemName}을(를) 장착했습니다!" : $"{item.ItemName}을(를) 해제했습니다!");
-            }
         }
 
         // 🔹 데미지를 받는 함수 (사망 여부 체크 포함)
@@ -181,7 +185,7 @@ namespace ConsoleRPG24
         public string Skill { get; set; }  // 스킬
         public float CritHit { get; set; }  // 치명타 확률 (%)
         public float CritDmg { get; set; }  // 치명타 피해 배율
-        public Inventory Inventory { get; private set; } // 🔹 인벤토리를 Player에서 직접 보유
+        public Inventory Inventory { get; private set; } 
 
 
         public Player(string name, string job)
