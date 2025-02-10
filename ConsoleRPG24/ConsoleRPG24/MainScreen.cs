@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using static ConsoleRPG24.Stat;
 
 namespace ConsoleRPG24
 {
@@ -8,8 +9,21 @@ namespace ConsoleRPG24
     {
         List<Item> itemlist = new List<Item>();
 
+        private MercenaryManager mercenaryManager = new MercenaryManager();
+        private Inventory inventory;
+
+
+        public MainScreen()
+        {
+            inventory = new Inventory(mercenaryManager);
+        }
+
+
+
         public void GameStart()
         {
+
+            
             string userName;
 
             /*
@@ -85,6 +99,7 @@ namespace ConsoleRPG24
                         continue;
                 }
             }
+            
         }
 
         public void StatusScreen()
@@ -122,9 +137,9 @@ namespace ConsoleRPG24
 
         public void InventoryScreen()
         {
-            Inventory inventory = new Inventory();
-            inventory.OpenInventory();
+            inventory.OpenInventory(); // 기존 인벤토리를 유지하며 사용
         }
+
 
 
         public void Village()
