@@ -30,21 +30,20 @@ namespace ConsoleRPG24
             public string teamName { get; set; }
             public List<Monster> monsters { get; set; }
 
+
             public Team(string name)
             {
                 teamName = name;
-                monsters = new List<Monster>();
             }
         }
 
         public void CreateMonster()
-        {//이곳에 몬스터 생성을 구현해야함
-            Random rand = new Random();
-            Console.WriteLine("랜덤한 적이 생성됨");
-            Console.WriteLine("랜덤한 적이 팀에 배치됨");
-
+        {
 
         }
+
+
+
         public void BattleStart()
         {//은 전투 진입점으로 몬스터 생성 메서드를 부르고 그 뒤에 생성된 애들을 체크하고 이제 턴을 진행 할 거임
             CreateMonster();
@@ -54,7 +53,7 @@ namespace ConsoleRPG24
             Console.WriteLine($"뱀을 만났습니다.");
             Console.WriteLine($"개구리을 만났습니다.");
             Console.WriteLine($"뫼옹을 만났습니다.");
-            Console.WriteLine($"스타을 만났습니다.");
+            Console.WriteLine($"{}을 만났습니다.");
             Console.ReadKey();
 
             Chance();
