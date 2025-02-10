@@ -27,7 +27,7 @@ namespace ConsoleRPG24
         }
 
         // 🔹 데미지를 받는 함수 (사망 여부 체크 포함)
-        public void TakeDamage(int damage)
+        public virtual void TakeDamage(int damage)
         {
             if (IsDead)
             {
@@ -243,24 +243,30 @@ namespace ConsoleRPG24
             }
         }
 
-        public class Slime : Monster // 🔹 슬라임:피격 시 일정 확률로 분열
+        public class Slime : Monster
         {
+            public static List<Slime> SlimeList = new List<Slime>(); 
+
             public Slime(string name) : base(name, 5, 2, 20f, 20f, 2) { }
 
+            // 🔹 BaseCharacter의 TakeDamage()를 override하여 분열 기능 추가
             public override void TakeDamage(int damage)
             {
-                base.TakeDamage(damage);
+                base.TakeDamage(damage); 
 
                 Random rand = new Random();
-                if (Health <= 0 && rand.NextDouble() < 0.5)
+                if (Health <= 0 && rand.NextDouble() < 0.5) 
                 {
-                    Console.WriteLine($"{Name}이 분열하여 새로운 슬라임이 생성되었습니다!");
-                    Slime newSlime = new Slime($"{Name} 분열체");
+                    string newSlimeName = $"{Name} 분열체";
+                    Slime newSlime = new Slime(newSlimeName);
+                    SlimeList.Add(newSlime); 
+                    Console.WriteLine($"{Name}이 분열하여 {newSlimeName}이 생성되었습니다!");
                 }
             }
         }
-        
-        public class Vampire : Monster ///뱀파이어:공격시 흡혈
+
+
+    public class Vampire : Monster ///뱀파이어:공격시 흡혈
         {
             public Vampire(string name) : base(name, 18, 6, 70f, 70f, 6) { }
 
