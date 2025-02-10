@@ -76,7 +76,7 @@ namespace ConsoleRPG24
         public void ShowMercenaries()
         {
             Console.Clear();
-            Console.WriteLine("\n[보유 중인 용병 목록]");
+            Console.WriteLine("[보유 중인 용병 목록]");
             for (int i = 0; i < mercenaries.Count; i++)
             {
                 var merc = mercenaries[i];
@@ -84,8 +84,8 @@ namespace ConsoleRPG24
                 Console.WriteLine($"{i + 1}. {merc.Name} | ATK: {merc.Atk} | DEF: {merc.Defen} | HP: {merc.Health}/{merc.MaxHealth} {status}");
             }
 
-            Console.WriteLine("\n0. 뒤로 가기");
-            Console.Write("\n>> 선택할 용병 번호 입력: ");
+            Console.WriteLine("0. 뒤로 가기");
+            Console.Write(">> 선택할 용병 번호 입력: ");
             string input = Console.ReadLine();
 
             if (int.TryParse(input, out int index) && index >= 1 && index <= mercenaries.Count)
@@ -108,7 +108,7 @@ namespace ConsoleRPG24
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine($"\n[용병 상세 정보]");
+                Console.WriteLine($"[용병 상세 정보]");
                 Console.WriteLine($"이름: {merc.Name}");
                 Console.WriteLine($"공격력: {merc.Atk}");
                 Console.WriteLine($"방어력: {merc.Defen}");
