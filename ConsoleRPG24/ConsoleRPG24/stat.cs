@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using ConsoleRPG24;
 
 namespace ConsoleRPG24
 {
@@ -29,50 +31,82 @@ namespace ConsoleRPG24
         // 🔹 인벤토리 클래스
         public class Inventory
         {
-            public List<Item> Items { get; set; }
+            public List<Item> Inven { get; set; } = new List<Item>();
 
-            public Inventory()
+            // 🔹 인벤토리 열기
+            public void OpenInventory()
             {
-                Items = new List<Item>();
+                while (true)
+                {
+                    Console.WriteLine("[인벤토리]");
+                    Console.WriteLine("1. 장비 관리");
+                    Console.WriteLine("0. 뒤로 가기");
+                    Console.Write(">> ");
+                    string input = Console.ReadLine();
+
+                    if (input == "1")
+                    {
+                        ManageEquipment();
+                    }
+                    else if (input == "0")
+                    {
+                        Console.Clear();
+                        return;
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("잘못된 입력입니다. 다시 입력하세요.");
+                    }
+                }
             }
 
+            // 🔹 아이템 추가
             public void AddItem(Item item)
             {
-                Items.Add(item);
-                Console.WriteLine($"{item.Name}을(를) 인벤토리에 추가했습니다.");
+                Inven.Add(item);
+                Console.WriteLine($"{item.ItemName}을(를) 인벤토리에 추가했습니다!");
             }
 
-            public void RemoveItem(Item item)
+            // 🔹 장비 관리 (아이템 목록 출력 및 장착/해제 기능)
+            public void ManageEquipment()
             {
-                if (Items.Contains(item))
+                while (true)
                 {
-                    Items.Remove(item);
-                    Console.WriteLine($"{item.Name}을(를) 인벤토리에서 제거했습니다.");
+                    Console.WriteLine("[아이템 목록]");
+                    for (int i = 0; i < Inven.Count; i++)
+                    {
+                        var item = Inven[i];
+                        string equippedMark = item.IsEquipped ? "[E]" : "   ";
+                        Console.WriteLine($"- {i + 1} {equippedMark} {item.ItemName} | {item.ItemDivision} +{item.Attack}/{item.Defense}/{item.Health} | {item.Description}");
+                    }
+                    Console.WriteLine("0. 나가기");
+                    Console.WriteLine("원하시는 행동을 입력해주세요: ");
+                    Console.Write(">> ");
+                    string input = Console.ReadLine();
+
+                    if (input == "0") return;
+
+                    if (int.TryParse(input, out int itemIndex) && itemIndex > 0 && itemIndex <= Inven.Count)
+                    {
+                        ToggleEquip(itemIndex - 1);
+                    }
+                    else
+                    {
+                        Console.WriteLine("잘못된 입력입니다. 다시 입력하세요.");
+                    }
                 }
-                else
-                {
-                    Console.WriteLine($"{item.Name}이(가) 인벤토리에 없습니다.");
-                }
+            }
+            // 🔹 장착/해제 기능
+            private void ToggleEquip(int index)
+            {
+                var item = Inven[index];
+                item.IsEquipped = !item.IsEquipped;
+                Console.WriteLine(item.IsEquipped ? $"{item.ItemName}을(를) 장착했습니다!" : $"{item.ItemName}을(를) 해제했습니다!");
             }
         }
-
-            // 🔹 아이템 클래스
-            public class Item
-            {
-                public string Name { get; set; }
-                public int AttackBoost { get; set; }
-                public int DefenseBoost { get; set; }
-                public float HealthBoost { get; set; }
-
-                public Item(string name, int attackBoost, int defenseBoost, float healthBoost)
-                {
-                    Name = name;
-                    AttackBoost = attackBoost;
-                    DefenseBoost = defenseBoost;
-                    HealthBoost = healthBoost;
-                }
-            }
-
+    
+        
         // 🔹 데미지를 받는 함수 (사망 여부 체크 포함)
         public virtual void TakeDamage(int damage)
         {
@@ -137,15 +171,15 @@ namespace ConsoleRPG24
         public string Skill { get; set; }  // 스킬
         public float CritHit { get; set; }  // 치명타 확률 (%)
         public float CritDmg { get; set; }  // 치명타 피해 배율
-        public Inventory Inventory { get; set; }
+        public Inventory Inventory { get; set; } // Inventory 속성 유지
 
         public Player(string name, string job)
-            : base(name, 0, 0, 0, 0, 0) // 스탯을 0으로 초기화하고 아래에서 설정
+           : base(name, 0, 0, 0, 0, 0) // 기본 스탯 0으로 초기화 후, SetJobStats()로 설정
         {
             Gold = 100;
             Miss = 0.1f;
             Mana = 100;
-            Inventory = new Inventory();
+            Inventory = new Inventory(); // 인벤토리 생성
             SetJobStats(job);
         }
 
