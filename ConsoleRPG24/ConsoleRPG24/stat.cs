@@ -75,7 +75,10 @@ namespace ConsoleRPG24
         {
             return IsTraitor;
         }
+
     }
+
+
 
     // 🔹 플레이어 클래스
     public class Player : BaseCharacter
@@ -193,28 +196,52 @@ namespace ConsoleRPG24
     }
 
     // 🔹 몬스터 클래스
-    public class Monster : BaseCharacter
-    {
-        public Monster(string name, int atk, int defen, float health, float maxHealth, int speed)
-            : base(name, atk, defen, health, maxHealth, speed)
+    
+        public class Monster : BaseCharacter
         {
+            public Monster(string name, int atk, int defen, float health, float maxHealth, int speed)
+                : base(name, atk, defen, health, maxHealth, speed)
+            {
+            }
+
+            public override bool IsAlly()
+            {
+                return false;
+            }
         }
 
-        public override bool IsAlly()
+        public class Goblin : Monster
         {
-            return false;
+            public Goblin(string name) : base(name, 8, 3, 30f, 30f, 7) { }
+
+            public override void Attack(BaseCharacter target)
+            {
+                Console.WriteLine($"{Name}이 빠르게 공격합니다! (속도 {Speed})");
+                target.TakeDamage(Atk);
+            }
+        }
+
+        public class Orc : Monster
+        {
+            public Orc(string name) : base(name, 15, 5, 60f, 60f, 4) { }
+
+            public override void Attack(BaseCharacter target)
+            {
+                Console.WriteLine($"{Name}이 강력한 일격을 가합니다!");
+                target.TakeDamage(Atk + 5);
+            }
+        }
+
+        public class Dragon : Monster
+        {
+            public Dragon(string name) : base(name, 30, 10, 200f, 200f, 5) { }
+
+            public override void Attack(BaseCharacter target)
+            {
+                Console.WriteLine($"{Name}이 불을 뿜습니다! (광역 공격)");
+                target.TakeDamage(Atk * 2);
+            }
         }
     }
 
-    // 🔹 고블린 클래스 (몬스터 상속)
-    public class Goblin : Monster
-    {
-        public Goblin(string name) : base(name, 8, 3, 30f, 30f, 7) { }
 
-        public override void Attack(BaseCharacter target)
-        {
-            Console.WriteLine($"{Name}이 빠르게 공격합니다! (속도 {Speed})");
-            target.TakeDamage(Atk);
-        }
-    }
-}
