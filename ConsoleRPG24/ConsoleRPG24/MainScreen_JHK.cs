@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ConsoleRPG24
+﻿namespace ConsoleRPG24
 {
     //게임 내 아이템들 Init
     internal partial class MainScreen

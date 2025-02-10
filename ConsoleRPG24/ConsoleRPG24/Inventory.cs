@@ -10,7 +10,7 @@ using static ConsoleRPG24.MercenaryManager;
 
 namespace ConsoleRPG24
 {
-    internal class Inventory
+    internal partial class Inventory
     {
         private MercenaryManager mercenaryManager;
 
