@@ -67,7 +67,18 @@ namespace ConsoleRPG24
                 Inven.Add(item);
                 Console.WriteLine($"{item.ItemName}을(를) 인벤토리에 추가했습니다!");
             }
-
+            public void RemoveItem(Item item)
+            {
+                if (Inven.Contains(item))
+                {
+                    Inven.Remove(item);
+                    Console.WriteLine($"{item.ItemName}을(를) 인벤토리에서 제거했습니다.");
+                }
+                else
+                {
+                    Console.WriteLine($"{item.ItemName}이(가) 인벤토리에 없습니다.");
+                }
+            }
             // 🔹 장비 관리 (아이템 목록 출력 및 장착/해제 기능)
             public void ManageEquipment()
             {
@@ -97,7 +108,7 @@ namespace ConsoleRPG24
                     }
                 }
             }
-            // 🔹 장착/해제 기능
+                // 🔹 장착/해제 기능
             private void ToggleEquip(int index)
             {
                 var item = Inven[index];
@@ -105,8 +116,7 @@ namespace ConsoleRPG24
                 Console.WriteLine(item.IsEquipped ? $"{item.ItemName}을(를) 장착했습니다!" : $"{item.ItemName}을(를) 해제했습니다!");
             }
         }
-    
-        
+
         // 🔹 데미지를 받는 함수 (사망 여부 체크 포함)
         public virtual void TakeDamage(int damage)
         {
@@ -171,31 +181,33 @@ namespace ConsoleRPG24
         public string Skill { get; set; }  // 스킬
         public float CritHit { get; set; }  // 치명타 확률 (%)
         public float CritDmg { get; set; }  // 치명타 피해 배율
-        public Inventory Inventory { get; set; } // Inventory 속성 유지
+        public Inventory Inventory { get; private set; } // 🔹 인벤토리를 Player에서 직접 보유
+
 
         public Player(string name, string job)
-           : base(name, 0, 0, 0, 0, 0) // 기본 스탯 0으로 초기화 후, SetJobStats()로 설정
+           : base(name, 0, 0, 0, 0, 0) 
         {
             Gold = 100;
             Miss = 0.1f;
             Mana = 100;
-            Inventory = new Inventory(); // 인벤토리 생성
+            Inventory = new Inventory(); // 🔹 인벤토리 초기화 (중요)
             SetJobStats(job);
         }
 
         public void EquipItem(Item item)
         {
-            if (Inventory.Items.Contains(item))
+            // 🔹 Inventory.Items → Inventory.Inven으로 수정
+            if (Inventory != null && Inventory.Inven.Contains(item))
             {
-                Atk += item.AttackBoost;
-                Defen += item.DefenseBoost;
-                MaxHealth += item.HealthBoost;
-                Console.WriteLine($"{Name}이(가) {item.Name}을(를) 장착했습니다!");
+                Atk += item.Attack;
+                Defen += item.Defense;
+                MaxHealth += item.Health;
+                Console.WriteLine($"{Name}이(가) {item.ItemName}을(를) 장착했습니다!");
                 Inventory.RemoveItem(item);
             }
             else
             {
-                Console.WriteLine($"{item.Name}이(가) 인벤토리에 없습니다.");
+                Console.WriteLine($"{item.ItemName}이(가) 인벤토리에 없습니다.");
             }
         }
 
