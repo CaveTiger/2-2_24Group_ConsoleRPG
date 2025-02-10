@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using ConsoleRPG24;
 
 namespace ConsoleRPG24
@@ -41,6 +42,14 @@ namespace ConsoleRPG24
         {
             Inven.Add(item);
             Console.WriteLine($"{item.ItemName}을(를) 인벤토리에 추가했습니다!");
+        }
+        /// 인벤토리 아이템을 가져올때 반복문
+        public void ShowInventory()
+        {
+            foreach (var item in Inven)
+            {
+                Console.WriteLine($"아이템: {item.ItemName} | 설명: {item.Description}");
+            }
         }
         public void RemoveItem(Item item)
         {
@@ -217,16 +226,16 @@ namespace ConsoleRPG24
 
         public void UseItem(Item item)
         {
-            if (Inventory.Items.Contains(item))
+            if (Inventory.Inven.Contains(item))
             {
-                Health += item.HealthBoost;
-                if (Health > MaxHealth) Health = MaxHealth;
-                Console.WriteLine($"{Name}이(가) {item.Name}을(를) 사용하여 체력이 {Health}이 되었습니다!");
+                this.Health += item.Health;
+                if (this.Health > this.MaxHealth) this.Health = this.MaxHealth;
+                Console.WriteLine($"{this.Name}이(가) {item.ItemName}을(를) 사용하여 체력이 {this.Health}이 되었습니다!");
                 Inventory.RemoveItem(item);
             }
             else
             {
-                Console.WriteLine($"{item.Name}이(가) 인벤토리에 없습니다.");
+                Console.WriteLine($"{item.ItemName}이(가) 인벤토리에 없습니다.");
             }
         }
 
