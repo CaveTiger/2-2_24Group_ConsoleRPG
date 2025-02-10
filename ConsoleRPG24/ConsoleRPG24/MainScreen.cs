@@ -7,7 +7,7 @@ namespace ConsoleRPG24
 {
     internal partial class MainScreen
     {
-        List<Item> itemlist = new List<Item>();
+        List<Item> itemList = new List<Item>();
 
         private MercenaryManager mercenaryManager = new MercenaryManager();
         private Inventory inventory;
