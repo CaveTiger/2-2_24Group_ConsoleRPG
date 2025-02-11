@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
-using ConsoleRPG24;
-
-namespace ConsoleRPG24
+﻿namespace ConsoleRPG24
 {
     // 🔹 기본 캐릭터 클래스 (부모 클래스)
     public class BaseCharacter
@@ -87,7 +82,7 @@ namespace ConsoleRPG24
 
 
     // 🔹 플레이어 클래스
-    public partial class Player : BaseCharacter
+    internal partial class Player : BaseCharacter
     {
         public int BaseAtk { get; private set; }  //원래 공격력 저장
         public int BaseDefen { get; private set; }  //원래 방어력 저장
@@ -122,33 +117,31 @@ namespace ConsoleRPG24
         public int CurrentDefen => BaseDefen + bonusDefen;
         public float CurrentHealth => BaseHealth + bonusHealth;
 
-        public void EquipItem(Item item)
+        //아이템을 장착할 경우
+        internal void EquipItem_JHK(Item item)
         {
-            if (Inventory.Inven.Contains(item))
-            {
-                if (item.IsPercentage)  // 🔹 퍼센트 증가 아이템인지 확인
-                {
-                    Atk = BaseAtk + (int)(BaseAtk * (item.Attack / 100f));
-                    Defen = BaseDefen + (int)(BaseDefen * (item.Defense / 100f));
-                    MaxHealth = BaseHealth + (BaseHealth * (item.Health / 100f));
-                }
-                else  // 🔹 일반 아이템
-                {
-                    Atk += item.Attack;
-                    Defen += item.Defense;
-                    MaxHealth += item.Health;
-                }
+            //아이템을 가지고 있는지? (원래는 isOwned로 하려고 했지만 이거도 괜찮은것 같습니다!)
 
-                Console.WriteLine($"{Name}이(가) {item.ItemName}을(를) 장착했습니다! (공격력: {Atk}, 방어력: {Defen}, 체력: {MaxHealth})");
-                Inventory.RemoveItem(item);
+            //가지고 있지 않은 경우
+            if (!Inventory.Inven.Contains(item))
+            {
+                PrintWarningForNoItem(item);
             }
+            //가지고 있지만 장착중인 경우
+            else if (Inventory.Inven.Contains(item) && !item.IsEquipped)
+            {
+                PrintWarningForEquipingItem(item);
+            }
+            //가지고 있지 않은 경우 && 장착중이 아닌 경우
             else
             {
-                Console.WriteLine($"{item.ItemName}이(가) 인벤토리에 없습니다.");
+                ApplyItemEffect(item);
+                PrintPlayerEquipItem(item);
+                item.IsEquipped = true;
             }
         }
 
-        public void UseItem(Item item)
+        internal void UseItem(Item item)
         {
             if (Inventory.Inven.Contains(item))
             {
@@ -162,28 +155,27 @@ namespace ConsoleRPG24
                 Console.WriteLine($"{item.ItemName}이(가) 인벤토리에 없습니다.");
             }
         }
-        public void UnequipItem(Item item)
+        //아이템을 장착해제할 경우
+        internal void UnequipItem_JHK(Item item)
         {
-            if (item.IsPercentage)
+
+            //가지고 있지 않은 경우
+            if (!Inventory.Inven.Contains(item))
             {
-                // 🔹 퍼센트 아이템 해제 시 원래 스탯으로 복원
-                bonusAtk -= (int)(BaseAtk * (item.Attack / 100f));
-                bonusDefen -= (int)(BaseDefen * (item.Defense / 100f));
-                bonusHealth -= (BaseHealth * (item.Health / 100f));
+                PrintWarningForNoItem(item);
             }
+            //가지고 있지만 장착 해제중인 경우
+            else if (Inventory.Inven.Contains(item) && item.IsEquipped)
+            {
+                PrintWarningForNotEquipingItem(item);
+            }
+            //가지고 있지 않은 경우 && 장착중이 아닌 경우
             else
             {
-                bonusAtk -= item.Attack;
-                bonusDefen -= item.Defense;
-                bonusHealth -= item.Health;
+                ApplyItemEffect(item);
+                PrintPlayerUnequipItem(item);
+                item.IsEquipped = false;
             }
-            // 🔹 값이 0 이하로 떨어지지 않도록 보정
-            if (bonusAtk < 0) bonusAtk = 0;
-            if (bonusDefen < 0) bonusDefen = 0;
-            if (bonusHealth < 0) bonusHealth = 0;
-
-            Console.WriteLine($"{Name}이(가) {item.ItemName}을(를) 해제했습니다! (공격력: {CurrentAtk}, 방어력: {CurrentDefen}, 체력: {CurrentHealth})");
-            Inventory.AddItem(item);
         }
 
         // 🔹 직업 선택 시 스탯 설정
