@@ -28,7 +28,7 @@ namespace ConsoleRPG24
             public Monster RandomMoster()
             {
                 Random random = new Random();
-                int index = random.Next(1, 6);
+                int index = random.Next(1, 8);
                 if (index == 1)
                 {
                     Goblin goblin = new Goblin("고블린");
@@ -41,18 +41,18 @@ namespace ConsoleRPG24
                 }
                 else if (index == 3)
                 {
-                    Slime slime = new Slime("슬라임");
-                    return slime;
+                    Vampire vampire = new Vampire("뱀파이어");
+                    return vampire;
                 }
                 else if (index == 4)
                 {
-                    Orc slime = new Orc("오크");
-                    return slime;
+                    Orc orc = new Orc("오크");
+                    return orc;
                 }
                 else
                 {
-                    Vampire vampire = new Vampire("뱀파이어");
-                    return vampire;
+                    Slime slime = new Slime("슬라임");
+                    return slime;
                 }
                 
             }
@@ -60,15 +60,17 @@ namespace ConsoleRPG24
         {
             RandomMoster();
         }
+        public void Add(Monster monster)
+        {
+
+        }
 
 
 
             public void BattleStart()
         {
             //이곳은 전투 진입점으로 몬스터 생성 메서드를 부르고 그 뒤에 생성된 애들을 체크하고 이제 턴을 진행 할 거임
-            Console.WriteLine(RandomMoster().ToString());
-            Console.WriteLine(RandomMoster().ToString());
-            Console.WriteLine(RandomMoster().ToString());
+            //Console.WriteLine(RandomMoster().ToString());
 
 
             Battle();
@@ -82,12 +84,19 @@ namespace ConsoleRPG24
         public void Battle()
         {
 
-            List<Monster> teamB = new List<Monster> {
-                new Monster("Goblin", 15, 5, 120, 120, 7),
-                new Monster("Orc", 20, 8, 250, 250, 7),
-                new Monster("Troll", 10, 6, 150, 150, 5),
-                new Monster("Dragon", 30, 10, 500, 500, 1)
-            };
+            List<Monster> monsterTeam = new List<Monster>();
+            {
+                monsterTeam.Add(RandomMoster());
+                monsterTeam.Add(RandomMoster());
+                monsterTeam.Add(RandomMoster());
+                monsterTeam.Add(RandomMoster());
+                Console.WriteLine(monsterTeam);
+            }
+            foreach (var number in monsterTeam)
+            {
+                Console.WriteLine(number); 
+            }
+
             //이건 턴의 '찬스'가 왔음을 체크해야할때.
             for (int turnCheck = 21; turnCheck >= 0; turnCheck--)
             //속도 최대 20 21부터 시작해 1씩 내려가 해당 속도와 == 이 뜰대 밑의 조건문을 실행함
@@ -96,12 +105,12 @@ namespace ConsoleRPG24
                 //실제로 작동할땐 그딴거 없고 한번에 작동할지도 모름.
                 Console.WriteLine($"{turnCheck}.");//현재 턴이 몇번을 도는지 디버깅
                 Console.ReadKey();
-                for (int i = 0; i < teamB.Count; i++)
+                for (int i = 0; i < monsterTeam.Count; i++)
                 {
-                    if (teamB[i].Speed == turnCheck)
+                    if (monsterTeam[i].Speed == turnCheck)
                     {
                         
-                        Console.WriteLine($"{teamB[i].Name}가 당신에게 피해를 주었습니다.");
+                        Console.WriteLine($"{monsterTeam[i].Name}가 당신에게 피해를 주었습니다.");
                        // BaseCharacter.Attack(Player);
                     }
                 }
