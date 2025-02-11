@@ -102,8 +102,8 @@ namespace ConsoleRPG24
 
                     Rewards();
 
-                    //Camp camp = new Camp(player);
-                    //camp.CampCount();
+                    Camp camp = new Camp(player);
+                    camp.CampCount();
                 }
 
                 ShopEncounter();
@@ -131,8 +131,8 @@ namespace ConsoleRPG24
 
             if (input == "1")
             {
-               //Shop shop = new Shop();
-                //shop.ShowDungeonShop();
+                Shop shop = new Shop();
+                shop.ShowDungeonShop();
             }
 
             else
