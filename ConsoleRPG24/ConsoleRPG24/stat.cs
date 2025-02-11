@@ -81,11 +81,11 @@ namespace ConsoleRPG24
         }
     }
 
-
+    
 
 
     // 🔹 플레이어 클래스
-    public partial class Player : BaseCharacter
+    public class Player : BaseCharacter
     {
         public string Job { get; set; }  // 직업
         public int Gold { get; set; }  // 돈
