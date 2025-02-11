@@ -85,7 +85,7 @@
                 {
                     var item = Inven[i];
                     string equippedMark = item.IsEquipped ? "[E]" : "   ";
-                    Console.WriteLine($"- {i + 1} {equippedMark} {item.ItemName} | {item.Description} | {item.ItemRank}| {item.EffectDescription}");
+                    Console.WriteLine($"- {i + 1} {equippedMark} {item.ItemName} | {item.EffectDescription} | {item.ItemRank}| {item.Description}");
                 }
 
                 Console.WriteLine("0. 나가기");
