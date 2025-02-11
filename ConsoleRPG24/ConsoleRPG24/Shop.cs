@@ -3,6 +3,13 @@
     internal class Shop
     {
 
+        private List<Item> itemList = new List<Item>();
+
+        // 아이템 추가 메서드
+        public void AddItem(Item item)
+        {
+            itemList.Add(item);
+        }
 
 
         public void ShowVillageShop()
@@ -32,7 +39,7 @@
         public void VillageShop()
         {
             // MainScreen_JHK 아이템 리스크를 불러오기
-            // Common 등급 아이템 3가지를 랜덤하게 플레이어에게 보여주기
+            // Common Rank 아이템 3가지를 랜덤하게 플레이어에게 보여주기
             // (아이템 3개 옵션과 효과 보여주기)
             // 플레이어가 아이템을 택1 해서 구매 -> 인벤토리로 보내주기
         }
@@ -71,5 +78,6 @@
             //
 
         }
+
     }
 }
