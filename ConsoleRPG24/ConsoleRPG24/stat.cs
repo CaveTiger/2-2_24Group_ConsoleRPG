@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Numerics;
-using ConsoleRPG24;
-
 namespace ConsoleRPG24
 {
     // 🔹 기본 캐릭터 클래스 (부모 클래스)
@@ -85,7 +80,7 @@ namespace ConsoleRPG24
 
 
     // 🔹 플레이어 클래스
-    public partial class Player : BaseCharacter
+    internal partial class Player : BaseCharacter
     {
         public string Job { get; set; }  // 직업
         public int Gold { get; set; }  // 돈
@@ -107,7 +102,7 @@ namespace ConsoleRPG24
             SetJobStats(job);
         }
 
-        public void EquipItem(Item item)
+        internal void EquipItem(Item item)
         {
             // 🔹 Inventory.Items → Inventory.Inven으로 수정
             if (Inventory != null && Inventory.Inven.Contains(item))
@@ -124,7 +119,7 @@ namespace ConsoleRPG24
             }
         }
 
-        public void UseItem(Item item)
+        internal void UseItem(Item item)
         {
             if (Inventory.Inven.Contains(item))
             {
