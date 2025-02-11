@@ -99,6 +99,18 @@ namespace ConsoleRPG24
         private int bonusDefen = 0;  // 추가 방어력 저장
         private float bonusHealth = 0;  // 추가 체력 저장
 
+        // 🔹 기본 생성자 (매개변수 부족한 경우 사용)
+        public Player() : base("Unknown", 0, 0, 100, 100, 5, 0)
+        {
+            BaseAtk = 0;
+            BaseDefen = 0;
+            BaseHealth = 100;
+            Gold = 100;
+            Mana = 100;
+            Inventory = new Inventory();
+            Job = "전사"; // 기본 직업 설정
+        }
+
 
         public Player(string name, string job, int baseAtk, int baseDefen, float baseHealth, float maxHealth, int speed, int miss)
        : base(name, 0, 0, baseHealth, maxHealth, speed, miss)
@@ -118,7 +130,7 @@ namespace ConsoleRPG24
         public float CurrentHealth => BaseHealth + bonusHealth;
 
         //아이템을 장착할 경우
-        internal void EquipItem_JHK(Item item)
+        internal void EquipItem(Item item)
         {
             //아이템을 가지고 있는지? (원래는 isOwned로 하려고 했지만 이거도 괜찮은것 같습니다!)
 
@@ -156,7 +168,7 @@ namespace ConsoleRPG24
             }
         }
         //아이템을 장착해제할 경우
-        internal void UnequipItem_JHK(Item item)
+        internal void UnequipItem(Item item)
         {
 
             //가지고 있지 않은 경우
