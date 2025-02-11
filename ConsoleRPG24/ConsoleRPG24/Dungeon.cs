@@ -12,22 +12,53 @@ namespace ConsoleRPG24
     {
         Player player;
         Monster monster;
-
-        public Stage(Player player, Monster monster)
-        {
-            this.player = player;
-            this.monster = monster;
-
-            //??????????
-        }
+        //뭔가 이부분 수정이 필요해보임...
 
 
-        //열심히 작성 중~
+
+        //열심히 작성 중~~
         public void Rewards()
         {
             if (monster.Health <= 0)
             {
-                Console.WriteLine($"스테이지 클리어! {monster.Name}를 물리쳤습니다!");
+                Console.WriteLine($"스테이지 클리어! {monster.Name}를 물리쳤다!");
+                Console.WriteLine("전리품으로써 골드 혹은 아이템을 보상으로 얻을 수 있다.");
+                Console.WriteLine();
+                Console.WriteLine("1. 골드를 얻는다");
+                Console.WriteLine("2. 아이템을 얻는다");
+                Console.WriteLine();
+                Console.WriteLine("0. 무시한다");
+                Console.WriteLine();
+                Console.WriteLine("무엇을 하시겠습니까?");
+                Console.WriteLine(">> ");
+
+                string input;
+                input = Console.ReadLine();
+
+                if (input == "1")
+                {
+                    player.Gold += 100;
+                    Console.WriteLine("당신은 100 G를 얻었다.");
+                }
+
+                else
+                {
+                    /*
+                   player.Inventory
+                   이 아이템이랑 저 아이템이 있다. 뭘 가질까?
+
+                    if (input == "1")
+                    {
+                        체력 포션을 얻었다!
+                    }
+
+                    else
+                    {
+                        마나 포션을 얻었다!
+                    }
+                    */
+
+                }
 
                 //골드 혹은 아이템 보상
                 //다음 전투로~!
@@ -36,10 +67,14 @@ namespace ConsoleRPG24
 
             else if (player.Health <= 0)
             {
-                Console.WriteLine("게임 오버! 패배했습니다...");
+                Console.WriteLine("당신은 눈 앞이 깜깜해졌다...");
+                Console.WriteLine("게임 오버!......");
+
             }
         }
+
         //열심히 작성 중~
+
 
 
 
