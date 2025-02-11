@@ -95,44 +95,61 @@ namespace ConsoleRPG24
         public float CritHit { get; set; }  // 치명타 확률 (%)
         public float CritDmg { get; set; }  // 치명타 피해 배율
         public Inventory Inventory { get; private set; }
+        private int bonusAtk = 0;  // 추가 공격력 저장
+        private int bonusDefen = 0;  // 추가 방어력 저장
+        private float bonusHealth = 0;  // 추가 체력 저장
 
-
-        public Player(string name, string job, int atk, int defen, float health, float maxHealth, int speed, int miss)
-      : base(name, atk, defen, health, maxHealth, speed, miss)
+        // 🔹 기본 생성자 (매개변수 부족한 경우 사용)
+        public Player() : base("Unknown", 0, 0, 100, 100, 5, 0)
         {
-            BaseAtk = atk;
-            BaseDefen = defen;
-            BaseHealth = maxHealth;
+            BaseAtk = 0;
+            BaseDefen = 0;
+            BaseHealth = 100;
             Gold = 100;
-            Miss = 10;  // 10% 확률 (0~100 기준)
             Mana = 100;
-            Inventory = new Inventory(); // 🔹 인벤토리 초기화 (중요)
-            SetJobStats(job);
+            Inventory = new Inventory();
         }
 
+
+        public Player(string name, string job, int baseAtk, int baseDefen, float baseHealth, float maxHealth, int speed, int miss)
+       : base(name, 0, 0, baseHealth, maxHealth, speed, miss)
+        {
+            BaseAtk = baseAtk;
+            BaseDefen = baseDefen;
+            BaseHealth = maxHealth;
+            Gold = 100;
+            Mana = 100;
+            Inventory = new Inventory();
+            SetJobStats(job);
+
+        }
+
+        // Atk 계산
+        public int CurrentAtk => BaseAtk + bonusAtk;
+        public int CurrentDefen => BaseDefen + bonusDefen;
+        public float CurrentHealth => BaseHealth + bonusHealth;
+
+        //아이템을 장착할 경우
         internal void EquipItem(Item item)
         {
-            if (Inventory.Inven.Contains(item))
-            {
-                if (item.IsPercentage)  // 🔹 퍼센트 증가 아이템인지 확인
-                {
-                    Atk = BaseAtk + (int)(BaseAtk * (item.Attack / 100f));
-                    Defen = BaseDefen + (int)(BaseDefen * (item.Defense / 100f));
-                    MaxHealth = BaseHealth + (BaseHealth * (item.Health / 100f));
-                }
-                else  // 🔹 일반 아이템
-                {
-                    Atk += item.Attack;
-                    Defen += item.Defense;
-                    MaxHealth += item.Health;
-                }
+            //아이템을 가지고 있는지? (원래는 isOwned로 하려고 했지만 이거도 괜찮은것 같습니다!)
 
-                Console.WriteLine($"{Name}이(가) {item.ItemName}을(를) 장착했습니다! (공격력: {Atk}, 방어력: {Defen}, 체력: {MaxHealth})");
-                Inventory.RemoveItem(item);
+            //가지고 있지 않은 경우
+            if (!Inventory.Inven.Contains(item))
+            {
+                PrintWarningForNoItem(item);
             }
+            //가지고 있지만 장착중인 경우
+            else if (Inventory.Inven.Contains(item) && !item.IsEquipped)
+            {
+                PrintWarningForEquipingItem(item);
+            }
+            //가지고 있지 않은 경우 && 장착중이 아닌 경우
             else
             {
-                Console.WriteLine($"{item.ItemName}이(가) 인벤토리에 없습니다.");
+                ApplyItemEffect(item);
+                PrintPlayerEquipItem(item);
+                item.IsEquipped = true;
             }
         }
 
@@ -150,20 +167,26 @@ namespace ConsoleRPG24
                 Console.WriteLine($"{item.ItemName}이(가) 인벤토리에 없습니다.");
             }
         }
-        public void UnequipItem(Item item)
+        //아이템을 장착해제할 경우
+        internal void UnequipItem(Item item)
         {
-            if (item.IsPercentage)
+
+            //가지고 있지 않은 경우
+            if (!Inventory.Inven.Contains(item))
             {
-                // 🔹 퍼센트 아이템 해제 시 원래 스탯으로 복원
-                Atk = BaseAtk;
-                Defen = BaseDefen;
-                MaxHealth = BaseHealth;
+                PrintWarningForNoItem(item);
             }
+            //가지고 있지만 장착 해제중인 경우
+            else if (Inventory.Inven.Contains(item) && item.IsEquipped)
+            {
+                PrintWarningForNotEquipingItem(item);
+            }
+            //가지고 있지 않은 경우 && 장착중이 아닌 경우
             else
             {
-                Atk -= item.Attack;
-                Defen -= item.Defense;
-                MaxHealth -= item.Health;
+                ApplyItemEffect(item);
+                PrintPlayerUnequipItem(item);
+                item.IsEquipped = false;
             }
         }
 
