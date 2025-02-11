@@ -1,22 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static ConsoleRPG24.Stat;
-using static ConsoleRPG24.MercenaryManager;
-using static ConsoleRPG24.Stat.Player;
-
-namespace ConsoleRPG24
+﻿namespace ConsoleRPG24
 {
     internal class Shop
     {
-        private MercenaryManager mercenaryManager;
-        
-        public Shop(MercenaryManager manager)
-        {
-            mercenaryManager = manager;
-        }
+    
+
         public void EnterShop(string location)
         {
             if (location == "마을")
@@ -93,35 +80,7 @@ namespace ConsoleRPG24
             }
 
         }
-        public void ShowMercenaryShop()
-        {
-            Console.WriteLine("[용병소]");
-            Console.WriteLine("1. 용병 고용");
-            Console.WriteLine("2. 나가기");
-            Console.Write(">> ");
-            string input = Console.ReadLine();
-            if (input == "1")
-            {
-                // 용병리스트
-                //1.
-                //2.
-                //용병 선택후 고용 -> Inventory 
-                
-            }
-            else if (input == "2")
-            {
-                Console.WriteLine("용병 상점을 나갑니다.");
-            }
-            else
-            {
-                Console.WriteLine("잘못된 입력입니다.");
-            }
-        }
-        public void BuyMercenary(Mercenary merc, int price)
-        {
-            Console.WriteLine($"{merc.Name} 용병을 {price} 골드에 고용했습니다!");
-            mercenaryManager.AddMercenary(merc);
-        }
-    
+        
+      
     }
 }

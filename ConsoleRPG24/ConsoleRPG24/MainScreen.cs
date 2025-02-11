@@ -12,16 +12,6 @@ namespace ConsoleRPG24
 
         private Player player;
 
-        private MercenaryManager mercenaryManager = new MercenaryManager();
-        //private Inventory inventory;
-
-
-        public MainScreen()
-        {
-
-            //inventory = new Inventory(mercenaryManager);
-        }
-
 
         public void GameStart()
         {
