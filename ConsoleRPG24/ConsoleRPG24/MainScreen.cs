@@ -58,22 +58,22 @@ namespace ConsoleRPG24
 
                 if (input == "1")
                 {
-                    player.Job = "전사";
+                    player.SetJobStats("전사");
                 }
 
                 else if (input == "2")
                 {
-                    player.Job = "마법사";
+                    player.SetJobStats("마법사");
                 }
 
                 else if (input == "3")
                 {
-                    player.Job = "궁수";
+                    player.SetJobStats("궁수");
                 }
 
                 else if (input == "4")
                 {
-                    player.Job = "암살자";
+                    player.SetJobStats("암살자");
                 }
 
                 else
@@ -82,9 +82,6 @@ namespace ConsoleRPG24
                     Console.WriteLine("자신이 했을만한 직업은 저 네가지 이외엔 없다는 확신이 든다.");
                     continue;
                 }
-
-
-                
 
                 break;
             }
