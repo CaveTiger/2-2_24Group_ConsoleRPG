@@ -1,25 +1,9 @@
-﻿using ConsoleRPG24;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static ConsoleRPG24.Stat;
-using static ConsoleRPG24.MercenaryManager;
-
-
-namespace ConsoleRPG24
+﻿namespace ConsoleRPG24
 {
-    internal class Inventory
+
+    public class Inventory
     {
-        private MercenaryManager mercenaryManager;
-
-        public Inventory(MercenaryManager mercenaryManager)
-        {
-            this.mercenaryManager = mercenaryManager;
-        }
-
-        public List<Item> Inven { get; set; } = new List<Item>();
+        internal List<Item> Inven { get; set; } = new List<Item>();
 
         public void OpenInventory()
         {
@@ -27,7 +11,6 @@ namespace ConsoleRPG24
             {
                 Console.WriteLine("[인벤토리]");
                 Console.WriteLine("1. 장비 관리");
-                Console.WriteLine("2. 용병 관리");
                 Console.WriteLine("0. 뒤로 가기");
                 Console.Write(">> ");
                 string input = Console.ReadLine();
@@ -35,10 +18,6 @@ namespace ConsoleRPG24
                 if (input == "1")
                 {
                     ManageEquipment();
-                }
-                else if (input == "2")
-                {
-                    MercenariesScreen();
                 }
                 else if (input == "0")
                 {
@@ -53,29 +32,71 @@ namespace ConsoleRPG24
             }
         }
 
-        public void AddItem(Item item)
+        // 🔹 아이템 추가
+        internal void AddItem(Item item)
         {
             Inven.Add(item);
             Console.WriteLine($"{item.ItemName}을(를) 인벤토리에 추가했습니다!");
         }
 
+        // 🔹 인벤토리 아이템을 가져올 때 반복문
+        public void ShowInventory()
+        {
+            if (Inven.Count == 0)
+            {
+                Console.WriteLine("인벤토리가 비어 있습니다.");
+                return;
+            }
+
+            Console.WriteLine("[인벤토리 아이템 목록]");
+            foreach (var item in Inven)
+            {
+                Console.WriteLine($"아이템: {item.ItemName} | 설명: {item.Description}");
+            }
+        }
+
+        // 🔹 아이템 제거
+        internal void RemoveItem(Item item)
+        {
+            if (Inven.Contains(item))
+            {
+                Inven.Remove(item);
+                Console.WriteLine($"{item.ItemName}을(를) 인벤토리에서 제거했습니다.");
+            }
+            else
+            {
+                Console.WriteLine($"{item.ItemName}이(가) 인벤토리에 없습니다.");
+            }
+        }
+
+        // 🔹 장비 관리 (아이템 목록 출력 및 장착/해제 기능)
         public void ManageEquipment()
         {
             while (true)
             {
+                if (Inven.Count == 0)
+                {   
+                    Console.WriteLine("인벤토리가 비어 있습니다.");
+                    return;
+                }
+
                 Console.WriteLine("[아이템 목록]");
                 for (int i = 0; i < Inven.Count; i++)
                 {
                     var item = Inven[i];
                     string equippedMark = item.IsEquipped ? "[E]" : "   ";
-                    Console.WriteLine($"- {i + 1}{item.ItemName} | {item.ItemDivision} +{item.Attack}{item.Defense}{item.Health} | {item.Description}");
+                    Console.WriteLine($"- {i + 1} {equippedMark} {item.ItemName} | {item.ItemDivision} +{item.Attack}/{item.Defense}/{item.Health} | {item.Description}");
                 }
+
                 Console.WriteLine("0. 나가기");
-                Console.WriteLine("원하시는 행동을 입력해주세요: ");
-                Console.Write(">>");
+                Console.Write(">> ");
                 string input = Console.ReadLine();
 
-                if (input == "0") return;
+                if (input == "0")
+                {
+                    Console.Clear();
+                    break;
+                }
 
                 if (int.TryParse(input, out int itemIndex) && itemIndex > 0 && itemIndex <= Inven.Count)
                 {
@@ -87,17 +108,13 @@ namespace ConsoleRPG24
                 }
             }
         }
+
+        // 🔹 장착/해제 기능
         private void ToggleEquip(int index)
         {
             var item = Inven[index];
             item.IsEquipped = !item.IsEquipped;
             Console.WriteLine(item.IsEquipped ? $"{item.ItemName}을(를) 장착했습니다!" : $"{item.ItemName}을(를) 해제했습니다!");
         }
-
-        public void MercenariesScreen()
-        {
-            mercenaryManager.ShowMercenaries(); // 인스턴스를 새로 생성하지 않고 기존 객체 사용
-        }
     }
-
 }

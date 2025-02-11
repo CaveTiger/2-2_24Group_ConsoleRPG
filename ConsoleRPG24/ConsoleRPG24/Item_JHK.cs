@@ -26,22 +26,22 @@
 
     internal partial class Item
     {
-        public string ItemName { get; set; }                //이름
-        public string Description { get; set; }             //설명
-        public string EffectDescription { get; set; }       //효과 설명
-        public int Attack { get; set; }                     //공격력
-        public int Defense { get; set; }                    //방어력
-        public int Health { get; set; }                     //체력
-        public int MaxHealth { get; set; }                  //최대 체력
-        public int CritHit { get; set; }                    //치확
-        public int CritDmg { get; set; }                    //치피
-        public int Mana { get; set; }                       //마나
-        public int Miss { get; set; }                       //회피
-        public int Gold { get; set; }                       //골드
-        public int Speed { get; set; }                      //속도
-        public int ItemPrice { get; set; }                  //가격
-        public Rank ItemRank { get; set; }                  //등급
-        public Division ItemDivision { get; set; }          //분류
+        public string ItemName { get; private set; }                //이름
+        public string Description { get; private set; }             //설명
+        public string EffectDescription { get; private set; }       //효과 설명
+        public int Attack { get; private set; }                     //공격력
+        public int Defense { get; private set; }                    //방어력
+        public int Health { get; private set; }                     //체력
+        public int MaxHealth { get; private set; }                  //최대 체력
+        public int CritHit { get; private set; }                    //치확
+        public int CritDmg { get; private set; }                    //치피
+        public int Mana { get; private set; }                       //마나
+        public int Miss { get; private set; }                       //회피
+        public int Gold { get; private set; }                       //골드
+        public int Speed { get; private set; }                      //속도
+        public int ItemPrice { get; private set; }                  //가격
+        public Rank ItemRank { get; private set; }                  //등급
+        public Division ItemDivision { get; private set; }          //분류
 
         public bool IsOwned { get; set; }                   //소유 여부
         public bool IsEquipped { get; set; }                //착용 여부
