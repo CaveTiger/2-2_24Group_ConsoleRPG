@@ -11,9 +11,10 @@ namespace ConsoleRPG24
         public int Speed { get; set; }  // 속도
         public bool IsDead { get; set; } // 사망 여부
         public bool IsTraitor { get; set; } // 배신 여부
+        public int Miss { get; set; }  // 회피 확률 추가 (기본값 0)
 
 
-        public BaseCharacter(string name, int atk, int defen, float health, float maxHealth, int speed)
+        public BaseCharacter(string name, int atk, int defen, float health, float maxHealth, int speed, int miss)
         {
             Name = name;
             Atk = atk;
@@ -23,6 +24,7 @@ namespace ConsoleRPG24
             Speed = speed;
             IsDead = false;
             IsTraitor = false;
+            Miss = miss;
         }
 
         // 🔹 데미지를 받는 함수 (사망 여부 체크 포함)
@@ -82,6 +84,9 @@ namespace ConsoleRPG24
     // 🔹 플레이어 클래스
     internal partial class Player : BaseCharacter
     {
+        public int BaseAtk { get; private set; }  //원래 공격력 저장
+        public int BaseDefen { get; private set; }  //원래 방어력 저장
+        public float BaseHealth { get; private set; }  // 원래 체력 저장
         public string Job { get; set; }  // 직업
         public int Gold { get; set; }  // 돈
         public float Miss { get; set; }  // 회피 확률
@@ -92,11 +97,14 @@ namespace ConsoleRPG24
         public Inventory Inventory { get; private set; }
 
 
-        public Player(string name, string job)
-           : base(name, 0, 0, 0, 0, 0)
+        public Player(string name, string job, int atk, int defen, float health, float maxHealth, int speed, int miss)
+      : base(name, atk, defen, health, maxHealth, speed, miss)
         {
+            BaseAtk = atk;
+            BaseDefen = defen;
+            BaseHealth = maxHealth;
             Gold = 100;
-            Miss = 0.1f;
+            Miss = 10;  // 10% 확률 (0~100 기준)
             Mana = 100;
             Inventory = new Inventory(); // 🔹 인벤토리 초기화 (중요)
             SetJobStats(job);
@@ -104,13 +112,22 @@ namespace ConsoleRPG24
 
         internal void EquipItem(Item item)
         {
-            // 🔹 Inventory.Items → Inventory.Inven으로 수정
-            if (Inventory != null && Inventory.Inven.Contains(item))
+            if (Inventory.Inven.Contains(item))
             {
-                Atk += item.Attack;
-                Defen += item.Defense;
-                MaxHealth += item.Health;
-                Console.WriteLine($"{Name}이(가) {item.ItemName}을(를) 장착했습니다!");
+                if (item.IsPercentage)  // 🔹 퍼센트 증가 아이템인지 확인
+                {
+                    Atk = BaseAtk + (int)(BaseAtk * (item.Attack / 100f));
+                    Defen = BaseDefen + (int)(BaseDefen * (item.Defense / 100f));
+                    MaxHealth = BaseHealth + (BaseHealth * (item.Health / 100f));
+                }
+                else  // 🔹 일반 아이템
+                {
+                    Atk += item.Attack;
+                    Defen += item.Defense;
+                    MaxHealth += item.Health;
+                }
+
+                Console.WriteLine($"{Name}이(가) {item.ItemName}을(를) 장착했습니다! (공격력: {Atk}, 방어력: {Defen}, 체력: {MaxHealth})");
                 Inventory.RemoveItem(item);
             }
             else
@@ -123,14 +140,30 @@ namespace ConsoleRPG24
         {
             if (Inventory.Inven.Contains(item))
             {
-                this.Health += item.Health;
-                if (this.Health > this.MaxHealth) this.Health = this.MaxHealth;
-                Console.WriteLine($"{this.Name}이(가) {item.ItemName}을(를) 사용하여 체력이 {this.Health}이 되었습니다!");
+                Health += item.Health;
+                if (Health > MaxHealth) Health = MaxHealth;
+                Console.WriteLine($"{Name}이(가) {item.ItemName}을(를) 사용하여 체력이 {Health}이 되었습니다!");
                 Inventory.RemoveItem(item);
             }
             else
             {
                 Console.WriteLine($"{item.ItemName}이(가) 인벤토리에 없습니다.");
+            }
+        }
+        public void UnequipItem(Item item)
+        {
+            if (item.IsPercentage)
+            {
+                // 🔹 퍼센트 아이템 해제 시 원래 스탯으로 복원
+                Atk = BaseAtk;
+                Defen = BaseDefen;
+                MaxHealth = BaseHealth;
+            }
+            else
+            {
+                Atk -= item.Attack;
+                Defen -= item.Defense;
+                MaxHealth -= item.Health;
             }
         }
 
@@ -191,13 +224,19 @@ namespace ConsoleRPG24
                     break;
             }
         }
-        // 🔹 Attack 메서드 재정의 (override)
         public override void Attack(BaseCharacter target)
         {
             Console.WriteLine($"{Name}이(가) {target.Name}을(를) 공격합니다!");
 
-            // 치명타 확률 적용
-            bool isCritical = new Random().NextDouble() < CritHit;
+            // 🔹 0~100 사이의 난수 생성
+            Random rand = new Random();
+            float missChance = rand.Next(0, 101);
+            float critChance = rand.Next(0, 101);  // 0~100 사이의 정수값
+
+            // 🔹 치명타 여부 판별 (CritHit를 0~100 범위로 비교)
+            bool isCritical = critChance < CritHit * 100;
+
+            // 🔹 일반 공격 vs 치명타 공격
             int damage = isCritical ? (int)(Atk * CritDmg) : Atk;
 
             if (isCritical)
@@ -206,7 +245,15 @@ namespace ConsoleRPG24
             }
 
             target.TakeDamage(damage);
+
+            // 🔹 공격이 빗나가는지 확인
+            if (missChance < target.Miss)  // 대상의 회피 확률 적용
+            {
+                Console.WriteLine($"❌ {target.Name}이(가) 공격을 회피했습니다!");
+                return;  // 공격 실패
+            }
         }
+
 
         public bool EvadeAttack()
         {
@@ -229,8 +276,8 @@ namespace ConsoleRPG24
     // 🔹 용병 클래스
     public class Mercenary : BaseCharacter
     {
-        public Mercenary(string name, int atk, int defen, float health, float maxHealth, int speed)
-            : base(name, atk, defen, health, maxHealth, speed)
+        public Mercenary(string name, int atk, int defen, float health, float maxHealth, int speed, int miss)
+            : base(name, atk, defen, health, maxHealth, speed, 0)
         {
         }
 
@@ -245,7 +292,7 @@ namespace ConsoleRPG24
     public class Monster : BaseCharacter
     {
         public Monster(string name, int atk, int defen, float health, float maxHealth, int speed)
-            : base(name, atk, defen, health, maxHealth, speed)
+            : base(name, atk, defen, health, maxHealth, speed, 0) // 🔹 몬스터는 회피 없음 (Miss = 0)
         {
         }
 
