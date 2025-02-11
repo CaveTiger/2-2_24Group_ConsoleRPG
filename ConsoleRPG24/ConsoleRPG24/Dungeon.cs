@@ -129,15 +129,14 @@ namespace ConsoleRPG24
                         //최종보스전
                     }
                 }
-
-                ShopEncounter();
-
                 //5번, 10번 15번 배틀 후 상점 등장!
                 //20번 배틀에서는 최종보스 등장 → 이후 클리어~!
                 //int stage = 20일때 최종보스전
 
                 break;
             }
+
+            GameClear();
         }
 
 
