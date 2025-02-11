@@ -20,8 +20,7 @@
         miss,
         gold,
         spd,
-        shop,
-        mer
+        shop
     }
 
     internal partial class Item
