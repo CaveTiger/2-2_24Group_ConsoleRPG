@@ -2,8 +2,7 @@ namespace ConsoleRPG24
 {
     internal class Shop
     {
-    
-       
+
 
         public void ShowVillageShop()
         {
@@ -28,7 +27,7 @@ namespace ConsoleRPG24
             }
 
         }
-        
+
         public void VillageShop()
         {
             // MainScreen_JHK 아이템 리스크를 불러오기
@@ -71,5 +70,7 @@ namespace ConsoleRPG24
             //
 
         }
-    }   
+
+    }
+
 }
