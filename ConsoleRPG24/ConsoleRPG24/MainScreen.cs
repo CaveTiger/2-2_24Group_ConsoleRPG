@@ -184,10 +184,7 @@ namespace ConsoleRPG24
         public void InventoryScreen()
         {
             Console.Clear();
-            //inventory.OpenInventory(); // 기존 인벤토리를 유지하며 사용
-            Inventory inventory = new Inventory();
-            inventory.OpenInventory();
-
+            player.Inventory.OpenInventory();
         }
 
 
