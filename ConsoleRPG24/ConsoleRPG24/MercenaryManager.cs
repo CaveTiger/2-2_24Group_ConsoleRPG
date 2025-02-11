@@ -73,6 +73,7 @@
 //            }
 //        }
 
+
 //        public void ShowMercenaries()
 //        {
 //            Console.Clear();
@@ -87,7 +88,6 @@
 //            Console.WriteLine("\n0. 뒤로 가기");
 //            Console.Write("\n>> 선택할 용병 번호 입력: ");
 //            string input = Console.ReadLine();
-
 //            if (int.TryParse(input, out int index) && index >= 1 && index <= mercenaries.Count)
 //            {
 //                ShowMercenaryDetails(mercenaries[index - 1]);
@@ -102,6 +102,7 @@
 //                Console.WriteLine("잘못된 입력입니다. 다시 입력하세요.");
 //            }
 //        }
+
 
 //        public void ShowMercenaryDetails(Mercenary merc)
 //        {
@@ -119,7 +120,6 @@
 //                Console.WriteLine("3. 해고");
 //                Console.WriteLine("0. 뒤로 가기");
 //                Console.Write(">>  ");
-
 //                string input = Console.ReadLine();
 //                if (input == "1")
 //                {
