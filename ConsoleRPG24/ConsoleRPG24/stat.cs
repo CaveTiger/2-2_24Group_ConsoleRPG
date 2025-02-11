@@ -108,7 +108,6 @@
             Gold = 100;
             Mana = 100;
             Inventory = new Inventory();
-            Job = "전사"; // 기본 직업 설정
         }
 
 
@@ -124,6 +123,7 @@
             SetJobStats(job);
 
         }
+
         // Atk 계산
         public int CurrentAtk => BaseAtk + bonusAtk;
         public int CurrentDefen => BaseDefen + bonusDefen;
