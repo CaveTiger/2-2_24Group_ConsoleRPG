@@ -100,20 +100,27 @@ namespace ConsoleRPG24
         public float CritHit { get; set; }  // 치명타 확률 (%)
         public float CritDmg { get; set; }  // 치명타 피해 배율
         public Inventory Inventory { get; private set; }
+        private int bonusAtk = 0;  // 추가 공격력 저장
+        private int bonusDefen = 0;  // 추가 방어력 저장
+        private float bonusHealth = 0;  // 추가 체력 저장
 
 
-        public Player(string name, string job, int atk, int defen, float health, float maxHealth, int speed, int miss)
-      : base(name, atk, defen, health, maxHealth, speed, miss)
+        public Player(string name, string job, int baseAtk, int baseDefen, float baseHealth, float maxHealth, int speed, int miss)
+       : base(name, 0, 0, baseHealth, maxHealth, speed, miss)
         {
-            BaseAtk = atk;
-            BaseDefen = defen;
+            BaseAtk = baseAtk;
+            BaseDefen = baseDefen;
             BaseHealth = maxHealth;
             Gold = 100;
-            Miss = 10;  // 10% 확률 (0~100 기준)
             Mana = 100;
-            Inventory = new Inventory(); // 🔹 인벤토리 초기화 (중요)
+            Inventory = new Inventory();
             SetJobStats(job);
+
         }
+        // Atk 계산
+        public int CurrentAtk => BaseAtk + bonusAtk;
+        public int CurrentDefen => BaseDefen + bonusDefen;
+        public float CurrentHealth => BaseHealth + bonusHealth;
 
         public void EquipItem(Item item)
         {
@@ -160,16 +167,23 @@ namespace ConsoleRPG24
             if (item.IsPercentage)
             {
                 // 🔹 퍼센트 아이템 해제 시 원래 스탯으로 복원
-                Atk = BaseAtk;
-                Defen = BaseDefen;
-                MaxHealth = BaseHealth;
+                bonusAtk -= (int)(BaseAtk * (item.Attack / 100f));
+                bonusDefen -= (int)(BaseDefen * (item.Defense / 100f));
+                bonusHealth -= (BaseHealth * (item.Health / 100f));
             }
             else
             {
-                Atk -= item.Attack;
-                Defen -= item.Defense;
-                MaxHealth -= item.Health;
+                bonusAtk -= item.Attack;
+                bonusDefen -= item.Defense;
+                bonusHealth -= item.Health;
             }
+            // 🔹 값이 0 이하로 떨어지지 않도록 보정
+            if (bonusAtk < 0) bonusAtk = 0;
+            if (bonusDefen < 0) bonusDefen = 0;
+            if (bonusHealth < 0) bonusHealth = 0;
+
+            Console.WriteLine($"{Name}이(가) {item.ItemName}을(를) 해제했습니다! (공격력: {CurrentAtk}, 방어력: {CurrentDefen}, 체력: {CurrentHealth})");
+            Inventory.AddItem(item);
         }
 
         // 🔹 직업 선택 시 스탯 설정
