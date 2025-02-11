@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Numerics;
+using ConsoleRPG24;
 
 namespace ConsoleRPG24
 {
@@ -13,6 +16,7 @@ namespace ConsoleRPG24
         public int Speed { get; set; }  // 속도
         public bool IsDead { get; set; } // 사망 여부
         public bool IsTraitor { get; set; } // 배신 여부
+
 
         public BaseCharacter(string name, int atk, int defen, float health, float maxHealth, int speed)
         {
@@ -50,13 +54,6 @@ namespace ConsoleRPG24
             }
         }
 
-        // 🔹 기본 공격 메서드 (모든 캐릭터가 사용 가능)
-        public virtual void Attack(BaseCharacter target)
-        {
-            Console.WriteLine($"{Name}이 {target.Name}을(를) 공격합니다!");
-            target.TakeDamage(Atk);
-        }
-
         // 🔹 배신 이벤트
         public void Betray()
         {
@@ -76,12 +73,19 @@ namespace ConsoleRPG24
             return IsTraitor;
         }
 
+        // 🔹 Attack 메서드를 virtual로 선언 (재정의 가능)
+        public virtual void Attack(BaseCharacter target)
+        {
+            Console.WriteLine($"{Name}이 {target.Name}을(를) 공격합니다!");
+            target.TakeDamage(Atk);
+        }
     }
 
 
 
+
     // 🔹 플레이어 클래스
-    public class Player : BaseCharacter
+    public partial class Player : BaseCharacter
     {
         public string Job { get; set; }  // 직업
         public int Gold { get; set; }  // 돈
@@ -90,14 +94,49 @@ namespace ConsoleRPG24
         public string Skill { get; set; }  // 스킬
         public float CritHit { get; set; }  // 치명타 확률 (%)
         public float CritDmg { get; set; }  // 치명타 피해 배율
+        public Inventory Inventory { get; private set; }
+
 
         public Player(string name, string job)
-            : base(name, 0, 0, 0, 0, 0) // 스탯을 0으로 초기화하고 아래에서 설정
+           : base(name, 0, 0, 0, 0, 0)
         {
             Gold = 100;
             Miss = 0.1f;
             Mana = 100;
+            Inventory = new Inventory(); // 🔹 인벤토리 초기화 (중요)
             SetJobStats(job);
+        }
+
+        public void EquipItem(Item item)
+        {
+            // 🔹 Inventory.Items → Inventory.Inven으로 수정
+            if (Inventory != null && Inventory.Inven.Contains(item))
+            {
+                Atk += item.Attack;
+                Defen += item.Defense;
+                MaxHealth += item.Health;
+                Console.WriteLine($"{Name}이(가) {item.ItemName}을(를) 장착했습니다!");
+                Inventory.RemoveItem(item);
+            }
+            else
+            {
+                Console.WriteLine($"{item.ItemName}이(가) 인벤토리에 없습니다.");
+            }
+        }
+
+        public void UseItem(Item item)
+        {
+            if (Inventory.Inven.Contains(item))
+            {
+                this.Health += item.Health;
+                if (this.Health > this.MaxHealth) this.Health = this.MaxHealth;
+                Console.WriteLine($"{this.Name}이(가) {item.ItemName}을(를) 사용하여 체력이 {this.Health}이 되었습니다!");
+                Inventory.RemoveItem(item);
+            }
+            else
+            {
+                Console.WriteLine($"{item.ItemName}이(가) 인벤토리에 없습니다.");
+            }
         }
 
         // 🔹 직업 선택 시 스탯 설정
@@ -157,10 +196,21 @@ namespace ConsoleRPG24
                     break;
             }
         }
-
-        public override bool IsAlly()
+        // 🔹 Attack 메서드 재정의 (override)
+        public override void Attack(BaseCharacter target)
         {
-            return true;
+            Console.WriteLine($"{Name}이(가) {target.Name}을(를) 공격합니다!");
+
+            // 치명타 확률 적용
+            bool isCritical = new Random().NextDouble() < CritHit;
+            int damage = isCritical ? (int)(Atk * CritDmg) : Atk;
+
+            if (isCritical)
+            {
+                Console.WriteLine("💥 치명타 공격! 💥");
+            }
+
+            target.TakeDamage(damage);
         }
 
         public bool EvadeAttack()
@@ -196,87 +246,89 @@ namespace ConsoleRPG24
     }
 
     // 🔹 몬스터 클래스
-    
-        public class Monster : BaseCharacter
-        {
-            public Monster(string name, int atk, int defen, float health, float maxHealth, int speed)
-                : base(name, atk, defen, health, maxHealth, speed)
-            {
-            }
 
-            public override bool IsAlly()
-            {
-                return false;
-            }
+    public class Monster : BaseCharacter
+    {
+        public Monster(string name, int atk, int defen, float health, float maxHealth, int speed)
+            : base(name, atk, defen, health, maxHealth, speed)
+        {
         }
 
-        public class Goblin : Monster ///고블린:속도가 빠름
+        public override bool IsAlly()
         {
-            public Goblin(string name) : base(name, 8, 3, 30f, 30f, 7) { }
-
-            public override void Attack(BaseCharacter target)
-            {
-                Console.WriteLine($"{Name}이 빠르게 공격합니다! (속도 {Speed})");
-                target.TakeDamage(Atk);
-            }
+            return false;
         }
+    }
 
-        public class Orc : Monster ///오크:강한 공격력
+    public class Goblin : Monster ///고블린:속도가 빠름
+    {
+        public Goblin(string name) : base(name, 8, 3, 30f, 30f, 7) { }
+
+        public override void Attack(BaseCharacter target)
         {
-            public Orc(string name) : base(name, 15, 5, 60f, 60f, 4) { }
-
-            public override void Attack(BaseCharacter target)
-            {
-                Console.WriteLine($"{Name}이 강력한 일격을 가합니다!");
-                target.TakeDamage(Atk + 5);
-            }
+            Console.WriteLine($"{Name}이 빠르게 공격합니다! (속도 {Speed})");
+            target.TakeDamage(Atk);
         }
+    }
 
-        public class Dragon : Monster ///드레곤:강력한 브레스 공격
+    public class Orc : Monster ///오크:강한 공격력
+    {
+        public Orc(string name) : base(name, 15, 5, 60f, 60f, 4) { }
+
+        public override void Attack(BaseCharacter target)
         {
-            public Dragon(string name) : base(name, 30, 10, 200f, 200f, 5) { }
-
-            public override void Attack(BaseCharacter target)
-            {
-                Console.WriteLine($"{Name}이 불을 뿜습니다! (광역 공격)");
-                target.TakeDamage(Atk * 2);
-            }
+            Console.WriteLine($"{Name}이 강력한 일격을 가합니다!");
+            target.TakeDamage(Atk + 5);
         }
+    }
 
-        public class Slime : Monster // 🔹 슬라임:피격 시 일정 확률로 분열
+    public class Dragon : Monster ///드레곤:강력한 브레스 공격
+    {
+        public Dragon(string name) : base(name, 30, 10, 200f, 200f, 5) { }
+
+        public override void Attack(BaseCharacter target)
         {
-            public static List<Slime> SlimeList = new List<Slime>(); 
-
-            public Slime(string name) : base(name, 5, 2, 20f, 20f, 2) { }
-
-            public override void TakeDamage(int damage)
-            {
-                base.TakeDamage(damage);
-
-                Random rand = new Random();
-                if (Health <= 0 && rand.NextDouble() < 0.5)
-                {
-                    string newSlimeName = $"{Name} 분열체";
-                    Slime newSlime = new Slime(newSlimeName);
-                    SlimeList.Add(newSlime);
-                    Console.WriteLine($"{Name}이 분열하여 {newSlimeName}이 생성되었습니다!");
-                }
-            }
+            Console.WriteLine($"{Name}이 불을 뿜습니다! (광역 공격)");
+            target.TakeDamage(Atk * 2);
         }
-        
-        public class Vampire : Monster ///뱀파이어:공격시 흡혈
-        {
-            public Vampire(string name) : base(name, 18, 6, 70f, 70f, 6) { }
+    }
 
-            public override void Attack(BaseCharacter target)
+    public class Slime : Monster
+    {
+        public static List<Slime> SlimeList = new List<Slime>();
+
+        public Slime(string name) : base(name, 5, 2, 20f, 20f, 2) { }
+
+        // 🔹 BaseCharacter의 TakeDamage()를 override하여 분열 기능 추가
+        public override void TakeDamage(int damage)
+        {
+            base.TakeDamage(damage);
+
+            Random rand = new Random();
+            if (Health <= 0 && rand.NextDouble() < 0.5)
             {
-                Console.WriteLine($"{Name}이 {target.Name}을(를) 공격하며 피를 흡수합니다!");
-                target.TakeDamage(Atk);
-                Health += 5; // 흡혈 효과
-                if (Health > MaxHealth) Health = MaxHealth;
-                Console.WriteLine($"{Name}의 체력이 {Health}로 회복되었습니다!");
+                string newSlimeName = $"{Name} 분열체";
+                Slime newSlime = new Slime(newSlimeName);
+                SlimeList.Add(newSlime);
+                Console.WriteLine($"{Name}이 분열하여 {newSlimeName}이 생성되었습니다!");
             }
         }
     }
+
+
+    public class Vampire : Monster ///뱀파이어:공격시 흡혈
+    {
+        public Vampire(string name) : base(name, 18, 6, 70f, 70f, 6) { }
+
+        public override void Attack(BaseCharacter target)
+        {
+            Console.WriteLine($"{Name}이 {target.Name}을(를) 공격하며 피를 흡수합니다!");
+            target.TakeDamage(Atk);
+            Health += 5; // 흡혈 효과
+            if (Health > MaxHealth) Health = MaxHealth;
+            Console.WriteLine($"{Name}의 체력이 {Health}로 회복되었습니다!");
+        }
+    }
+}
 
 

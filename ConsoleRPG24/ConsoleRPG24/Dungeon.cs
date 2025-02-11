@@ -1,111 +1,120 @@
-﻿using System.Numerics;
-using System.Reflection.PortableExecutable;
+﻿using System;
 using System.Threading;
 
-/*
+//git organazation
+
 namespace ConsoleRPG24
 {
-    public void TakeDamege(int damage)
+
+    //던전 아직 구현 중입니다!!
+
+    public class Stage
     {
-        health -= damage;
-    }
+        Player player;
+        Monster monster;
 
-
-    public class DungeonStage
-    {
-        
-        private ICharacter player;
-        private ICharacter monster;
-
-        //델리게이트
-        public delegate void GameEvent(ICharacter character);
-        public event GameEvent OnCharacterDeath;
-
-        public Stage(ICharacter player, ICharacter monster)
+        public Stage(Player player, Monster monster)
         {
             this.player = player;
             this.monster = monster;
-            OnCharacterDeath += StageClear;
+
+            //??????????
         }
-        
+
+
+        //열심히 작성 중~
+        public void Rewards()
+        {
+            if (monster.Health <= 0)
+            {
+                Console.WriteLine($"스테이지 클리어! {monster.Name}를 물리쳤습니다!");
+
+                //골드 혹은 아이템 보상
+                //다음 전투로~!
+
+            }
+
+            else if (player.Health <= 0)
+            {
+                Console.WriteLine("게임 오버! 패배했습니다...");
+            }
+        }
+        //열심히 작성 중~
+
+
 
         public void Start()
         {
             BattleSystem battleSystem = new BattleSystem();
-            battleSystem.Chance();
+            battleSystem.BattleStart();
 
-            Console.WriteLine(new string('=', 20));
-            Console.WriteLine($"전투 개시! \n플레이어 {player.name} \n체력: {player.health}\n 마나: {player.mana}\n공격력/방어력: {player.atk}/{player.defen}");
-            Console.WriteLine();
-            Console.WriteLine($"적 {monster.name} \n체력: {monster.health} \n공격력/방어력: {monster.atk}/{monster.defen}");
-            Console.WriteLine(new string('=', 20));
-            Console.WriteLine();
+            //battleSystem.Rewards();
+        }
 
-            while (!player.IsDead && !monster.IsDead)
+
+        public void DungeonStart()
+        {
+            while (true)
             {
-                Console.WriteLine($"{player.name}의 턴!");
-                monster.TakeDamage(player.attack);
-                Console.WriteLine();
-                Thread.Sleep(1000);
-
-                if (monster.IsDead) break;
-
-                Console.WriteLine($"{monster.name}의 턴!");
-                player.TakeDamage(monster.attack);
-                Console.WriteLine();
-                Thread.Sleep(1000);
-
-                if (player.IsDead) //플레이어 or 몬스터 죽었을 시의 이벤트 호출.
+                for (int i = 0; i <= 4; i++)
                 {
-                    OnCharacterDeath?.Invoke(player);
+                    Start();
+
+                    if (player.IsDead)
+                    {
+                        return;
+                    }
+
+                    Rewards();
+
+                    Camp camp = new Camp(player);
+                    camp.CampCount();
                 }
 
-                else if (monster.IsDead)
-                {
-                    OnCharacterDeath?.Invoke(monster);
-                }
+                ShopEncounter();
 
+                //5번, 10번 15번 배틀 후 상점 등장!
+                //20번 배틀에서는 최종보스 등장 → 이후 클리어~!
+
+                break;
             }
         }
 
 
-        private void StageClear(Icharacter character)
+        public void ShopEncounter()
         {
-            if (character is monster)
+            Console.WriteLine("당신은 다음으로 나아가던 중, 던전 안에 숨겨져있던 비밀 상점을 발견했다.");
+            Console.WriteLine();
+            Console.WriteLine("1. 비밀 상점 진입");
+            Console.WriteLine();
+            Console.WriteLine("0. 무시한다");
+            Console.WriteLine();
+            Console.WriteLine("무엇을 하시겠습니까?");
+            Console.WriteLine(">> ");
+            string input;
+            input = Console.ReadLine();
+
+            if (input == "1")
             {
-                Console.WriteLine($"스테이지 클리어! {character.name}(을)를 물리쳤습니다!");
+                Shop shop = new Shop();
+                shop.ShowDungeonShop();
             }
 
             else
             {
-                Console.WriteLine("게임 오버! 패배했습니다.");
-                Console.WriteLine($"{player.name}은 눈 앞이 깜깜해졌다...");
+                DungeonStart();
             }
         }
 
-        }
 
-
-        static void Main(string[] args)
+        public void GameClear()
         {
-
-            player = new player;
-            monster = new monster; //monster는 랜덤 생성
-
-            for ()
-            {   
-                
-                
-                Stage stage = new Stage(player, monster, rewards);
-                stage.Start();
-
-                if (player.IsDead) return;
-                
-            }
-
-
-            //스테이지가 끝날때마다 랜덤하게 전투 || 랜덤 이벤트 || 상점 출현
+            Console.WriteLine("당신은 던전의 모든 스테이지를 클리어했다!!");
+            Console.WriteLine("그 소문은 빠르게 퍼져, 대륙 전체가 당신의 위상을 알게 되었다.");
+            Console.WriteLine();
+            Thread.Sleep(1500);
+            Console.WriteLine("당신은 전설적인 모험가가 되었습니다.");
         }
     }
-} //git organazation
-*/
+}
+
