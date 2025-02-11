@@ -79,13 +79,13 @@
                     Console.WriteLine("인벤토리가 비어 있습니다.");
                     return;
                 }
-
+                Console.Clear();
                 Console.WriteLine("[아이템 목록]");
                 for (int i = 0; i < Inven.Count; i++)
                 {
                     var item = Inven[i];
                     string equippedMark = item.IsEquipped ? "[E]" : "   ";
-                    Console.WriteLine($"- {i + 1} {equippedMark} {item.ItemName} | {item.Description} | {item.ItemRank}| {item.EffectDescription}");
+                    Console.WriteLine($"- {i + 1} {equippedMark} {item.ItemName} | {item.EffectDescription} | {item.ItemRank}| {item.Description}");
                 }
 
                 Console.WriteLine("0. 나가기");
