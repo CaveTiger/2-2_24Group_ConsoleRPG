@@ -129,13 +129,13 @@
             Mana = 100;
             Inventory = new Inventory();
             SetJobStats(job);
-
         }
 
         // Atk 계산
         public int CurrentAtk => BaseAtk + bonusAtk;
         public int CurrentDefen => BaseDefen + bonusDefen;
         public float CurrentHealth => BaseHealth + bonusHealth;
+
 
         //아이템을 장착할 경우
         internal void EquipItem(Item item)
@@ -346,7 +346,7 @@
 
     public class Orc : Monster ///오크:강한 공격력
     {
-        public Orc(string name) : base(name, 15, 5, 60f, 60f, 4) { }
+        public Orc(string name) : base(name, 15, 5, 45f, 45f, 4) { }
 
         public override void Attack(BaseCharacter target)
         {
@@ -357,7 +357,7 @@
 
     public class Dragon : Monster ///드레곤:강력한 브레스 공격
     {
-        public Dragon(string name) : base(name, 30, 10, 200f, 200f, 5) { }
+        public Dragon(string name) : base(name, 30, 10, 125f, 125f, 4) { }
 
         public override void Attack(BaseCharacter target)
         {
