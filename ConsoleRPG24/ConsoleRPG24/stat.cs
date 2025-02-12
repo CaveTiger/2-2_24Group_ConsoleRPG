@@ -89,7 +89,7 @@ namespace ConsoleRPG24
 
             // 🔹 마을 화면으로 이동
             MainScreen mainScreen = new MainScreen();
-            mainScreen.Village();
+            mainScreen.GameStart();
         }
 
 
@@ -149,7 +149,7 @@ namespace ConsoleRPG24
             BaseHealth = 100;
             Gold = 1000;
             Mana = 100;
-            Inventory = new Inventory();
+            Inventory = new Inventory(this);
         }
 
 
@@ -161,7 +161,7 @@ namespace ConsoleRPG24
             BaseHealth = maxHealth;
             Gold = 1000;
             Mana = 100;
-            Inventory = new Inventory();
+            Inventory = new Inventory(this);
             SetJobStats(job);
 
         }

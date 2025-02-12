@@ -1,141 +1,160 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleRPG24
 {
-
-    public class Inventory
+    internal class Inventory
     {
-        internal List<Item> Inven { get; set; } = new List<Item>();
-        private const int MaxEquippedItems = 12;
-        public void OpenInventory()
-        {
-            while (true)
-            {
-                Console.WriteLine("[인벤토리]");
-                Console.WriteLine("1. 장비 관리");
-                Console.WriteLine("0. 뒤로 가기");
-                Console.Write(">> ");
-                string input = Console.ReadLine();
+        private Player player;  // 🔹 Player 참조 추가
+        private const int MaxEquippedItems = 9;  // 🔹 최대 장착 가능 아이템 개수
+        internal List<Item> Inven { get; private set; } = new List<Item>();
 
-                if (input == "1")
-                {
-                    ManageEquipment();
-                }
-                else if (input == "0")
-                {
-                    Console.Clear();
-                    return;
-                }
-                else
-                {
-                    Console.Clear();
-                    Console.WriteLine("잘못된 입력입니다. 다시 입력하세요.");
-                }
-            }
+        // 🔹 생성자: Player 객체를 참조
+        public Inventory(Player player)
+        {
+            this.player = player;
         }
 
         // 🔹 아이템 추가
         internal void AddItem(Item item)
         {
-            item.IsOwned = true;
-            Inven.Add(item);
-            Console.WriteLine($"{item.ItemName}을(를) 인벤토리에 추가했습니다!");
-        }
-
-        // 🔹 인벤토리 아이템을 가져올 때 반복문
-        public void ShowInventory()
-        {
-            if (Inven.Count == 0)
+            if (item.IsOwned) // 🔹 이미 소유한 아이템인지 확인
             {
-                Console.WriteLine("인벤토리가 비어 있습니다.");
+                Console.WriteLine($"[경고] {item.ItemName}은(는) 이미 보유 중입니다!");
                 return;
             }
 
-            Console.WriteLine("[인벤토리 아이템 목록]");
-            foreach (var item in Inven)
-            {
-                Console.WriteLine($"아이템: {item.ItemName} | 설명: {item.Description}");
-            }
+            item.IsOwned = true; // 🔹 아이템을 추가하면 소유 여부 설정
+            Inven.Add(item);
+            Console.WriteLine($"[성공] {item.ItemName}을(를) 인벤토리에 추가했습니다!");
         }
+
 
         // 🔹 아이템 제거
         internal void RemoveItem(Item item)
         {
             if (Inven.Contains(item))
             {
-                item.IsOwned = false;
                 Inven.Remove(item);
-                Console.WriteLine($"{item.ItemName}을(를) 인벤토리에서 제거했습니다.");
+                Console.WriteLine($"[성공] {item.ItemName}을(를) 인벤토리에서 제거했습니다.");
             }
             else
             {
-                Console.WriteLine($"{item.ItemName}이(가) 인벤토리에 없습니다.");
+                Console.WriteLine($"[오류] {item.ItemName}이(가) 인벤토리에 없습니다.");
             }
         }
 
-        // 🔹 장비 관리 (아이템 목록 출력 및 장착/해제 기능)
-        public void ManageEquipment()
+        // 🔹 아이템 장착
+        internal void EquipItem(Item item)
+        {
+            if (!Inven.Contains(item))
+            {
+                Console.WriteLine($"[오류] {item.ItemName}이(가) 인벤토리에 없습니다!");
+                return;
+            }
+
+            if (item.IsEquipped)
+            {
+                Console.WriteLine($"[경고] {item.ItemName}은(는) 이미 장착 중입니다!");
+                return;
+            }
+
+            int equippedCount = Inven.Count(i => i.IsEquipped);
+            if (equippedCount >= MaxEquippedItems)
+            {
+                Console.WriteLine($"[경고] 최대 {MaxEquippedItems}개의 아이템만 장착할 수 있습니다.");
+                return;
+            }
+
+            item.IsEquipped = true;
+            player.ApplyItemEffect(item);
+            Console.WriteLine($"[성공] {item.ItemName}을(를) 장착했습니다!");
+        }
+
+        // 🔹 아이템 해제
+        internal void UnequipItem(Item item)
+        {
+            if (!Inven.Contains(item))
+            {
+                Console.WriteLine($"[오류] {item.ItemName}이(가) 인벤토리에 없습니다!");
+                return;
+            }
+
+            if (!item.IsEquipped)
+            {
+                Console.WriteLine($"[경고] {item.ItemName}은(는) 장착 중이 아닙니다!");
+                return;
+            }
+
+            item.IsEquipped = false;
+            player.LoseItemEffect(item);
+            Console.WriteLine($"[성공] {item.ItemName}을(를) 해제했습니다!");
+        }
+
+        // 🔹 인벤토리 표시
+        public void ShowInventory()
+        {
+            if (Inven.Count == 0)
+            {
+                Console.WriteLine("[인벤토리] 비어 있습니다.");
+                return;
+            }
+
+            Console.WriteLine("[인벤토리 목록]");
+            for (int i = 0; i < Inven.Count; i++)
+            {
+                var item = Inven[i];
+                string equippedMark = item.IsEquipped ? "[E] " : "    ";
+                Console.WriteLine($"{equippedMark}{i + 1}. {item.ItemName} / {item.ItemRank} / {item.Description} " +
+                    $"(효과: {item.EffectDescription})");
+
+            }
+        }
+
+        // 🔹 인벤토리 UI
+        public void OpenInventory()
         {
             while (true)
             {
-                if (Inven.Count == 0)
-                {
-                    Console.WriteLine("인벤토리가 비어 있습니다.");
-                    return;
-                }
                 Console.Clear();
-                Console.WriteLine("[아이템 목록]");
-                for (int i = 0; i < Inven.Count; i++)
-                {
-                    var item = Inven[i];
-                    string equippedMark = item.IsEquipped ? "[E]" : "   ";
-                    Console.WriteLine($"- {i + 1} {equippedMark} {item.ItemName} | {item.EffectDescription} | {item.ItemRank}| {item.Description}");
-                }
+                ShowInventory();
 
-                Console.WriteLine("0. 나가기");
+                Console.WriteLine("\n[아이템 번호] 장착/해제  [0] 나가기");
                 Console.Write(">> ");
                 string input = Console.ReadLine();
 
                 if (input == "0")
                 {
                     Console.Clear();
-                    break;
+                    return;
                 }
 
                 if (int.TryParse(input, out int itemIndex) && itemIndex > 0 && itemIndex <= Inven.Count)
                 {
-                    ToggleEquip(itemIndex - 1);
+                    var item = Inven[itemIndex - 1];
+                    if (item.IsEquipped)
+                        UnequipItem(item);
+                    else
+                        EquipItem(item);
+                }
+                else if (input == "2")
+                {
+                    Console.Write("제거할 아이템 번호 입력: ");
+                    string removeInput = Console.ReadLine();
+                    if (int.TryParse(removeInput, out int removeIndex) && removeIndex > 0 && removeIndex <= Inven.Count)
+                    {
+                        RemoveItem(Inven[removeIndex - 1]);
+                    }
+                    else
+                    {
+                        Console.WriteLine("[오류] 잘못된 입력입니다.");
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("잘못된 입력입니다. 다시 입력하세요.");
+                    Console.WriteLine("[오류] 올바른 입력이 아닙니다.");
                 }
-            }
-        }
-
-        // 🔹 장착/해제 기능
-        private void ToggleEquip(int index)
-        {
-            var item = Inven[index];
-
-            // 이미 장착된 아이템이 아니면 장착 가능한 아이템 수 확인
-            if (item.IsEquipped)
-            {
-                item.IsEquipped = false;
-                Console.WriteLine($"{item.ItemName}을(를) 해제했습니다!");
-            }
-            else
-            {
-                int equippedCount = Inven.Count(i => i.IsEquipped);  // 장착된 아이템 수 계산
-
-                if (equippedCount >= MaxEquippedItems)
-                {
-                    Console.WriteLine($"최대 {MaxEquippedItems}개의 아이템만 장착할 수 있습니다.");
-                    return;
-                }
-
-                item.IsEquipped = true;
-                Console.WriteLine($"{item.ItemName}을(를) 장착했습니다!");
             }
         }
     }

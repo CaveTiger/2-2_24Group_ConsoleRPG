@@ -11,80 +11,69 @@ namespace ConsoleRPG24
         //능력치 효과 적용
         public void ApplyItemEffect(Item item)
         {
+            Console.WriteLine($"[디버그] {item.ItemName} 능력치 적용 중...");
+            Console.WriteLine($"[디버그] 기존 공격력: {Atk}, 기존 방어력: {Defen}, 기존 체력: {MaxHealth}");
+
             switch (item.ItemDivision)
             {
-                case Division.atk: Atk += (BaseAtk * (item.Attack / 100)); break;                         //퍼센트 계산
-                case Division.def: Defen += (BaseDefen * (item.Defense / 100)); break;                    //퍼센트 계산
-                case Division.hp: MaxHealth += (BaseHealth * (item.MaxHealth / 100)); break;           //퍼센트 계산
-                case Division.cHit: CritHit += item.CritHit; break;                                 //단순 수치 증가
-                case Division.cDmg: CritDmg += item.CritDmg; break;                                 //단순 수치 증가
-                case Division.miss: Miss += item.Miss; break;                                       //단순 수치 증가
-                case Division.spd: Speed += item.Speed; break;                                      //단순 수치 증가
-                default: break;
+                case Division.atk:
+                    Atk += (int)(Atk * (item.Attack / 100.0f));  // 🔹 퍼센트 기반 증가
+                    break;
+                case Division.def:
+                    Defen += (int)(Defen * (item.Defense / 100.0f));
+                    break;
+                case Division.hp:
+                    MaxHealth += (int)(Health * (item.MaxHealth / 100.0f));
+                    break;
+                case Division.cHit:
+                    CritHit += item.CritHit / 100.0f;  // 🔹 3 → 0.03 (3%)
+                    break;
+                case Division.cDmg:
+                    CritDmg += item.CritDmg / 100.0f;  // 🔹 50 → 0.5 (50%)
+                    break;
+                case Division.miss:
+                    Miss += item.Miss / 100.0f;  // 🔹 회피율도 100분율 적용
+                    break;
+                case Division.spd:
+                    Speed += item.Speed;  // 🔹 속도는 정수 값 유지
+                    break;
             }
+
+            Console.WriteLine($"[디버깅] 능력치 변경 후 공격력: {Atk}, 방어력: {Defen}, 체력: {MaxHealth}");
         }
+
 
         //능력치 효과 해제
         public void LoseItemEffect(Item item)
         {
+            Console.WriteLine($"[디버그] {item.ItemName} 능력치 해제 중...");
+
             switch (item.ItemDivision)
             {
-                case Division.atk: Atk -= (BaseAtk * (item.Attack / 100)); break;                         //퍼센트 계산
-                case Division.def: Defen -= (BaseDefen * (item.Defense / 100)); break;                    //퍼센트 계산
-                case Division.hp: MaxHealth -= (BaseHealth * (item.MaxHealth / 100)); break;           //퍼센트 계산
-                case Division.cHit: CritHit -= item.CritHit; break;                                 //단순 수치 감소
-                case Division.cDmg: CritDmg -= item.CritDmg; break;                                 //단순 수치 감소
-                case Division.miss: Miss -= item.Miss; break;                                       //단순 수치 감소
-                case Division.spd: Speed -= item.Speed; break;                                      //단순 수치 감소
-                default: break;
+                case Division.atk:
+                    Atk -= (int)(BaseAtk * (item.Attack / 100.0f));
+                    break;
+                case Division.def:
+                    Defen -= (int)(BaseDefen * (item.Defense / 100.0f));
+                    break;
+                case Division.hp:
+                    MaxHealth -= (int)(BaseHealth * (item.MaxHealth / 100.0f));
+                    break;
+                case Division.cHit:
+                    CritHit -= item.CritHit / 100.0f;
+                    break;
+                case Division.cDmg:
+                    CritDmg -= item.CritDmg / 100.0f;
+                    break;
+                case Division.miss:
+                    Miss -= item.Miss / 100.0f;
+                    break;
+                case Division.spd:
+                    Speed -= item.Speed;
+                    break;
             }
-        }
 
-        //아이템을 장착할 경우
-        internal void EquipItem_JHK(Item item)
-        {
-            //아이템을 가지고 있는지? (원래는 isOwned로 하려고 했지만 이거도 괜찮은것 같습니다!)
-
-            //가지고 있지 않은 경우
-            if (!Inventory.Inven.Contains(item))
-            {
-                PrintWarningForNoItem(item);
-            }
-            //가지고 있지만 장착중인 경우
-            else if (Inventory.Inven.Contains(item) && !item.IsEquipped)
-            {
-                PrintWarningForEquipingItem(item);
-            }
-            //가지고 있지 않은 경우 && 장착중이 아닌 경우
-            else
-            {
-                ApplyItemEffect(item);
-                PrintPlayerEquipItem(item);
-                item.IsEquipped = true;
-            }
-        }
-
-        //아이템을 장착해제할 경우
-        internal void UnequipItem_JHK(Item item)
-        {
-
-            //가지고 있지 않은 경우
-            if (!Inventory.Inven.Contains(item))
-            {
-                PrintWarningForNoItem(item);
-            }
-            //가지고 있지만 장착 해제중인 경우
-            else if (Inventory.Inven.Contains(item) && item.IsEquipped)
-            {
-                PrintWarningForNotEquipingItem(item);
-            }
-            //가지고 있지 않은 경우 && 장착중이 아닌 경우
-            else
-            {
-                ApplyItemEffect(item);
-                PrintPlayerUnequipItem(item);
-                item.IsEquipped = false;
-            }
+            Console.WriteLine($"[디버깅] 능력치 변경 후 공격력: {Atk}, 방어력: {Defen}, 체력: {MaxHealth}");
         }
 
         //아이템이 없을 경우 나오는 경고문 출력
