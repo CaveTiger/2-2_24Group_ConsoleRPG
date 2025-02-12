@@ -11,6 +11,8 @@ namespace ConsoleRPG24
         List<Item> itemList = new List<Item>();
         public Player player;
         private int pityCounter = 0;  // 🔹 90회 뽑으면 확정 지급 (pity 시스템)
+        private int totalDraws = 0;  // 🔹 총 뽑기 횟수
+        private List<Item> obtainedItems = new List<Item>();  // 🔹 중복 방지를 위한 획득 아이템 리스트
 
         public static MainScreen instance; 
 
@@ -297,6 +299,7 @@ namespace ConsoleRPG24
 
             for (int i = 0; i < times; i++)
             {
+                totalDraws++; // 🔹 총 뽑기 횟수 증가
                 int roll = rand.Next(0, 100);  // 🔹 0~99 사이의 난수 생성
 
                 if (roll < 1 || pityCounter >= 90)  // 🔹 1% 확률 or 90회 보장 지급
@@ -306,34 +309,87 @@ namespace ConsoleRPG24
                         "시작시 공격력이 2배 증가하며 체력이 점차 성장한다",
                         Rank.legend, Division.atk, 0);
 
-                    player.Inventory.AddItem(specialItem);  // 🔹 인벤토리에 추가
-                    player.EquipItem(specialItem);  // 🔹 장착 즉시 효과 반영
-                    pityCounter = 0;  // 🔹 확정 횟수 초기화
+                    if (!obtainedItems.Contains(specialItem)) // 🔹 중복 방지
+                    {
+                        player.Inventory.AddItem(specialItem);
+                        player.EquipItem(specialItem);
+                        obtainedItems.Add(specialItem);
+                        pityCounter = 0;  // 🔹 확정 횟수 초기화
 
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.Write("축하합니다!");
-                    PrintRainbowText("그리웠던 그때 그곳으로"); // 🔹 무지개 색상 출력
-                    Console.WriteLine("' 획득!'");
-                    Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("축하합니다! ");
+                        PrintRainbowText("그리웠던 그때 그곳으로");
+                        Console.WriteLine(" 획득!");
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.WriteLine("이미 획득한 아이템입니다. 대신 200골드 지급!");
+                        Console.ResetColor();
+                        player.Gold += 200;
+                    }
                 }
-                else
+                else if (roll < 2)  // 🔹 1% 확률로 `Legend` 아이템 획득
                 {
-                    int refundGold = rand.Next(1, times == 1 ? 10 : 100);  // 🔹 1~9골드 or 1~99골드 반환
+                    GiveItemByRank(Rank.legend);
+                }
+                else if (roll < 5)  // 🔹 3% 확률로 `Epic` 아이템 획득
+                {
+                    GiveItemByRank(Rank.epic);
+                }
+                else if (roll < 10)  // 🔹 5% 확률로 `Rare` 아이템 획득
+                {
+                    GiveItemByRank(Rank.rare);
+                }
+                else if (roll < 30)  // 🔹 20% 확률로 `Common` 아이템 획득
+                {
+                    GiveItemByRank(Rank.common);
+                }
+                else  // 🔹 70% 확률로 골드 획득
+                {
+                    int refundGold = rand.Next(1, times == 1 ? 10 : 100);
                     player.Gold += refundGold;
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"{refundGold} 골드를 획득했습니다.");
                     Console.ResetColor();
-                    pityCounter++;  // 🔹 확정 횟수 증가
+                    pityCounter++;
                 }
 
-                Thread.Sleep(1000);  // 🔹 결과 간 텀 추가 (10회 뽑기는 개별 출력)
+                Console.WriteLine($"총 뽑기 횟수: {totalDraws} 회"); // 🔹 뽑기 횟수 출력
+                Thread.Sleep(1000);
             }
 
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.WriteLine("뽑기 완료!");  // 🔹 1회 뽑기 후 표시
+            Console.WriteLine("뽑기 완료!");
             Console.ResetColor();
             Thread.Sleep(1500);
+        }
+
+        // 🔹 아이템 등급별 지급 (중복 방지 포함)
+        private void GiveItemByRank(Rank rank)
+        {
+            List<Item> availableItems = itemList.Where(item => item.ItemRank == rank && !obtainedItems.Contains(item)).ToList();
+
+            if (availableItems.Count > 0)
+            {
+                Random rand = new Random();
+                Item selectedItem = availableItems[rand.Next(availableItems.Count)];
+                player.Inventory.AddItem(selectedItem);
+                obtainedItems.Add(selectedItem);
+
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine($"{rank} 아이템 '{selectedItem.ItemName}' 획득!");
+                Console.ResetColor();
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine($"이미 모든 {rank} 등급 아이템을 보유하고 있습니다. 대신 150 골드 지급!");
+                Console.ResetColor();
+                player.Gold += 150;
+            }
         }
 
         private void PrintRainbowText(string text)
