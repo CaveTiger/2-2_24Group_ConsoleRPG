@@ -239,15 +239,15 @@ namespace ConsoleRPG24
         {
             Console.Clear();
             Shop shop = new Shop(player, itemList);
-            shop.DisplayShopItems();
+            //shop.DisplayShopItems();
         }
-
 
 
         public void DungeonScreen()
         {
             Console.Clear();
-            Stage stage = new Stage(player,itemList);
+            Stage tempStage = new Stage();
+            Stage stage = new Stage(player,itemList, tempStage);
             stage.DungeonStart();
         }
     }
