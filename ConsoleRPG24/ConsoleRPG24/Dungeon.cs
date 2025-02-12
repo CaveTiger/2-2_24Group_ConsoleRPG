@@ -184,8 +184,8 @@ namespace ConsoleRPG24
 
             if (input == "1")
             {
-                Shop shop = new Shop();
-                shop.ShowDungeonShop();
+                Shop shop = new Shop(player, itemList);
+                shop.DisplayShopItems();
             }
 
             else

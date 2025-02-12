@@ -238,8 +238,8 @@ namespace ConsoleRPG24
         public void VillageShop()
         {
             Console.Clear();
-            Shop shop = new Shop();
-            shop.ShowVillageShop();
+            Shop shop = new Shop(player, itemList);
+            shop.DisplayShopItems();
         }
 
 
