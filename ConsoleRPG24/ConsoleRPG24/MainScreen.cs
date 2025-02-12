@@ -197,7 +197,7 @@ namespace ConsoleRPG24
                 Console.WriteLine("무엇을 할까?");
                 Console.WriteLine(new string('=', 20));
                 Console.WriteLine("1. 상점");
-                Console.WriteLine("2. 뽑기 시스템 🎲");  // 🔹 뽑기 시스템 추가
+                Console.WriteLine("2. ???:운명의 숭배"); 
                 Console.WriteLine();
                 Console.WriteLine("0. 나가기");
                 Console.WriteLine(new string('=', 20));
@@ -230,9 +230,9 @@ namespace ConsoleRPG24
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("[ 마을 뽑기 시스템 🎲 ]");
-                Console.WriteLine("1. 1회 뽑기 (100 골드)");
-                Console.WriteLine("2. 10회 뽑기 (1000 골드)");
+                Console.WriteLine("[ 운명의 숭배 ]");
+                Console.WriteLine("1. 1회 숭배 (100 골드)");
+                Console.WriteLine("2. 10회 숭배 (1000 골드)");
                 Console.WriteLine();
                 Console.WriteLine("0. 나가기");
                 Console.Write(">> ");
@@ -241,11 +241,11 @@ namespace ConsoleRPG24
 
                 if (input == "1")
                 {
-                    DrawItem(1);  // 🔹 1회 뽑기 실행
+                    DrawItem(1);
                 }
                 else if (input == "2")
                 {
-                    DrawItem(10); // 🔹 10회 뽑기 실행
+                    DrawItem(10);
                 }
                 else if (input == "0")
                 {
@@ -265,14 +265,18 @@ namespace ConsoleRPG24
 
             if (player.Gold < times * 100)
             {
-                Console.WriteLine("💰 골드가 부족합니다!");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("골드가 부족합니다!");
+                Console.ResetColor();
                 Thread.Sleep(1500);
                 return;
             }
 
             player.Gold -= times * 100;  // 🔹 골드 차감
             Console.Clear();
-            Console.WriteLine("🎲 뽑는 중 . . .");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("뽑는 중 . . .");
+            Console.ResetColor();
             Thread.Sleep(2000); // 🔹 2초 지연 (긴장감 유도)
 
             for (int i = 0; i < times; i++)
@@ -287,15 +291,22 @@ namespace ConsoleRPG24
                         Rank.legend, Division.atk, 0);
 
                     player.Inventory.AddItem(specialItem);  // 🔹 인벤토리에 추가
+                    player.EquipItem(specialItem);  // 🔹 장착 즉시 효과 반영
                     pityCounter = 0;  // 🔹 확정 횟수 초기화
 
-                    Console.WriteLine("🌟✨ 축하합니다! '그리웠던 그때 그곳으로' 획득! ✨🌟");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write("축하합니다! '");
+                    PrintRainbowText("그리웠던 그때 그곳으로"); // 🔹 무지개 색상 출력
+                    Console.WriteLine("' 획득!");
+                    Console.ResetColor();
                 }
                 else
                 {
                     int refundGold = rand.Next(1, times == 1 ? 10 : 100);  // 🔹 1~9골드 or 1~99골드 반환
                     player.Gold += refundGold;
-                    Console.WriteLine($"💰 {refundGold} 골드를 획득했습니다.");
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"{refundGold} 골드를 획득했습니다.");
+                    Console.ResetColor();
                     pityCounter++;  // 🔹 확정 횟수 증가
                 }
 
@@ -303,10 +314,30 @@ namespace ConsoleRPG24
             }
 
             Console.WriteLine();
-            Console.WriteLine("✅ 뽑기 완료!");  // 🔹 1회 뽑기 후 표시
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine("뽑기 완료!");  // 🔹 1회 뽑기 후 표시
+            Console.ResetColor();
             Thread.Sleep(1500);
         }
-    
+
+        private void PrintRainbowText(string text)
+        {
+            ConsoleColor[] rainbowColors = {
+        ConsoleColor.Red, ConsoleColor.Yellow, ConsoleColor.Green,
+        ConsoleColor.Cyan, ConsoleColor.Blue, ConsoleColor.Magenta
+    };
+
+            for (int i = 0; i < text.Length; i++)
+            {
+                Console.ForegroundColor = rainbowColors[i % rainbowColors.Length]; // 글자마다 다른 색 적용
+                Console.Write(text[i]);
+                Thread.Sleep(100); // 0.1초 간격으로 표시 (조절 가능)
+            }
+
+            Console.ResetColor(); // 색상 초기화
+            Console.WriteLine(); // 줄 바꿈
+        }
+
 
 
         public void VillageShop()
