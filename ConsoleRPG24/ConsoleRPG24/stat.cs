@@ -402,7 +402,7 @@ namespace ConsoleRPG24
     // ============= 초반 몬스터 (1~15 스테이지) =============
     public class Goblin : Monster ///고블린:속도가
     {
-        public Goblin(string name) : base(name, 8, 3, 30f, 30f, 7) { }
+        public Goblin(string name) : base(name, 110, 100, 250f, 250f, 7) { }
 
         public override void Attack(BaseCharacter target)
         {
@@ -415,7 +415,7 @@ namespace ConsoleRPG24
     {
         public static List<Slime> SlimeList = new List<Slime>();
 
-        public Slime(string name) : base(name, 5, 2, 20f, 20f, 2) { }
+        public Slime(string name) : base(name, 95, 100, 200f, 200f, 2) { }
 
         // 🔹 BaseCharacter의 TakeDamage()를 override하여 분열 기능 추가
         public override void TakeDamage(int damage)
@@ -435,7 +435,7 @@ namespace ConsoleRPG24
 
     public class Wolf : Monster // 🔹 초반 몬스터 (속도 빠르고 공격력 중간)
     {
-        public Wolf(string name) : base(name, 10, 4, 25f, 25f, 8) { }
+        public Wolf(string name) : base(name, 100, 80, 250f, 250f, 8) { }
 
         public override void Attack(BaseCharacter target)
         {
@@ -448,7 +448,7 @@ namespace ConsoleRPG24
     {
         private bool hasRevived = false;
 
-        public Zombie(string name) : base(name, 6, 2, 30f, 30f, 2) { }
+        public Zombie(string name) : base(name, 100, 70, 300f, 300f, 2) { }
 
         public override void TakeDamage(int damage)
         {
@@ -464,18 +464,18 @@ namespace ConsoleRPG24
     // ============= 중반 몬스터 (6~15 스테이지) =============
     public class Orc : Monster ///오크:강한 공격력
     {
-        public Orc(string name) : base(name, 10, 5, 45f, 45f, 4) { }
+        public Orc(string name) : base(name, 175, 110, 450f, 450f, 4) { }
 
         public override void Attack(BaseCharacter target)
         {
             Console.WriteLine($"{Name}이 강력한 일격을 가합니다!");
-            target.TakeDamage(Atk + 5);
+            target.TakeDamage(Atk + 25);
         }
     }
 
     public class Minotaur : Monster // 미노타우르스: <중반 몬스터> (공격력 높고, 2회 공격 확률)
     {
-        public Minotaur(string name) : base(name, 20, 8, 45f, 45f, 4) { }
+        public Minotaur(string name) : base(name, 180, 125, 550f, 550f, 4) { }
 
         public override void Attack(BaseCharacter target)
         {
@@ -493,7 +493,7 @@ namespace ConsoleRPG24
 
     public class Ghost : Monster //고스트:<중반 몬스터> (방어력 무시)
     {
-        public Ghost(string name) : base(name, 12, 0, 45f, 45f, 7) { }
+        public Ghost(string name) : base(name, 185, 0, 600f, 600f, 7) { }
 
         public override void Attack(BaseCharacter target)
         {
@@ -504,7 +504,7 @@ namespace ConsoleRPG24
 
     public class Vampire : Monster ///뱀파이어:공격시 흡혈
     {
-        public Vampire(string name) : base(name, 13, 6, 50f, 50f, 6) { }
+        public Vampire(string name) : base(name, 175, 120, 600f, 800f, 5) { }
 
         public override void Attack(BaseCharacter target)
         {
@@ -519,7 +519,7 @@ namespace ConsoleRPG24
     // ============= 후반 몬스터 (16~19 스테이지) =============
     public class Lich : Monster // 리치:마법공격 체력흡수
     {
-        public Lich(string name) : base(name, 23, 6, 80f, 80f, 5) { }
+        public Lich(string name) : base(name, 200, 135, 1000f, 1000f, 5) { }
 
         public override void Attack(BaseCharacter target)
         {
@@ -533,7 +533,7 @@ namespace ConsoleRPG24
 
     public class Golem : Monster // 골렘:높은 체력과 공격력
     {
-        public Golem(string name) : base(name, 18, 15, 155f, 155f, 2) { }
+        public Golem(string name) : base(name, 200, 130, 1350f, 1350f, 2) { }
 
         public override void Attack(BaseCharacter target)
         {
@@ -544,7 +544,7 @@ namespace ConsoleRPG24
     //앤드급 보스 드레곤
     public class Dragon : Monster ///드레곤:강력한 브레스 공격
     {
-        public Dragon(string name) : base(name, 30, 10, 200f, 200f, 5) { }
+        public Dragon(string name) : base(name, 300, 150, 2000f, 2000f, 5) { }
 
         public override void Attack(BaseCharacter target)
         {
