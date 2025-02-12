@@ -4,7 +4,7 @@
     public class Inventory
     {
         internal List<Item> Inven { get; set; } = new List<Item>();
-
+        private const int MaxEquippedItems = 12;
         public void OpenInventory()
         {
             while (true)
@@ -75,11 +75,11 @@
             while (true)
             {
                 if (Inven.Count == 0)
-                {   
+                {
                     Console.WriteLine("인벤토리가 비어 있습니다.");
                     return;
                 }
-
+                Console.Clear();
                 Console.WriteLine("[아이템 목록]");
                 for (int i = 0; i < Inven.Count; i++)
                 {
@@ -113,8 +113,26 @@
         private void ToggleEquip(int index)
         {
             var item = Inven[index];
-            item.IsEquipped = !item.IsEquipped;
-            Console.WriteLine(item.IsEquipped ? $"{item.ItemName}을(를) 장착했습니다!" : $"{item.ItemName}을(를) 해제했습니다!");
+
+            // 이미 장착된 아이템이 아니면 장착 가능한 아이템 수 확인
+            if (item.IsEquipped)
+            {
+                item.IsEquipped = false;
+                Console.WriteLine($"{item.ItemName}을(를) 해제했습니다!");
+            }
+            else
+            {
+                int equippedCount = Inven.Count(i => i.IsEquipped);  // 장착된 아이템 수 계산
+
+                if (equippedCount >= MaxEquippedItems)
+                {
+                    Console.WriteLine($"최대 {MaxEquippedItems}개의 아이템만 장착할 수 있습니다.");
+                    return;
+                }
+
+                item.IsEquipped = true;
+                Console.WriteLine($"{item.ItemName}을(를) 장착했습니다!");
+            }
         }
     }
 }
