@@ -45,8 +45,6 @@ namespace ConsoleRPG24
         {
             if (MainScreen.instance.player.IsDead)
 
-            if(!(player.IsDead))
-            {
                 Console.WriteLine($"스테이지 클리어! 적을 물리쳤다!");
                 Console.WriteLine("전리품으로써 골드 혹은 아이템을 보상으로 얻을 수 있다.");
                 Console.WriteLine();
@@ -101,15 +99,7 @@ namespace ConsoleRPG24
                         Console.WriteLine($"{itemList[index2]}(을)를 획득했다!");
                     }
                 }
-
                 //다음 전투로~!
-            }
-
-            else if (player.IsDead)
-            {
-                Console.WriteLine("당신은 눈 앞이 깜깜해졌다...");
-                Console.WriteLine("게임 오버!......");
-            }
         }
 
         //열심히 작성 중~
@@ -121,8 +111,6 @@ namespace ConsoleRPG24
         {
             BattleSystem battleSystem = new BattleSystem(player, itemList, stage);
             battleSystem.Battle();
-
-            //battleSystem.Rewards();
         }
 
 
@@ -168,7 +156,7 @@ namespace ConsoleRPG24
             GameClear();
         }
 
-
+        
         public void ShopEncounter()
         {
             Console.WriteLine("당신은 다음으로 나아가던 중, 던전 안에 숨겨져있던 비밀 상점을 발견했다.");
@@ -184,8 +172,10 @@ namespace ConsoleRPG24
 
             if (input == "1")
             {
+                Console.Clear();
                 Shop shop = new Shop(player, itemList);
-                shop.DisplayShopItems();
+                //Shop shop = new Shop();
+                //shop.ShowDungeonShop();
             }
 
             else
@@ -193,6 +183,7 @@ namespace ConsoleRPG24
                 DungeonStart();
             }
         }
+        
 
 
         public void GameClear()

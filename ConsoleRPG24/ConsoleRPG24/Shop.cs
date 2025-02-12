@@ -91,7 +91,8 @@ namespace ConsoleRPG24
             //아이템 전시
             while (true)
             {
-                Console.Clear();
+                //Console.Clear();
+                Console.WriteLine("아무문자.");
                 for (int i = 0; i < randomThreeItems.Count(); i++)
                 {
                     switch (randomThreeItems[i].ItemRank)
@@ -114,14 +115,14 @@ namespace ConsoleRPG24
                     //41. 할인 쿠폰 : 상점 내 아이템 가격 10% 감소(가격 표시)
                     if (itemList[41].IsOwned && itemList[41].IsEquipped)
                     {
-                        Console.Write($"{i} | " + String.Format("{0,-10}", randomThreeItems[i].ItemRank) +
+                        Console.WriteLine($"{i} | " + String.Format("{0,-10}", randomThreeItems[i].ItemRank) +
                        " | " + String.Format("{ 0,-30}", randomThreeItems[i].ItemName) +
                        " | " + String.Format("{0,-10}", randomThreeItems[i].ItemPrice * 9 / 10) +
                        "원 | " + String.Format("{0,-40}", randomThreeItems[i].EffectDescription));
                     }
                     else
                     {
-                        Console.Write($"{i} | " + String.Format("{0,-10}", randomThreeItems[i].ItemRank) +
+                        Console.WriteLine(i + " | "+ String.Format("{ 0,-10}", randomThreeItems[i].ItemRank) +
                        " | " + String.Format("{ 0,-30}", randomThreeItems[i].ItemName) +
                        " | " + String.Format("{0,-10}", randomThreeItems[i].ItemPrice) +
                        " 원| " + String.Format("{0,-40}", randomThreeItems[i].EffectDescription));

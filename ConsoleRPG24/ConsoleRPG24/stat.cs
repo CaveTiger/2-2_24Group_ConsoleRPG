@@ -1,7 +1,7 @@
 namespace ConsoleRPG24
 {
     // 🔹 기본 캐릭터 클래스 (부모 클래스)
-    public class BaseCharacter
+    public abstract class BaseCharacter
     {
         public string Name { get; set; }
         public int Atk { get; set; }  // 공격력
@@ -53,11 +53,11 @@ namespace ConsoleRPG24
         }
 
         // 🔹 사망 시 처리할 메서드
-        private void OnDeath()
+        protected virtual void OnDeath()
         {
-            Console.WriteLine("게임이 종료되었습니다!");
-            // 추가적으로 게임 종료 로직을 넣거나, 부활 시스템을 구현 가능
+            IsDead = true;
         }
+
 
         // 🔹 배신 이벤트
         public void Betray()
@@ -301,6 +301,12 @@ namespace ConsoleRPG24
             }
 
             TakeDamage(damage);
+        }
+
+        protected override void OnDeath()
+        {
+            base.OnDeath();
+            //바로 겜오버되도록
         }
     }
 

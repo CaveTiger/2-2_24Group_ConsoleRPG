@@ -10,6 +10,8 @@ namespace ConsoleRPG24
     //어느 한쪽이 전멸했으니 보상 혹은 게임오버를 띄워야함
     internal partial class BattleSystem
     {
+   
+
         public Player player { get; set; }
         public Stage stage { get; set; }
         public List<Item> itemList { get; set; }
@@ -182,6 +184,8 @@ namespace ConsoleRPG24
         }
         public void Battle()
         {
+            new Stage();
+
             Console.Clear();
             Console.WriteLine();
             Console.WriteLine("적과 조우했습니다.");
@@ -353,7 +357,7 @@ namespace ConsoleRPG24
                     BattleOn = false;
                 }
             }
-            stage.Rewards();
+            stage.Rewards(player, stage);
         }
 
         public void BossBattle()
@@ -491,7 +495,7 @@ namespace ConsoleRPG24
                     BattleOn = false;
                 }
             }
-            stage.Rewards();
+            stage.Rewards(player, stage);
         }
     }
 }
