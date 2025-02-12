@@ -310,7 +310,9 @@ namespace ConsoleRPG24
 
             if (isCritical)
             {
-                Console.WriteLine("💥 치명타 공격! 💥");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("치명타 공격!");
+                Console.ResetColor();
             }
 
             target.TakeDamage(damage);
@@ -318,7 +320,9 @@ namespace ConsoleRPG24
             // 🔹 공격이 빗나가는지 확인
             if (missChance < target.Miss)  // 대상의 회피 확률 적용
             {
+                Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine($"❌ {target.Name}이(가) 공격을 회피했습니다!");
+                Console.ResetColor();
                 return;  // 공격 실패
             }
         }
@@ -387,7 +391,7 @@ namespace ConsoleRPG24
 
             if (isCritical)
             {
-                Console.WriteLine("💥 몬스터의 치명타 공격! 💥");
+                Console.WriteLine("몬스터의 치명타 공격!");
             }
 
             target.TakeDamage(damage);
@@ -458,6 +462,16 @@ namespace ConsoleRPG24
         }
     }
     // ============= 중반 몬스터 (6~15 스테이지) =============
+    public class Orc : Monster ///오크:강한 공격력
+    {
+        public Orc(string name) : base(name, 10, 5, 45f, 45f, 4) { }
+
+        public override void Attack(BaseCharacter target)
+        {
+            Console.WriteLine($"{Name}이 강력한 일격을 가합니다!");
+            target.TakeDamage(Atk + 5);
+        }
+    }
     public class Orc : Monster ///오크:강한 공격력
     {
         public Orc(string name) : base(name, 10, 5, 45f, 45f, 4) { }

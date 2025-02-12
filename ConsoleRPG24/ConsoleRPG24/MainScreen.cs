@@ -295,9 +295,9 @@ namespace ConsoleRPG24
                     pityCounter = 0;  // 🔹 확정 횟수 초기화
 
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.Write("축하합니다! '");
+                    Console.Write("축하합니다!");
                     PrintRainbowText("그리웠던 그때 그곳으로"); // 🔹 무지개 색상 출력
-                    Console.WriteLine("' 획득!");
+                    Console.WriteLine("' 획득!'");
                     Console.ResetColor();
                 }
                 else
