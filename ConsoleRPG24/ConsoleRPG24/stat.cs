@@ -44,11 +44,19 @@ namespace ConsoleRPG24
                 Health = 0;
                 IsDead = true;
                 Console.WriteLine($"{Name}가 사망했습니다!");
+                OnDeath(); // 🔹 사망 후 추가 처리
             }
             else
             {
                 Console.WriteLine($"{Name}가 {reducedDamage}의 피해를 입었습니다. 남은 HP: {Health}");
             }
+        }
+
+        // 🔹 사망 시 처리할 메서드
+        private void OnDeath()
+        {
+            Console.WriteLine("게임이 종료되었습니다!");
+            // 추가적으로 게임 종료 로직을 넣거나, 부활 시스템을 구현 가능
         }
 
         // 🔹 배신 이벤트
@@ -108,7 +116,6 @@ namespace ConsoleRPG24
             Gold = 100;
             Mana = 100;
             Inventory = new Inventory();
-            Job = "전사"; // 기본 직업 설정
         }
 
 
@@ -124,6 +131,7 @@ namespace ConsoleRPG24
             SetJobStats(job);
 
         }
+
         // Atk 계산
         public int CurrentAtk => BaseAtk + bonusAtk;
         public int CurrentDefen => BaseDefen + bonusDefen;

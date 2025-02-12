@@ -12,7 +12,6 @@ namespace ConsoleRPG24
 
         private Player player;
 
-
         public void GameStart()
         {
             InitItem();
@@ -21,10 +20,13 @@ namespace ConsoleRPG24
             string userName;
 
             Thread.Sleep(1000);
-            Console.WriteLine("=", 20);
+            Console.WriteLine(new string('=', 20));
+            Console.WriteLine();
             Console.WriteLine("당신은 눈을 떴다.");
+            Console.WriteLine();
             Thread.Sleep(2500);
             Console.WriteLine("아주 긴 잠에서 깨어난 듯 하다.");
+            Console.WriteLine();
             Thread.Sleep(2500);
 
             Console.Write("당신의 성함을 입력해 주십시오: ");
@@ -39,9 +41,9 @@ namespace ConsoleRPG24
 
             while (true)
             {
+                player = new Player();
 
                 string input;
-                string yourJob;
 
                 Console.WriteLine("당신은 이전부터 어떤 일을 해왔지?");
                 Thread.Sleep(2000);
@@ -51,27 +53,27 @@ namespace ConsoleRPG24
                 Console.WriteLine("3. 궁수");
                 Console.WriteLine("4. 암살자");
                 Console.WriteLine();
-                Console.Write(">>");
+                Console.Write(">> ");
                 input = Console.ReadLine();
 
                 if (input == "1")
                 {
-                    yourJob = "전사";
+                    player.SetJobStats("전사");
                 }
 
                 else if (input == "2")
                 {
-                    yourJob = "마법사";
+                    player.SetJobStats("마법사");
                 }
 
                 else if (input == "3")
                 {
-                    yourJob = "궁수";
+                    player.SetJobStats("궁수");
                 }
 
                 else if (input == "4")
                 {
-                    yourJob = "암살자";
+                    player.SetJobStats("암살자");
                 }
 
                 else
@@ -80,9 +82,6 @@ namespace ConsoleRPG24
                     Console.WriteLine("자신이 했을만한 직업은 저 네가지 이외엔 없다는 확신이 든다.");
                     continue;
                 }
-
-
-                player = new Player();
 
                 break;
             }
@@ -185,10 +184,7 @@ namespace ConsoleRPG24
         public void InventoryScreen()
         {
             Console.Clear();
-            //inventory.OpenInventory(); // 기존 인벤토리를 유지하며 사용
-            Inventory inventory = new Inventory();
-            inventory.OpenInventory();
-
+            player.Inventory.OpenInventory();
         }
 
 

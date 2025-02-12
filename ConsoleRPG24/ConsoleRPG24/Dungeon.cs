@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Threading;
 
 //git organazation
@@ -14,12 +15,10 @@ namespace ConsoleRPG24
         Monster monster;
         //뭔가 이부분 수정이 필요해보임...
 
-
-
         //열심히 작성 중~~
         public void Rewards()
         {
-            if (monster.Health <= 0)
+            if(!(player.IsDead))
             {
                 Console.WriteLine($"스테이지 클리어! {monster.Name}를 물리쳤다!");
                 Console.WriteLine("전리품으로써 골드 혹은 아이템을 보상으로 얻을 수 있다.");
@@ -43,39 +42,51 @@ namespace ConsoleRPG24
 
                 else
                 {
-                    /*
-                   player.Inventory
-                   이 아이템이랑 저 아이템이 있다. 뭘 가질까?
+                    List<Item> itemList = new List<Item>();
+                    Random random = new Random();
 
-                    if (input == "1")
+                    int index1 = random.Next(itemList.Count);
+                    int index2 = random.Next(itemList.Count);
+
+                    while (index2 == index1)
                     {
-                        체력 포션을 얻었다!
+                        index2 = random.Next(itemList.Count);
+                    }
+
+                    Console.WriteLine($"{itemList[index1]}과 {itemList[index2]}중 무엇을 얻을까?");
+
+                    string input02;
+                    input02 = Console.ReadLine();
+
+                    if (input02 == "1")
+                    {
+                        Inventory inventory = new Inventory();
+                        inventory.AddItem(itemList[index1]);
+
+                        Console.WriteLine($"{itemList[index1]}(을)를 획득했다!");
                     }
 
                     else
                     {
-                        마나 포션을 얻었다!
-                    }
-                    */
+                        Inventory inventory = new Inventory();
+                        inventory.AddItem(itemList[index2]);
 
+                        Console.WriteLine($"{itemList[index2]}(을)를 획득했다!");
+                    }
                 }
 
-                //골드 혹은 아이템 보상
                 //다음 전투로~!
 
             }
 
-            else if (player.Health <= 0)
+            else if (player.IsDead)
             {
                 Console.WriteLine("당신은 눈 앞이 깜깜해졌다...");
                 Console.WriteLine("게임 오버!......");
-
             }
         }
 
         //열심히 작성 중~
-
-
 
 
         public void Start()
@@ -89,9 +100,11 @@ namespace ConsoleRPG24
 
         public void DungeonStart()
         {
+            int battleCount = 0;
+
             while (true)
             {
-                for (int i = 0; i <= 4; i++)
+                for (int i = 0; i <= 19; i++)
                 {
                     Start();
 
@@ -104,15 +117,26 @@ namespace ConsoleRPG24
 
                     Camp camp = new Camp(player);
                     camp.CampCount();
+
+                    battleCount ++;
+                    if (battleCount == 5 || battleCount == 10 || battleCount == 15)
+                    {
+                        ShopEncounter();
+                    }
+
+                    if (battleCount == 20)
+                    {
+                        //최종보스전
+                    }
                 }
-
-                ShopEncounter();
-
                 //5번, 10번 15번 배틀 후 상점 등장!
                 //20번 배틀에서는 최종보스 등장 → 이후 클리어~!
+                //int stage = 20일때 최종보스전
 
                 break;
             }
+
+            GameClear();
         }
 
 
