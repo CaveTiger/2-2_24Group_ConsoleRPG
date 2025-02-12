@@ -9,15 +9,41 @@ namespace ConsoleRPG24
 
     //던전 아직 구현 중입니다!!
 
-    public class Stage
+   internal class Stage
     {
         Player player;
+        List<Item> itemList = new List<Item>();
+
+        Stage stage;
+
         Monster monster;
-        //뭔가 이부분 수정이 필요해보임...
 
         //열심히 작성 중~~
-        public void Rewards()
+
+
+        public Stage()
+            {
+                
+            }
+
+        public Stage(Player _player, List<Item> _itemList) //class Stage의 접근자를 internal로 해야 오류 안남
         {
+            player = _player;
+            itemList = _itemList;
+        }
+
+        public Stage(Player _player, List<Item> _itemList, Stage _stage) //이하동문
+        {
+            player = _player;
+            itemList = _itemList;
+            stage = _stage;
+        }
+
+
+        //
+        public void Rewards() //nullreferenceexpextion 고쳐야됨
+        {
+
             if(!(player.IsDead))
             {
                 Console.WriteLine($"스테이지 클리어! {monster.Name}를 물리쳤다!");
@@ -89,15 +115,19 @@ namespace ConsoleRPG24
         //열심히 작성 중~
 
 
+
+        //이 메소드로 던전 전투 시작!!
         public void Start()
         {
-            BattleSystem battleSystem = new BattleSystem();
-            battleSystem.BattleStart();
+            BattleSystem battleSystem = new BattleSystem(player, itemList, stage);
+            battleSystem.Battle();
 
             //battleSystem.Rewards();
         }
 
 
+
+        //던전 20번 깨는 반복문
         public void DungeonStart()
         {
             int battleCount = 0;
@@ -132,6 +162,8 @@ namespace ConsoleRPG24
                 //5번, 10번 15번 배틀 후 상점 등장!
                 //20번 배틀에서는 최종보스 등장 → 이후 클리어~!
                 //int stage = 20일때 최종보스전
+                
+                //
 
                 break;
             }
