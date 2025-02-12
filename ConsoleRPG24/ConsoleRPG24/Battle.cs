@@ -10,8 +10,8 @@ namespace ConsoleRPG24
     internal partial class BattleSystem
     {
         Player player = new Player();
-        BaseCharacter baseChar = new BaseCharacter("Unknown", 0, 0, 100, 100, 5, 0);
-
+        Stage stage = new Stage();
+        Inventory inventory = new Inventory();
 
         public Monster RandomMonster()
         {
@@ -49,7 +49,7 @@ namespace ConsoleRPG24
         public void RandomEventBattle(Monster target, int damage, List<Monster> monsterTeam)
         {
             Random random = new Random();
-            int REB = random.Next(0, 10);
+            int REB = random.Next(0, 11);
             switch (REB)
             {
                 case 0:
@@ -61,35 +61,53 @@ namespace ConsoleRPG24
                     Console.WriteLine("아무튼 생성됨 ");
                     Console.WriteLine("햄부기햄북 햄북어 햄북스딱스 함부르크햄부기우가햄비기햄부거 햄부가티햄부기온앤 온을 얻었습니다.");
                     Console.WriteLine("최대 체력 + 10");
+                    player.MaxHealth += 10;
+                    player.Health += 10;
                     break;
                     case 2:
                         Console.WriteLine("배가 고파졌습니다. 마침 주머니에 빵이 남았네요.");
                         Console.WriteLine("체력 + 20 회복");
+                    player.Health += 20;
+                    if(player.MaxHealth < player.Health)
+                    {
+                        player.Health = player.MaxHealth;
+                    }
                     break;
                     case 3:
                         Console.WriteLine("분노의 영약");
-                        Console.WriteLine("피해량 + 1 증가");
+                        Console.WriteLine("영구적인 공격력 + 1 증가");
+                    player.Atk += 1;
                     break;
                     case 4:
                         Console.WriteLine("탈모!");
                         Console.WriteLine("기부니가 별로에요. 최대 체력 - 5");
+                    player.MaxHealth -= 5;
+                    player.Health -= 5;
                     break;
                     case 6:
                         Console.WriteLine("! 잠시 잠들었나보네요 !");
                         Console.WriteLine("머리를 찧었습니다. 체력 -20");
+                    player.Health -= 20;
                     break;
                     case 7:
                         Console.WriteLine("얼음!");
                         Console.WriteLine("처럼 단단한 몸 방어력 +1");
+                    player.Defen += 1;
                     break;
                     case 8:
                         Console.WriteLine("발이 미끄러졌습니다.");
                         Console.WriteLine("체력 -10");
+                    player.Health -= 10;
                     break;
                     case 9:
                         Console.WriteLine("바나나 총을 찾았다!");
-                        Console.WriteLine("첫 번째 대상에게 피해 50");
-                        PlayerAttack(monsterTeam[0], player.Atk *= 3, monsterTeam);
+                        Console.WriteLine($"첫 번째 대상에게 피해 {player.Atk *= 3}");
+                        PlayerAttack(monsterTeam[0], player.Atk *= 3);
+                    break;
+                    case 10:
+                        Console.WriteLine("!!정상화!!");
+                        Console.WriteLine("내 체력이 정상화됩니다.");
+                    player.Health = player.MaxHealth;
                     break;
                     default:
                     Console.WriteLine("꽝");
@@ -104,9 +122,20 @@ namespace ConsoleRPG24
             Console.WriteLine();
             Console.WriteLine("적과 조우했습니다.");
             Console.WriteLine();
+            PlayerDebug();
             Battle();
         }
-        public void PlayerAttack(Monster target, int damage, List<Monster> monsterTeam)
+        public void PlayerDebug()
+        {
+            Console.WriteLine("플레이어 체력을 임시로 설정");
+            player.MaxHealth = float.Parse(Console.ReadLine());
+            player.Health = player.MaxHealth;
+            Console.WriteLine("플레이어 공격력을 임시로 설정");
+            player.Atk = int.Parse(Console.ReadLine());
+            Console.WriteLine("플레이어 방어력을 임시로 설정");
+            player.Defen = int.Parse(Console.ReadLine());
+        }
+        public void PlayerAttack(Monster target, int damage)
         {
             //이건 플레이어가 적에게 피해를 줬을때
             target.TakeDamage(damage);
@@ -176,8 +205,7 @@ namespace ConsoleRPG24
                         {
                             Console.WriteLine();
                             Console.WriteLine($"{monsterTeam[i].Name}이/가 당신에게 피해를 주었습니다.");
-                            baseChar.TakeDamage(monsterTeam[i].Atk);
-                            Console.WriteLine($"남은 체력은 {player.Health}");
+                            player.TakeDamage(monsterTeam[i].Atk);
                             Console.ReadKey();
                             
                         }
@@ -220,7 +248,7 @@ namespace ConsoleRPG24
                                         {
                                             case 1 :
                                                 Console.WriteLine($"당신은 {monsterTeam[0].Name}를 공격했습니다.");
-                                                PlayerAttack(monsterTeam[0], player.Atk, monsterTeam);
+                                                PlayerAttack(monsterTeam[0], player.Atk);
                                                 Console.WriteLine($"{monsterTeam[0].Name}의 현재 체력은 {monsterTeam[0].Health}/{monsterTeam[0].MaxHealth}입니다.");
                                                 playerTurn = false;
                                                 break;
@@ -228,7 +256,7 @@ namespace ConsoleRPG24
                                             if (monsterTeam[1] != null)
                                             {
                                                 Console.WriteLine($"당신은 {monsterTeam[1].Name}를 공격했습니다.");
-                                                PlayerAttack(monsterTeam[1], player.Atk, monsterTeam);
+                                                PlayerAttack(monsterTeam[1], player.Atk);
                                                 Console.WriteLine($"{monsterTeam[1].Name}의 현재 체력은 {monsterTeam[1].Health}/{monsterTeam[1].MaxHealth}입니다.");
                                                 playerTurn = false;
                                             }
@@ -237,7 +265,7 @@ namespace ConsoleRPG24
                                             if (monsterTeam[2] != null)
                                             {
                                                 Console.WriteLine($"당신은 {monsterTeam[2].Name}를 공격했습니다.");
-                                                PlayerAttack(monsterTeam[2], player.Atk, monsterTeam);
+                                                PlayerAttack(monsterTeam[2], player.Atk);
                                                 Console.WriteLine($"{monsterTeam[2].Name}의 현재 체력은 {monsterTeam[2].Health}/{monsterTeam[2].MaxHealth}입니다.");
                                                 playerTurn = false;
                                             }
@@ -246,7 +274,7 @@ namespace ConsoleRPG24
                                             if (monsterTeam[3] != null)
                                             {
                                                 Console.WriteLine($"당신은 {monsterTeam[3].Name}를 공격했습니다.");
-                                                PlayerAttack(monsterTeam[3], player.Atk, monsterTeam);
+                                                PlayerAttack(monsterTeam[3], player.Atk);
                                                 Console.WriteLine($"{monsterTeam[3].Name}의 현재 체력은 {monsterTeam[3].Health}/{monsterTeam[3].MaxHealth}입니다.");
                                                 playerTurn = false;
                                             }
@@ -266,7 +294,7 @@ namespace ConsoleRPG24
                                         playerTurn = false;
                                         break;
                                     case "4":
-                                        RandomEventBattle(monsterTeam[0], 50, monsterTeam);
+                                        RandomEventBattle(monsterTeam[0], player.Atk, monsterTeam);
                                         playerTurn = false;
                                         break;
                                     default:
@@ -286,7 +314,6 @@ namespace ConsoleRPG24
                     BattleOn = false;
                 }
             }
-            Stage stage = new Stage();
             stage.Rewards();
         }
 
