@@ -16,7 +16,9 @@ namespace ConsoleRPG24
 
         Stage stage;
 
-        Monster monster;
+        BattleSystem battleSystem;
+
+        int battleCount = 0;
 
         //열심히 작성 중~~
 
@@ -99,7 +101,9 @@ namespace ConsoleRPG24
                         Console.WriteLine($"{itemList[index2]}(을)를 획득했다!");
                     }
                 }
-                //다음 전투로~!
+
+            battleSystem.Battle();
+
         }
 
         //열심히 작성 중~
@@ -118,7 +122,7 @@ namespace ConsoleRPG24
         //던전 20번 깨는 반복문
         public void DungeonStart()
         {
-            int battleCount = 0;
+
 
             while (true)
             {
