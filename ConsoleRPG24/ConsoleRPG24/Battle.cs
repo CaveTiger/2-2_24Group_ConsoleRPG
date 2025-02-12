@@ -148,7 +148,7 @@ namespace ConsoleRPG24
         public void RandomEventBattle(Monster target, int damage, List<Monster> monsterTeam)
         {
             Random random = new Random();
-            int REB = random.Next(0, 11);
+            int REB = random.Next(0, 12);
             switch (REB)
             {
                 case 0:
@@ -286,6 +286,7 @@ namespace ConsoleRPG24
                 Console.WriteLine($"이름 : {player.Name}  직업 : {player.Job}");
                 Console.WriteLine($"속도 : {player.Speed}  체력 : {player.Health}/{player.MaxHealth}");
                 Console.WriteLine($"공격력 : {player.Atk}  방어력 : {player.Defen}");
+                Console.WriteLine($"치명타 확률 : {player.CritHit}  치명타 피해 : {player.CritHit}");
                 Console.ResetColor();
                 Console.WriteLine("}================================={");
                 foreach (var number in monsterTeam)
@@ -326,7 +327,7 @@ namespace ConsoleRPG24
                                 Console.WriteLine("}================================={");
                                 Console.WriteLine("당신의 턴입니다.");
                                 Console.WriteLine("}======================================={");
-                                Console.WriteLine("|1. 공격 | 2. 스킬 | 3. 아이템 | 4. ??? | ");
+                                Console.WriteLine("|1. 공격 | 2. ??? | ");
                                 string input = Console.ReadLine();
                                 switch (input)
                                 {
@@ -400,12 +401,6 @@ namespace ConsoleRPG24
                                         }
                                         break;
                                     case "2":
-                                        playerTurn = false;
-                                        break;
-                                    case "3":
-                                        playerTurn = false;
-                                        break;
-                                    case "4":
                                         RandomEventBattle(monsterTeam[0], player.Atk, monsterTeam);
                                         playerTurn = false;
                                         break;
