@@ -13,7 +13,7 @@ namespace ConsoleRPG24
         Stage stage { get; set; }
         List<Item> itemList { get; set; }
 
-        public BattleSystem(Player player, List<Item> items, Stage stage)
+        public BattleSystem(Player player, List<Item> itemList, Stage stage)
         {
             this.player = player;
             this.itemList = itemList;
