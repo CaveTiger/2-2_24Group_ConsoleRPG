@@ -9,10 +9,21 @@ namespace ConsoleRPG24
     internal partial class MainScreen
     {
         List<Item> itemList = new List<Item>();
-        Player player;
+        public Player player;
+
+        public static MainScreen instance; 
 
         public void GameStart()
         {
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                return;
+            }
+
             InitItem();
 
             player = new Player();
@@ -31,7 +42,6 @@ namespace ConsoleRPG24
 
             Console.Write("당신의 성함을 입력해 주십시오: ");
             player.Name = Console.ReadLine();
-
 
             Console.Clear();
 
