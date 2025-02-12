@@ -8,7 +8,8 @@ namespace ConsoleRPG24
     {
         
         public Player player { get; set; }
-        public List<Item> itemList { get; set; }
+        public List<Item> itemList { get; set; } 
+        private Monster enemy;
 
         public Stage stage { get; set; }
 

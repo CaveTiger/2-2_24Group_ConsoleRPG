@@ -39,7 +39,7 @@ namespace ConsoleRPG24
                 return;
             }
 
-            int reducedDamage = Math.Max(damage - Defen, 0);
+            int reducedDamage = Math.Max(damage - Defen, 1);
             Health -= reducedDamage;
 
             if (Health <= 0)
@@ -396,6 +396,8 @@ namespace ConsoleRPG24
         public Monster(string name, int atk, int defen, float health, float maxHealth, int speed, int critHit = 0, float critDmg = 1.5f)
             : base(name, atk, defen, health, maxHealth, speed, 0) //회피 0
         {
+            this.Atk = atk;  // 🔹 몬스터 공격력 설정
+            this.Defen = defen;
             CritHit = critHit;
             CritDmg = critDmg;
 
