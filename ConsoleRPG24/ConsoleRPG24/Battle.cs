@@ -12,14 +12,12 @@ namespace ConsoleRPG24
         public Player player { get; set; }
         public Stage stage { get; set; }
         public List<Item> itemList { get; set; }
-        public Monster monster { get; set; }
 
-        public BattleSystem(Player player, List<Item> itemList, Stage stage, Monster monster)
+        public BattleSystem(Player player, List<Item> itemList, Stage stage)
         {
             this.player = player;
             this.itemList = itemList;
             this.stage = stage;
-            this.monster = monster;
         }
 
         public Monster RandomBoss()
