@@ -58,10 +58,6 @@ namespace ConsoleRPG24
                 player.Inventory.AddItem(RandomItem());
             }
 
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("==================[ 상 점 ]==================");
-            Console.ResetColor();
-
             int warningType = 0;                //경고 종류
             string infoText = "";               //안내문 내용
             bool isBuy = false;                 //구매 여부
@@ -92,6 +88,9 @@ namespace ConsoleRPG24
             while (true)
             {
                 Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("==================[ 상 점 ]==================");
+                Console.ResetColor();
                 for (int i = 0; i < randomThreeItems.Count(); i++)
                 {
                     switch (randomThreeItems[i].ItemRank)
@@ -114,34 +113,39 @@ namespace ConsoleRPG24
                     //41. 할인 쿠폰 : 상점 내 아이템 가격 10% 감소(가격 표시)
                     if (itemList[41].IsOwned && itemList[41].IsEquipped)
                     {
-                        Console.Write($"{i} | " + String.Format("{0,-10}", randomThreeItems[i].ItemRank) +
-                       " | " + String.Format("{ 0,-30}", randomThreeItems[i].ItemName) +
-                       " | " + String.Format("{0,-10}", randomThreeItems[i].ItemPrice * 9 / 10) +
-                       "원 | " + String.Format("{0,-40}", randomThreeItems[i].EffectDescription));
+                        Console.Write(i + 1 + " | " + String.Format("{0,-8}", randomThreeItems[i].ItemRank) +
+                       " | " + String.Format("{0,-20}", randomThreeItems[i].ItemName) +
+                       " | " + String.Format("{0,-3}원", randomThreeItems[i].ItemPrice * 9 / 10) +
+                       " | " + String.Format("{0,-40}", randomThreeItems[i].EffectDescription));
                     }
                     else
                     {
-                        Console.Write($"{i} | " + String.Format("{0,-10}", randomThreeItems[i].ItemRank) +
-                       " | " + String.Format("{ 0,-30}", randomThreeItems[i].ItemName) +
-                       " | " + String.Format("{0,-10}", randomThreeItems[i].ItemPrice) +
-                       " 원| " + String.Format("{0,-40}", randomThreeItems[i].EffectDescription));
+                        Console.Write(i + 1 + " | " + String.Format("{0,-8}", randomThreeItems[i].ItemRank) +
+                        " | " + String.Format("{0,-20}", randomThreeItems[i].ItemName) +
+                        " | " + String.Format("{0,-3}원", randomThreeItems[i].ItemPrice) +
+                        " | " + String.Format("{0,-40}", randomThreeItems[i].EffectDescription));
+
                     }
                     Console.ResetColor();
                     if (randomThreeItems[i].IsOwned)
                     {
                         Console.Write("[보유중]");
                     }
+                    Console.WriteLine("");
                 }
 
                 //경고문 작성
+                Console.WriteLine("");
                 PrintWarningText(warningType);
 
                 //안내문 작성
                 PrintInfoText(infoText);
+                Console.WriteLine("");
 
                 //번호 선택 예외 고려 => -1로 처리
-                Console.WriteLine($"현재 보유 골드 {player.Gold}");
-                Console.Write(">> ");
+                Console.WriteLine($"현재 보유 골드 : {player.Gold}원");
+                Console.WriteLine("");
+                Console.Write("사고싶은 아이템의 번호를 입력해주세요 (나가기 : 0)>> ");
                 int itemIndex = -1;
                 try
                 {
@@ -155,7 +159,7 @@ namespace ConsoleRPG24
                 if (itemIndex >= 1 && itemIndex <= randomThreeItems.Count)
                 {
                     //구매 실패(이미 보유중)
-                    if(randomThreeItems[itemIndex - 1].IsOwned)
+                    if (randomThreeItems[itemIndex - 1].IsOwned)
                     {
                         warningType = 2;
                         infoText = "";
@@ -178,10 +182,10 @@ namespace ConsoleRPG24
                         {
                             player.Gold -= randomThreeItems[itemIndex - 1].ItemPrice;
                         }
-                        
+
                         player.Inventory.AddItem(randomThreeItems[itemIndex - 1]);
                         warningType = 0;
-                        infoText = $"{randomThreeItems[itemIndex - 1]} 아이템을 구매하였습니다!";
+                        infoText = $"{randomThreeItems[itemIndex - 1].ItemName} 아이템을 구매하였습니다!";
                         isBuy = true;
                     }
 
@@ -211,17 +215,23 @@ namespace ConsoleRPG24
             //돈 없어서 못사는 경우
             if (warningType == 1)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("현재 보유한 골드가 부족하여 아이템 구매에 실패하였습니다!");
+                Console.ResetColor();
             }
             //이미 보유중인 경우
             else if (warningType == 2)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("이미 보유중인 아이템입니다!");
+                Console.ResetColor();
             }
             //잘못된 입력인 경우
             else if (warningType == 3)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("잘못된 입력입니다!");
+                Console.ResetColor();
             }
             else
             {
@@ -231,9 +241,11 @@ namespace ConsoleRPG24
 
         public void PrintInfoText(string infoText)
         {
-            if(infoText != "")
+            if (infoText != "")
             {
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine(infoText);
+                Console.ResetColor();
             }
         }
 
