@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace ConsoleRPG24
@@ -79,6 +80,10 @@ namespace ConsoleRPG24
                 Slime slime = new Slime("슬라임");
                 return slime;
             }
+        }
+        public void ItemLoraderBattleFront(List<Monster> monsterTeam)
+        {
+            ApplyEffectBeforeBattle(monsterTeam);
         }
 
         public void RandomEventBattle(Monster target, int damage, List<Monster> monsterTeam)
@@ -193,10 +198,12 @@ namespace ConsoleRPG24
                 }
             }// 몬스터를 생성
             bool BattleOn = true;
+            ApplyEffectBeforeBattle(monsterTeam);
             while (BattleOn == true)
             {
                 Console.ReadLine();
                 Console.Clear();
+                ApplyEffectEveryTurn();
                 Console.WriteLine("}================================={");
                 Console.ForegroundColor= ConsoleColor.Green;
                 Console.WriteLine($"이름 : {player.Name}  직업 : {player.Job}");
@@ -338,8 +345,10 @@ namespace ConsoleRPG24
                     }
 
                 }
+                LoseEffectEveryTurn();
                 if (monsterTeam.TrueForAll(m => m.IsDead))
                 {
+                    LoseEffectAfterBattle(monsterTeam);
                     Console.WriteLine("모든 몬스터가 죽었습니다. 전투 종료!");
                     BattleOn = false;
                 }
@@ -367,11 +376,12 @@ namespace ConsoleRPG24
                     monsterTeam.Add(RandomMonster());
                 }
             }// 몬스터를 생성
-            
+            ApplyEffectBeforeBattle(monsterTeam);
             while (BattleOn == true)
             {
                 Console.ReadLine();
                 Console.Clear();
+                ApplyEffectEveryTurn();
                 Console.WriteLine("}================================={");
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine($"이름 : {player.Name}  직업 : {player.Job}");
@@ -533,8 +543,10 @@ namespace ConsoleRPG24
                     }
 
                 }
+                LoseEffectEveryTurn();
                 if (monsterTeam.TrueForAll(m => m.IsDead))
                 {
+                    LoseEffectAfterBattle(monsterTeam);
                     Console.WriteLine("모든 몬스터가 죽었습니다. 전투 종료!");
                     BattleOn = false;
                 }
