@@ -5,22 +5,33 @@ using System.Threading.Tasks.Dataflow;
 
 namespace ConsoleRPG24
 {
-
+    
     internal partial class MainScreen
     {
         List<Item> itemList = new List<Item>();
+        public Player player;
 
-        private Player player;
+        public static MainScreen instance; 
 
         public void GameStart()
         {
-            InitItem();
-            //DisplayItems();
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                return;
+            }
 
-            string userName;
+            InitItem();
+
+            player = new Player();
 
             Thread.Sleep(1000);
-            Console.WriteLine(new string('=', 20));
+            Console.WriteLine(new string('-', 30));
+            Console.WriteLine(new string('=', 40));
+            Thread.Sleep(1500);
             Console.WriteLine();
             Console.WriteLine("당신은 눈을 떴다.");
             Console.WriteLine();
@@ -30,18 +41,17 @@ namespace ConsoleRPG24
             Thread.Sleep(2500);
 
             Console.Write("당신의 성함을 입력해 주십시오: ");
-            userName = Console.ReadLine();
-
+            player.Name = Console.ReadLine();
 
             Console.Clear();
 
-            Console.WriteLine($"그래. 당신의 이름은 {userName}(이)다.");
+            Console.WriteLine($"그래. 당신의 이름은 {player.Name}(이)다.");
             Thread.Sleep(2000);
 
 
             while (true)
             {
-                player = new Player();
+                
 
                 string input;
 
@@ -58,22 +68,22 @@ namespace ConsoleRPG24
 
                 if (input == "1")
                 {
-                    player.Job = "전사";
+                    player.SetJobStats("전사");
                 }
 
                 else if (input == "2")
                 {
-                    player.Job = "마법사";
+                    player.SetJobStats("마법사");
                 }
 
                 else if (input == "3")
                 {
-                    player.Job = "궁수";
+                    player.SetJobStats("궁수");
                 }
 
                 else if (input == "4")
                 {
-                    player.Job = "암살자";
+                    player.SetJobStats("암살자");
                 }
 
                 else
@@ -82,9 +92,6 @@ namespace ConsoleRPG24
                     Console.WriteLine("자신이 했을만한 직업은 저 네가지 이외엔 없다는 확신이 든다.");
                     continue;
                 }
-
-
-                
 
                 break;
             }
@@ -187,10 +194,7 @@ namespace ConsoleRPG24
         public void InventoryScreen()
         {
             Console.Clear();
-            //inventory.OpenInventory(); // 기존 인벤토리를 유지하며 사용
-            Inventory inventory = new Inventory();
-            inventory.OpenInventory();
-
+            player.Inventory.OpenInventory();
         }
 
 
@@ -234,8 +238,8 @@ namespace ConsoleRPG24
         public void VillageShop()
         {
             Console.Clear();
-            Shop shop = new Shop();
-            shop.ShowVillageShop();
+            Shop shop = new Shop(player, itemList);
+            shop.DisplayShopItems();
         }
 
 
@@ -243,7 +247,7 @@ namespace ConsoleRPG24
         public void DungeonScreen()
         {
             Console.Clear();
-            Stage stage = new Stage();
+            Stage stage = new Stage(player,itemList);
             stage.DungeonStart();
         }
     }

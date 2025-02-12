@@ -1,10 +1,12 @@
-﻿namespace ConsoleRPG24
+﻿using System.Globalization;
+
+namespace ConsoleRPG24
 {
 
     public class Inventory
     {
         internal List<Item> Inven { get; set; } = new List<Item>();
-
+        private const int MaxEquippedItems = 12;
         public void OpenInventory()
         {
             while (true)
@@ -35,6 +37,7 @@
         // 🔹 아이템 추가
         internal void AddItem(Item item)
         {
+            item.IsOwned = true;
             Inven.Add(item);
             Console.WriteLine($"{item.ItemName}을(를) 인벤토리에 추가했습니다!");
         }
@@ -60,6 +63,7 @@
         {
             if (Inven.Contains(item))
             {
+                item.IsOwned = false;
                 Inven.Remove(item);
                 Console.WriteLine($"{item.ItemName}을(를) 인벤토리에서 제거했습니다.");
             }
@@ -75,17 +79,17 @@
             while (true)
             {
                 if (Inven.Count == 0)
-                {   
+                {
                     Console.WriteLine("인벤토리가 비어 있습니다.");
                     return;
                 }
-
+                Console.Clear();
                 Console.WriteLine("[아이템 목록]");
                 for (int i = 0; i < Inven.Count; i++)
                 {
                     var item = Inven[i];
                     string equippedMark = item.IsEquipped ? "[E]" : "   ";
-                    Console.WriteLine($"- {i + 1} {equippedMark} {item.ItemName} | {item.ItemDivision} +{item.Attack}/{item.Defense}/{item.Health} | {item.Description}");
+                    Console.WriteLine($"- {i + 1} {equippedMark} {item.ItemName} | {item.EffectDescription} | {item.ItemRank}| {item.Description}");
                 }
 
                 Console.WriteLine("0. 나가기");
@@ -113,8 +117,26 @@
         private void ToggleEquip(int index)
         {
             var item = Inven[index];
-            item.IsEquipped = !item.IsEquipped;
-            Console.WriteLine(item.IsEquipped ? $"{item.ItemName}을(를) 장착했습니다!" : $"{item.ItemName}을(를) 해제했습니다!");
+
+            // 이미 장착된 아이템이 아니면 장착 가능한 아이템 수 확인
+            if (item.IsEquipped)
+            {
+                item.IsEquipped = false;
+                Console.WriteLine($"{item.ItemName}을(를) 해제했습니다!");
+            }
+            else
+            {
+                int equippedCount = Inven.Count(i => i.IsEquipped);  // 장착된 아이템 수 계산
+
+                if (equippedCount >= MaxEquippedItems)
+                {
+                    Console.WriteLine($"최대 {MaxEquippedItems}개의 아이템만 장착할 수 있습니다.");
+                    return;
+                }
+
+                item.IsEquipped = true;
+                Console.WriteLine($"{item.ItemName}을(를) 장착했습니다!");
+            }
         }
     }
 }
