@@ -1,87 +1,5 @@
-﻿namespace ConsoleRPG24
+namespace ConsoleRPG24
 {
-    internal class GachaSystem
-    {
-        private Player player; // 플레이어 정보
-        private int pityCounter; // 90회 확정 지급 카운트
-
-        public GachaSystem(Player player)
-        {
-            this.player = player;
-            pityCounter = 0; // 초기화
-        }
-
-        // 🔹 뽑기 실행 메서드
-        public void Draw(int drawCount)
-        {
-            int cost = drawCount * 100; // 1회당 100골드
-            if (player.Gold < cost)
-            {
-                Console.WriteLine("💰 골드가 부족합니다. 뽑기를 진행할 수 없습니다!");
-                return;
-            }
-
-            player.Gold -= cost; // 골드 차감
-            Console.WriteLine($"🎰 {drawCount}회 뽑기를 시작합니다...");
-
-            for (int i = 0; i < drawCount; i++)
-            {
-                pityCounter++; // 뽑기 횟수 증가
-                Thread.Sleep(2000); // 🔹 2초 지연 (애니메이션 효과)
-                Console.WriteLine(". . 뽑기 완료!");
-
-                if (pityCounter >= 90)
-                {
-                    GiveSpecialItem();
-                    pityCounter = 0; // 확정 지급 후 초기화
-                }
-                else
-                {
-                    if (IsSpecialItem())
-                    {
-                        GiveSpecialItem();
-                        pityCounter = 0; // 특수 아이템 획득 시 확정 카운트 초기화
-                    }
-                    else
-                    {
-                        GiveGoldReward();
-                    }
-                }
-            }
-        }
-
-        // 🔹 1% 확률 체크
-        private bool IsSpecialItem()
-        {
-            Random rand = new Random();
-            return rand.Next(0, 100) < 1; // 1% 확률
-        }
-
-        // 🔹 특수 아이템 지급
-        private void GiveSpecialItem()
-        {
-            Item specialItem = new Item(
-                "그리웠던 그때 그곳으로",
-                "언젠가...우린 과거의 그때로 돌아갈꺼야 오래된 전설처럼.",
-                "시작시 공격력이 2배 증가하며, 체력이 매턴 5%씩 성장한다 (소수점 제외)",
-                Rank.legend,
-                Division.atk,
-                0
-            );
-
-            player.Inventory.AddItem(specialItem);
-            Console.WriteLine($"🎉 축하합니다! {specialItem.ItemName}을(를) 획득하였습니다!");
-        }
-
-        // 🔹 골드 보상 지급 (9골드 이하 / 10회 뽑기 시 99골드 이하)
-        private void GiveGoldReward()
-        {
-            Random rand = new Random();
-            int goldAmount = rand.Next(1, 10); // 1~9골드 (1회 기준)
-            player.Gold += goldAmount;
-            Console.WriteLine($"💰 {goldAmount}골드를 획득했습니다!");
-        }
-    }
     // 🔹 기본 캐릭터 클래스 (부모 클래스)
     public class BaseCharacter
     {
@@ -211,13 +129,13 @@
             Mana = 100;
             Inventory = new Inventory();
             SetJobStats(job);
+
         }
 
         // Atk 계산
         public int CurrentAtk => BaseAtk + bonusAtk;
         public int CurrentDefen => BaseDefen + bonusDefen;
         public float CurrentHealth => BaseHealth + bonusHealth;
-
 
         //아이템을 장착할 경우
         internal void EquipItem(Item item)
@@ -428,7 +346,7 @@
 
     public class Orc : Monster ///오크:강한 공격력
     {
-        public Orc(string name) : base(name, 15, 5, 45f, 45f, 4) { }
+        public Orc(string name) : base(name, 15, 5, 60f, 60f, 4) { }
 
         public override void Attack(BaseCharacter target)
         {
@@ -439,7 +357,7 @@
 
     public class Dragon : Monster ///드레곤:강력한 브레스 공격
     {
-        public Dragon(string name) : base(name, 30, 10, 125f, 125f, 4) { }
+        public Dragon(string name) : base(name, 30, 10, 200f, 200f, 5) { }
 
         public override void Attack(BaseCharacter target)
         {
