@@ -9,17 +9,49 @@ namespace ConsoleRPG24
     //어느 한쪽이 전멸했으니 보상 혹은 게임오버를 띄워야함
     internal partial class BattleSystem
     {
-        Player player { get; set; }
-        Stage stage { get; set; }
-        List<Item> itemList { get; set; }
+        public Player player { get; set; }
+        public Stage stage { get; set; }
+        public List<Item> itemList { get; set; }
+        public Monster monster { get; set; }
 
-        public BattleSystem(Player player, List<Item> items, Stage stage)
+        public BattleSystem(Player player, List<Item> itemList, Stage stage, Monster monster)
         {
             this.player = player;
             this.itemList = itemList;
             this.stage = stage;
+            this.monster = monster;
         }
 
+        public Monster RandomBoss()
+        {
+            Random random = new Random();
+            int index = random.Next(1, 6);
+            if (index == 1)
+            {
+                Goblin goblin = new Goblin("고블린");
+                return goblin;
+            }
+            else if (index == 2)
+            {
+                Dragon dragon = new Dragon("드래곤");
+                return dragon;
+            }
+            else if (index == 3)
+            {
+                Vampire vampire = new Vampire("뱀파이어");
+                return vampire;
+            }
+            else if (index == 4)
+            {
+                Orc orc = new Orc("오크");
+                return orc;
+            }
+            else
+            {
+                Slime slime = new Slime("슬라임");
+                return slime;
+            }
+        }
         public Monster RandomMonster()
         {
             Random random = new Random();
@@ -49,8 +81,6 @@ namespace ConsoleRPG24
                 Slime slime = new Slime("슬라임");
                 return slime;
             }
-
-
         }
 
         public void RandomEventBattle(Monster target, int damage, List<Monster> monsterTeam)
@@ -122,16 +152,6 @@ namespace ConsoleRPG24
             }
         }
 
-        public void BattleStart()
-        {
-            //여긴 배틀의 진행 전개를 적용시키는 곳 전투 상황 통제는 이 메서드서 한다.
-            Console.Clear();
-            Console.WriteLine();
-            Console.WriteLine("적과 조우했습니다.");
-            Console.WriteLine();
-            //PlayerDebug();
-            Battle();
-        }
         public void PlayerDebug()
         {
             Console.WriteLine("플레이어 체력을 임시로 설정");
@@ -145,7 +165,7 @@ namespace ConsoleRPG24
         public void PlayerAttack(Monster target, int damage)
         {
             //이건 플레이어가 적에게 피해를 줬을때
-            target.TakeDamage(damage);
+            player.Attack(target);
             if (target.Health <= 0)
             {
                 target.IsDead = true;
@@ -159,7 +179,11 @@ namespace ConsoleRPG24
         }
         public void Battle()
         {
-            int pspeed = 5;
+            Console.Clear();
+            Console.WriteLine();
+            Console.WriteLine("적과 조우했습니다.");
+            Console.WriteLine();
+            PlayerDebug();
             bool playerTurn = true;
             List<Monster> monsterTeam = new List<Monster>();
             {
@@ -211,12 +235,11 @@ namespace ConsoleRPG24
                         if (monsterTeam[i].Speed == turnCheck && !monsterTeam[i].IsDead)//적의 턴이되면 적이 공격하게 됨
                         {
                             Console.WriteLine();
-                            Console.WriteLine($"{monsterTeam[i].Name}이/가 당신에게 피해를 주었습니다.");
-                            player.TakeDamage(monsterTeam[i].Atk);
+                            monsterTeam[i].Attack(player);
                             Console.ReadKey();
                             
                         }
-                        if (pspeed == turnCheck)//플레이어의 속도를 체크
+                        if (player.Speed == turnCheck)//플레이어의 속도를 체크
                         {
                             while (playerTurn == true)//플레이어에게 턴 기회가 있는지 체크
                             {
@@ -254,31 +277,33 @@ namespace ConsoleRPG24
                                         switch (AttackCheck)
                                         {
                                             case 1 :
-                                                Console.WriteLine($"당신은 {monsterTeam[0].Name}를 공격했습니다.");
+                                               if (monsterTeam[0].IsDead == false)
+                                                {
                                                 PlayerAttack(monsterTeam[0], player.Atk);
                                                 Console.WriteLine($"{monsterTeam[0].Name}의 현재 체력은 {monsterTeam[0].Health}/{monsterTeam[0].MaxHealth}입니다.");
                                                 playerTurn = false;
+                                                }
                                                 break;
                                             case 2:
-                                            if (monsterTeam[1] != null)
+                                            if (monsterTeam[1] != null && monsterTeam[1].IsDead == false)
                                             {
-                                                Console.WriteLine($"당신은 {monsterTeam[1].Name}를 공격했습니다.");
+                                               
                                                 PlayerAttack(monsterTeam[1], player.Atk);
                                                 Console.WriteLine($"{monsterTeam[1].Name}의 현재 체력은 {monsterTeam[1].Health}/{monsterTeam[1].MaxHealth}입니다.");
                                                 playerTurn = false;
                                             }
                                                 break;
                                             case 3:
-                                            if (monsterTeam[2] != null)
+                                            if (monsterTeam[2] != null && monsterTeam[2].IsDead == false)
                                             {
-                                                Console.WriteLine($"당신은 {monsterTeam[2].Name}를 공격했습니다.");
+                                                
                                                 PlayerAttack(monsterTeam[2], player.Atk);
                                                 Console.WriteLine($"{monsterTeam[2].Name}의 현재 체력은 {monsterTeam[2].Health}/{monsterTeam[2].MaxHealth}입니다.");
                                                 playerTurn = false;
                                             }
                                                 break;
                                             case 4 :
-                                            if (monsterTeam[3] != null)
+                                            if (monsterTeam[3] != null && monsterTeam[3].IsDead == false)
                                             {
                                                 Console.WriteLine($"당신은 {monsterTeam[3].Name}를 공격했습니다.");
                                                 PlayerAttack(monsterTeam[3], player.Atk);
@@ -324,6 +349,200 @@ namespace ConsoleRPG24
             stage.Rewards();
         }
 
+        public void BossBattle()
+        {
+            bool playerTurn = true;
+            bool BattleOn = true;
+
+            Console.Clear();
+            Console.WriteLine();
+            Console.WriteLine("압도적인 힘을 느끼며 상대를 조우했습니다.");
+            Console.WriteLine();
+            PlayerDebug();
+            
+            List<Monster> monsterTeam = new List<Monster>();
+            {
+                Random r = new Random();
+                int spawnCount = r.Next(1, 2);
+                for (int i = 0; i < spawnCount; i++)
+                {
+                    monsterTeam.Add(RandomMonster());
+                }
+            }// 몬스터를 생성
+            
+            while (BattleOn == true)
+            {
+                Console.ReadLine();
+                Console.Clear();
+                Console.WriteLine("}================================={");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"이름 : {player.Name}  직업 : {player.Job}");
+                Console.WriteLine($"속도 : {player.Speed}  체력 : {player.Health}/{player.MaxHealth}");
+                Console.WriteLine($"공격력 : {player.Atk}  방어력 : {player.Defen}");
+                Console.ResetColor();
+                Console.WriteLine("}================================={");
+                foreach (var number in monsterTeam)
+                {
+                    if (number.IsDead)//몬스터 죽은 경우
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkGray;
+                        Console.WriteLine($"{number.Name} : 죽음");
+                        Console.ResetColor();
+                    }
+                    else //산 경우
+                    {
+                        Console.WriteLine($"{number.Name} : 체력 : {number.Health}/{number.MaxHealth} 속도 : {number.Speed}");
+                        Console.WriteLine($"\t공격력 : {number.Atk} 방어력 : {number.Defen}");
+                    }
+
+                    Console.WriteLine("}================================={");
+                }// 생성된 몬스터의 정보를 띄워줍니다.
+
+                for (int turnCheck = 21; turnCheck >= 0; turnCheck--)
+                //속도 최대 20 21부터 시작해 1씩 내려가 해당 속도와 == 이 뜰대 밑의 조건문을 실행함
+                {
+                    playerTurn = true;//플레이어 전용으로 플레이어가 턴 
+
+                    //Console.WriteLine($"{turnCheck}.");//현재 턴이 몇번을 도는지 디버깅
+                    //Console.ReadKey();
+                    for (int i = 0; i < monsterTeam.Count; i++)
+                    {
+                        if (monsterTeam[i].Speed == turnCheck && !monsterTeam[i].IsDead)//적의 턴이되면 적이 공격하게 됨
+                        {
+                            Random random = new Random();
+                            int pattern = random.Next(0, 10);
+                            if (pattern >= 6)
+                            {
+                                Console.WriteLine();
+                                monsterTeam[i].Attack(player);
+                                Console.ReadKey();
+                            }
+                            else if (pattern == 0)
+                            {
+                                Console.WriteLine();
+                                player.TakeDamage(monsterTeam[0].Atk);
+                                Console.WriteLine($"{monsterTeam[0]}이/가 당신을 후려쳤습니다.");
+                                Console.ReadKey();
+                            }
+                            else 
+                            {
+                                Console.WriteLine();
+                                player.TakeDamage(monsterTeam[0].Atk);
+                                Console.WriteLine($"{monsterTeam[0]}이/가 당신을 후려쳤습니다.");
+                                Console.ReadKey();
+                            }
+                            
+
+                        }
+                        if (player.Speed == turnCheck)//플레이어의 속도를 체크
+                        {
+                            while (playerTurn == true)//플레이어에게 턴 기회가 있는지 체크
+                            {
+                                Console.WriteLine("}================================={");
+                                Console.WriteLine("당신의 턴입니다.");
+                                Console.WriteLine("}======================================={");
+                                Console.WriteLine("|1. 공격 | 2. 스킬 | 3. 아이템 | 4. ??? | ");
+                                string input = Console.ReadLine();
+                                switch (input)
+                                {
+                                    case "1":
+                                        Console.WriteLine("누구를 공격하시겠습니까?");
+                                        foreach (var monster in monsterTeam)
+                                        {
+                                            Console.Write(" | ");
+                                            if (monster.IsDead)
+                                            {
+                                                Console.ForegroundColor = ConsoleColor.DarkGray;
+                                            }
+
+                                            Console.Write($"{monster.Name}");
+                                            Console.ResetColor();
+                                        }
+                                        Console.WriteLine(" | 0. 뒤로 |");
+
+                                        int AttackCheck = -1;
+                                        try
+                                        {
+                                            AttackCheck = int.Parse(Console.ReadLine());
+                                        }
+                                        catch
+                                        {
+                                            AttackCheck = -1;
+                                        }
+                                        switch (AttackCheck)
+                                        {
+                                            case 1:
+                                                if (monsterTeam[0].IsDead == false)
+                                                {
+                                                    PlayerAttack(monsterTeam[0], player.Atk);
+                                                    Console.WriteLine($"{monsterTeam[0].Name}의 현재 체력은 {monsterTeam[0].Health}/{monsterTeam[0].MaxHealth}입니다.");
+                                                    playerTurn = false;
+                                                }
+                                                break;
+                                            case 2:
+                                                if (monsterTeam[1] != null && monsterTeam[1].IsDead == false)
+                                                {
+
+                                                    PlayerAttack(monsterTeam[1], player.Atk);
+                                                    Console.WriteLine($"{monsterTeam[1].Name}의 현재 체력은 {monsterTeam[1].Health}/{monsterTeam[1].MaxHealth}입니다.");
+                                                    playerTurn = false;
+                                                }
+                                                break;
+                                            case 3:
+                                                if (monsterTeam[2] != null && monsterTeam[2].IsDead == false)
+                                                {
+
+                                                    PlayerAttack(monsterTeam[2], player.Atk);
+                                                    Console.WriteLine($"{monsterTeam[2].Name}의 현재 체력은 {monsterTeam[2].Health}/{monsterTeam[2].MaxHealth}입니다.");
+                                                    playerTurn = false;
+                                                }
+                                                break;
+                                            case 4:
+                                                if (monsterTeam[3] != null && monsterTeam[3].IsDead == false)
+                                                {
+                                                    Console.WriteLine($"당신은 {monsterTeam[3].Name}를 공격했습니다.");
+                                                    PlayerAttack(monsterTeam[3], player.Atk);
+                                                    Console.WriteLine($"{monsterTeam[3].Name}의 현재 체력은 {monsterTeam[3].Health}/{monsterTeam[3].MaxHealth}입니다.");
+                                                    playerTurn = false;
+                                                }
+                                                break;
+                                            case 0:
+                                                Console.WriteLine("뒤로 돌아갑니다.");
+                                                break;
+                                            default:
+                                                Console.WriteLine("잘못된 입력입니다.");
+                                                break;
+                                        }
+                                        break;
+                                    case "2":
+                                        playerTurn = false;
+                                        break;
+                                    case "3":
+                                        playerTurn = false;
+                                        break;
+                                    case "4":
+                                        RandomEventBattle(monsterTeam[0], player.Atk, monsterTeam);
+                                        playerTurn = false;
+                                        break;
+                                    default:
+                                        Console.WriteLine("잘못된 입력입니다.");
+                                        break;
+                                }
+
+                            }
+                        }
+
+                    }
+
+                }
+                if (monsterTeam.TrueForAll(m => m.IsDead))
+                {
+                    Console.WriteLine("모든 몬스터가 죽었습니다. 전투 종료!");
+                    BattleOn = false;
+                }
+            }
+            stage.Rewards();
+        }
     }
 }
 
