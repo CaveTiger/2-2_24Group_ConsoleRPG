@@ -169,6 +169,8 @@ namespace ConsoleRPG24
                 Console.WriteLine($"방어력: {player.Defen}");
                 Console.WriteLine($"체력: {player.Health}");
                 Console.WriteLine($"속도: {player.Speed} ");
+                Console.WriteLine($"치명타확률: {player.CritHit}");
+                Console.WriteLine($"치명타피해: {player.CritDmg}");
                 Console.WriteLine($"Gold: {player.Gold}");
 
                 Console.WriteLine("0. 나가기");
