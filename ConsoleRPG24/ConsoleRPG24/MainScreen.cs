@@ -10,6 +10,7 @@ namespace ConsoleRPG24
     {
         List<Item> itemList = new List<Item>();
         public Player player;
+        private int pityCounter = 0;  // 🔹 90회 뽑으면 확정 지급 (pity 시스템)
 
         public static MainScreen instance; 
 
@@ -167,6 +168,7 @@ namespace ConsoleRPG24
                 Console.WriteLine($"공격력: {player.Atk}");
                 Console.WriteLine($"방어력: {player.Defen}");
                 Console.WriteLine($"체력: {player.Health}");
+                Console.WriteLine($"속도: {player.Speed} ");
                 Console.WriteLine($"Gold: {player.Gold}");
 
                 Console.WriteLine("0. 나가기");
