@@ -273,7 +273,7 @@ namespace ConsoleRPG24
                 case "전사":
                     Atk = 130;
                     Defen = 150;
-                    MaxHealth = 1350;
+                    MaxHealth = 850;
                     Health = MaxHealth;
                     Speed = 5;
                     CritHit = 0.1f;
@@ -284,7 +284,7 @@ namespace ConsoleRPG24
                 case "마법사":
                     Atk = 180;
                     Defen = 100;
-                    MaxHealth = 1150;
+                    MaxHealth = 650;
                     Health = MaxHealth;
                     Speed = 6;
                     Mana = 200;
@@ -296,7 +296,7 @@ namespace ConsoleRPG24
                 case "궁수":
                     Atk = 180;
                     Defen = 100;
-                    MaxHealth = 1100;
+                    MaxHealth = 600;
                     Health = MaxHealth;
                     Speed = 7;
                     CritHit = 0.2f;
@@ -307,7 +307,7 @@ namespace ConsoleRPG24
                 case "암살자":
                     Atk = 135;
                     Defen = 100;
-                    MaxHealth = 1000;
+                    MaxHealth = 750;
                     Health = MaxHealth;
                     Speed = 9;
                     CritHit = 0.3f;
@@ -431,7 +431,7 @@ namespace ConsoleRPG24
     // ============= 초반 몬스터 (1~15 스테이지) =============
     public class Goblin : Monster ///고블린:속도가
     {
-        public Goblin(string name) : base(name, 110, 100, 250f, 250f, 7) { }
+        public Goblin(string name) : base(name, 120, 100, 250f, 250f, 7) { }
 
         public override void Attack(BaseCharacter target)
         {
@@ -444,7 +444,7 @@ namespace ConsoleRPG24
     {
         public static List<Slime> SlimeList = new List<Slime>();
 
-        public Slime(string name) : base(name, 95, 100, 200f, 200f, 2) { }
+        public Slime(string name) : base(name, 115, 100, 200f, 200f, 2) { }
 
         // 🔹 BaseCharacter의 TakeDamage()를 override하여 분열 기능 추가
         public override void TakeDamage(int damage)
@@ -464,7 +464,7 @@ namespace ConsoleRPG24
 
     public class Wolf : Monster // 🔹 초반 몬스터 (속도 빠르고 공격력 중간)
     {
-        public Wolf(string name) : base(name, 100, 80, 250f, 250f, 8) { }
+        public Wolf(string name) : base(name, 125, 80, 250f, 250f, 8) { }
 
         public override void Attack(BaseCharacter target)
         {
@@ -477,7 +477,7 @@ namespace ConsoleRPG24
     {
         private bool hasRevived = false;
 
-        public Zombie(string name) : base(name, 100, 70, 300f, 300f, 2) { }
+        public Zombie(string name) : base(name, 120, 70, 300f, 300f, 2) { }
 
         public override void TakeDamage(int damage)
         {
