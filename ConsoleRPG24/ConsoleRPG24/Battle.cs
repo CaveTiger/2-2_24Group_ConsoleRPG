@@ -183,7 +183,7 @@ namespace ConsoleRPG24
             Console.WriteLine();
             Console.WriteLine("적과 조우했습니다.");
             Console.WriteLine();
-            PlayerDebug();
+            //PlayerDebug();
             bool playerTurn = true;
             List<Monster> monsterTeam = new List<Monster>();
             {
@@ -358,7 +358,7 @@ namespace ConsoleRPG24
             Console.WriteLine();
             Console.WriteLine("압도적인 힘을 느끼며 상대를 조우했습니다.");
             Console.WriteLine();
-            PlayerDebug();
+            //PlayerDebug();
             
             List<Monster> monsterTeam = new List<Monster>();
             {
