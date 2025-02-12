@@ -438,6 +438,10 @@ namespace ConsoleRPG24
                                 Console.WriteLine();
                                 int bossHeal = random.Next(40, 101);
                                 monsterTeam[0].Health += bossHeal;
+                                if(monsterTeam[0].Health > monsterTeam[0].MaxHealth)
+                                {
+                                    monsterTeam[0].Health = monsterTeam[0].MaxHealth;
+                                }
                                 Console.WriteLine($"{monsterTeam[0].Name}이/가 숨을 돌립니다.");
                                 Console.WriteLine($"체력이 {bossHeal}만큼 회복됐습니다.");
                                 Console.WriteLine($"현재 {monsterTeam[0].Name}의 체력은 {monsterTeam[0].Health}/{monsterTeam[0].MaxHealth} 입니다.");
