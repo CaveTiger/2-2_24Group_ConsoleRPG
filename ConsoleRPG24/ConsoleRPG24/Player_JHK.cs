@@ -135,5 +135,34 @@ namespace ConsoleRPG24
             Console.ResetColor();
             Console.WriteLine("을(를) 장착 해제했습니다!");
         }
+
+        //플레이어가 아이템의 종류에 따라 효과를 적용(조건 아이템)
+        public void ApplyItemEffectByTerm(Item item, int percentAmount)
+        {
+            switch (item.ItemDivision)
+            {
+                case Division.atk: Atk += (BaseAtk * (percentAmount / 100)); break;                         //퍼센트 계산
+                case Division.def: Defen += (BaseDefen * (percentAmount / 100)); break;                    //퍼센트 계산
+                case Division.hp: MaxHealth += (BaseHealth * (percentAmount / 100)); break;           //퍼센트 계산
+                case Division.cHit: CritHit += percentAmount; break;                                 //단순 수치 증가
+                case Division.cDmg: CritDmg += percentAmount; break;                                 //단순 수치 증가
+                case Division.miss: Miss += percentAmount; break;                                       //단순 수치 증가
+                case Division.spd: Speed += percentAmount; break;
+            }
+        }
+
+        public void LoseItemEffectByTerm(Item item, int percentAmount)
+        {
+            switch (item.ItemDivision)
+            {
+                case Division.atk: Atk -= (BaseAtk * (percentAmount / 100)); break;                         //퍼센트 계산
+                case Division.def: Defen -= (BaseDefen * (percentAmount / 100)); break;                    //퍼센트 계산
+                case Division.hp: MaxHealth -= (BaseHealth * (percentAmount / 100)); break;           //퍼센트 계산
+                case Division.cHit: CritHit -= percentAmount; break;                                 //단순 수치 증가
+                case Division.cDmg: CritDmg -= percentAmount; break;                                 //단순 수치 증가
+                case Division.miss: Miss -= percentAmount; break;                                       //단순 수치 증가
+                case Division.spd: Speed -= percentAmount; break;
+            }
+        }
     }
 }
