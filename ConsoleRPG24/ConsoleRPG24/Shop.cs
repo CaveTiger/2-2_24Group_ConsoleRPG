@@ -46,11 +46,6 @@ namespace ConsoleRPG24
 
         public void DisplayShopItems()
         {
-            //45. 추가 서비스 티켓 : 상점에 진입시 N만큼의 골드 획득
-            if (itemList[45].IsEquipped && itemList[45].IsOwned)
-            {
-                player.Gold += 150;
-            }
 
             //43. 광대의 상자 : 상점 내 아이템 수량 1 감소, 대신 상점 진입시 랜덤 아이템 획득
             if (itemList[43].IsEquipped && itemList[43].IsOwned)
@@ -60,7 +55,6 @@ namespace ConsoleRPG24
 
             int warningType = 0;                //경고 종류
             string infoText = "";               //안내문 내용
-            bool isBuy = false;                 //구매 여부
 
             //랜덤 아이템을 3번 중복없이 가져오기
             List<Item> randomThreeItems = new List<Item>();
@@ -193,11 +187,6 @@ namespace ConsoleRPG24
                 //나가기
                 else if (itemIndex == 0)
                 {
-                    //44. 무료 서비스 티켓 : 상점 내에서 아무것도 사지 않고 나올 경우, N만큼의 골드 획득
-                    if (!isBuy && itemList[44].IsEquipped && itemList[44].IsOwned)
-                    {
-                        player.Gold += 150;
-                    }
                     break;
                 }
                 //잘못된 입력
