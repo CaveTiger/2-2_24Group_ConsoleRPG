@@ -5,22 +5,33 @@ using System.Threading.Tasks.Dataflow;
 
 namespace ConsoleRPG24
 {
-
+    
     internal partial class MainScreen
     {
         List<Item> itemList = new List<Item>();
+        public Player player;
 
-        private Player player;
+        public static MainScreen instance; 
 
         public void GameStart()
         {
-            InitItem();
-            //DisplayItems();
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                return;
+            }
 
-            string userName;
+            InitItem();
+
+            player = new Player();
 
             Thread.Sleep(1000);
-            Console.WriteLine(new string('=', 20));
+            Console.WriteLine(new string('-', 30));
+            Console.WriteLine(new string('=', 40));
+            Thread.Sleep(1500);
             Console.WriteLine();
             Console.WriteLine("당신은 눈을 떴다.");
             Console.WriteLine();
@@ -30,18 +41,17 @@ namespace ConsoleRPG24
             Thread.Sleep(2500);
 
             Console.Write("당신의 성함을 입력해 주십시오: ");
-            userName = Console.ReadLine();
-
+            player.Name = Console.ReadLine();
 
             Console.Clear();
 
-            Console.WriteLine($"그래. 당신의 이름은 {userName}(이)다.");
+            Console.WriteLine($"그래. 당신의 이름은 {player.Name}(이)다.");
             Thread.Sleep(2000);
 
 
             while (true)
             {
-                player = new Player();
+                
 
                 string input;
 
@@ -232,16 +242,16 @@ namespace ConsoleRPG24
         public void VillageShop()
         {
             Console.Clear();
-            Shop shop = new Shop();
-            shop.ShowVillageShop();
+            Shop shop = new Shop(player, itemList);
+            //shop.DisplayShopItems();
         }
-
 
 
         public void DungeonScreen()
         {
             Console.Clear();
-            Stage stage = new Stage();
+            Stage tempStage = new Stage();
+            Stage stage = new Stage(player,itemList, tempStage);
             stage.DungeonStart();
         }
     }
