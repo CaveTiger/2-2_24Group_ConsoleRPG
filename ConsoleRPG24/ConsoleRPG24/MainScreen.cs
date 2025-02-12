@@ -363,8 +363,7 @@ namespace ConsoleRPG24
         public void DungeonScreen()
         {
             Console.Clear();
-            Stage tempStage = new Stage();
-            Stage stage = new Stage(player,itemList, tempStage);
+            Stage stage = new Stage(player,itemList);
             stage.DungeonStart();
         }
     }

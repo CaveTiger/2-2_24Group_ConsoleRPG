@@ -14,19 +14,11 @@ namespace ConsoleRPG24
         Player player;
         List<Item> itemList = new List<Item>();
 
-        Stage stage;
-
         BattleSystem battleSystem;
 
-        int battleCount = 0;
+        public int battleCount = 0;
 
         //열심히 작성 중~~
-
-
-        public Stage()
-            {
-                
-            }
 
         public Stage(Player _player, List<Item> _itemList) //class Stage의 접근자를 internal로 해야 오류 안남
         {
@@ -34,16 +26,8 @@ namespace ConsoleRPG24
             itemList = _itemList;
         }
 
-        public Stage(Player _player, List<Item> _itemList, Stage _stage) //이하동문
-        {
-            player = _player;
-            itemList = _itemList;
-            stage = _stage;
-        }
-
-
         //
-        public void Rewards(Player player, Stage stage) 
+        public void Rewards(Player player) 
         {
             if (MainScreen.instance.player.IsDead)
 
@@ -113,7 +97,20 @@ namespace ConsoleRPG24
         //이 메소드로 던전 전투 시작!!
         public void Start()
         {
-            BattleSystem battleSystem = new BattleSystem(player, itemList, stage);
+            //23. 포도주가 담긴 성배 : 다음 구역 진입시마다 + 최대 체력 2%
+            if (itemList[23].IsOwned && itemList[23].IsEquipped)
+            {
+                player.MaxHealth += (player.BaseHealth * (2 / 100));
+            }
+            //37. 부자의 증표 : 다음 구역 진입시 보유 골드 5% 증가
+            if (itemList[37].IsOwned && itemList[37].IsEquipped)
+            {
+                player.Gold += (player.Gold * (5 / 100));
+            }
+
+            battleCount++;
+
+            BattleSystem battleSystem = new BattleSystem(player, itemList, this);
             battleSystem.Battle();
         }
 
@@ -122,11 +119,9 @@ namespace ConsoleRPG24
         //던전 20번 깨는 반복문
         public void DungeonStart()
         {
-
-
             while (true)
             {
-                for (int i = 0; i <= 19; i++)
+                for (; battleCount <= 19; battleCount++)
                 {
                     Start();
 
@@ -135,22 +130,23 @@ namespace ConsoleRPG24
                         return;
                     }
 
-                    Rewards(player, stage);
+                    Rewards(player);
 
                     Camp camp = new Camp(player);
                     camp.CampCount();
 
-                    battleCount ++;
-                    if (battleCount == 5 || battleCount == 10 || battleCount == 15)
+                    if (battleCount == 20)
+                    {
+                        BattleSystem battleSystem = new BattleSystem(player, itemList, this);
+                        battleSystem.BossBattle();
+                    }
+
+                    if (battleCount % 5 == 0)
                     {
                         ShopEncounter();
                     }
-
-                    if (battleCount == 20)
-                    {
-                        //최종보스전
-                    }
                 }
+
                 //5번, 10번 15번 배틀 후 상점 등장!
                 //20번 배틀에서는 최종보스 등장 → 이후 클리어~!
                 //int stage = 20일때 최종보스전
