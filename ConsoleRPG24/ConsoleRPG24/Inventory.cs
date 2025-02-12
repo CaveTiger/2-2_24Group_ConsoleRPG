@@ -1,4 +1,6 @@
-﻿namespace ConsoleRPG24
+﻿using System.Globalization;
+
+namespace ConsoleRPG24
 {
 
     public class Inventory
@@ -35,6 +37,7 @@
         // 🔹 아이템 추가
         internal void AddItem(Item item)
         {
+            item.IsOwned = true;
             Inven.Add(item);
             Console.WriteLine($"{item.ItemName}을(를) 인벤토리에 추가했습니다!");
         }
@@ -60,6 +63,7 @@
         {
             if (Inven.Contains(item))
             {
+                item.IsOwned = false;
                 Inven.Remove(item);
                 Console.WriteLine($"{item.ItemName}을(를) 인벤토리에서 제거했습니다.");
             }

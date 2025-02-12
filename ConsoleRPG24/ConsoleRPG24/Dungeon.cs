@@ -41,12 +41,11 @@ namespace ConsoleRPG24
 
 
         //
-        public void Rewards() //nullreferenceexpextion 고쳐야됨
+        public void Rewards(Player player, Stage stage) 
         {
+            if (MainScreen.instance.player.IsDead)
 
-            if(!(player.IsDead))
-            {
-                Console.WriteLine($"스테이지 클리어! {monster.Name}를 물리쳤다!");
+                Console.WriteLine($"스테이지 클리어! 적을 물리쳤다!");
                 Console.WriteLine("전리품으로써 골드 혹은 아이템을 보상으로 얻을 수 있다.");
                 Console.WriteLine();
                 Console.WriteLine("1. 골드를 얻는다");
@@ -66,9 +65,10 @@ namespace ConsoleRPG24
                     Console.WriteLine("당신은 100 G를 얻었다.");
                 }
 
-                else
+                else if (input == "2")
                 {
-                    List<Item> itemList = new List<Item>();
+                    //List<Item> itemList = new List<Item>();
+
                     Random random = new Random();
 
                     int index1 = random.Next(itemList.Count);
@@ -86,34 +86,24 @@ namespace ConsoleRPG24
 
                     if (input02 == "1")
                     {
-                        Inventory inventory = new Inventory();
-                        inventory.AddItem(itemList[index1]);
+                        
+                        player.Inventory.Inven.Add(itemList[index1]);
 
                         Console.WriteLine($"{itemList[index1]}(을)를 획득했다!");
                     }
 
                     else
                     {
-                        Inventory inventory = new Inventory();
-                        inventory.AddItem(itemList[index2]);
+                        player.Inventory.Inven.Add(itemList[index1]);
 
                         Console.WriteLine($"{itemList[index2]}(을)를 획득했다!");
                     }
                 }
-
                 //다음 전투로~!
-
-            }
-
-            else if (player.IsDead)
-            {
-                Console.WriteLine("당신은 눈 앞이 깜깜해졌다...");
-                Console.WriteLine("게임 오버!......");
-            }
         }
 
         //열심히 작성 중~
-
+        //rewards에서는 보상만,,,
 
 
         //이 메소드로 던전 전투 시작!!
@@ -121,8 +111,6 @@ namespace ConsoleRPG24
         {
             BattleSystem battleSystem = new BattleSystem(player, itemList, stage);
             battleSystem.Battle();
-
-            //battleSystem.Rewards();
         }
 
 
@@ -143,7 +131,7 @@ namespace ConsoleRPG24
                         return;
                     }
 
-                    Rewards();
+                    Rewards(player, stage);
 
                     Camp camp = new Camp(player);
                     camp.CampCount();
@@ -162,16 +150,13 @@ namespace ConsoleRPG24
                 //5번, 10번 15번 배틀 후 상점 등장!
                 //20번 배틀에서는 최종보스 등장 → 이후 클리어~!
                 //int stage = 20일때 최종보스전
-                
-                //
-
                 break;
             }
 
             GameClear();
         }
 
-
+        
         public void ShopEncounter()
         {
             Console.WriteLine("당신은 다음으로 나아가던 중, 던전 안에 숨겨져있던 비밀 상점을 발견했다.");
@@ -187,8 +172,10 @@ namespace ConsoleRPG24
 
             if (input == "1")
             {
-                Shop shop = new Shop();
-                shop.ShowDungeonShop();
+                Console.Clear();
+                Shop shop = new Shop(player, itemList);
+                //Shop shop = new Shop();
+                //shop.ShowDungeonShop();
             }
 
             else
@@ -196,6 +183,7 @@ namespace ConsoleRPG24
                 DungeonStart();
             }
         }
+        
 
 
         public void GameClear()
