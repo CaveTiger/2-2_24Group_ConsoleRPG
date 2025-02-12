@@ -20,6 +20,17 @@ namespace ConsoleRPG24
     //어느 한쪽이 전멸했으니 보상 혹은 게임오버를 띄워야함
     internal class BattleSystem
     {
+        private Player player;
+        private List<Item> itemList;
+        private Stage stage;
+
+        public BattleSystem(Player player, List<Item> itemList, Stage stage)
+        {
+            this.player = player;
+            this.itemList = itemList;
+            this.stage = stage;
+        }
+
         public Monster RandomMonster()
         {
             Random random = new Random();

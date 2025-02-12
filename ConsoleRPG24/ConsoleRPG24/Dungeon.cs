@@ -26,13 +26,13 @@ namespace ConsoleRPG24
                 
             }
 
-        public Stage(Player _player, List<Item> _itemList) //class Stage의 접근자를 internal로 해야 오류 안남
+        internal Stage(Player _player, List<Item> _itemList) //class Stage의 접근자를 internal로 해야 오류 안남
         {
             player = _player;
             itemList = _itemList;
         }
 
-        public Stage(Player _player, List<Item> _itemList, Stage _stage) //이하동문
+        internal Stage(Player _player, List<Item> _itemList, Stage _stage) //이하동문
         {
             player = _player;
             itemList = _itemList;
@@ -114,12 +114,12 @@ namespace ConsoleRPG24
 
         //열심히 작성 중~
 
-
-
+ 
+        
         //이 메소드로 던전 전투 시작!!
         public void Start()
         {
-            BattleSystem battleSystem = new BattleSystem(player, itemList, stage);
+            BattleSystem battleSystem = new BattleSystem(player, itemList, this);
             battleSystem.Battle();
 
             //battleSystem.Rewards();
