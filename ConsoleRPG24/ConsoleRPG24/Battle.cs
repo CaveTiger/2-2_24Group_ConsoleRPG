@@ -97,14 +97,14 @@ namespace ConsoleRPG24
                 case 1:
                     Console.WriteLine("아무튼 생성됨 ");
                     Console.WriteLine("햄부기햄북 햄북어 햄북스딱스 함부르크햄부기우가햄비기햄부거 햄부가티햄부기온앤 온을 얻었습니다.");
-                    Console.WriteLine("최대 체력 + 10");
-                    player.MaxHealth += 10;
-                    player.Health += 10;
+                    Console.WriteLine("최대 체력 + 50");
+                    player.MaxHealth += 50;
+                    player.Health += 50;
                     break;
                 case 2:
                     Console.WriteLine("배가 고파졌습니다. 마침 주머니에 빵이 남았네요.");
-                    Console.WriteLine("체력 + 20 회복");
-                    player.Health += 20;
+                    Console.WriteLine("체력 + 200 회복");
+                    player.Health += 200;
                     if (player.MaxHealth < player.Health)
                     {
                         player.Health = player.MaxHealth;
@@ -112,34 +112,34 @@ namespace ConsoleRPG24
                     break;
                 case 3:
                     Console.WriteLine("분노의 영약");
-                    Console.WriteLine("영구적인 공격력 + 1 증가");
-                    player.Atk += 1;
+                    Console.WriteLine("영구적인 공격력 + 10 증가");
+                    player.Atk += 10;
                     break;
                 case 4:
                     Console.WriteLine("탈모!");
-                    Console.WriteLine("기부니가 별로에요. 최대 체력 - 5");
-                    player.MaxHealth -= 5;
-                    player.Health -= 5;
+                    Console.WriteLine("기부니가 별로에요. 최대 체력 - 50");
+                    player.MaxHealth -= 50;
+                    player.Health -= 50;
                     break;
                 case 6:
                     Console.WriteLine("! 잠시 잠들었나보네요 !");
-                    Console.WriteLine("머리를 찧었습니다. 체력 -20");
-                    player.Health -= 20;
+                    Console.WriteLine("머리를 찧었습니다. 체력 -200");
+                    player.Health -= 200;
                     break;
                 case 7:
                     Console.WriteLine("얼음!");
-                    Console.WriteLine("처럼 단단한 몸 방어력 +1");
-                    player.Defen += 1;
+                    Console.WriteLine("처럼 단단한 몸 방어력 +10");
+                    player.Defen += 10;
                     break;
                 case 8:
                     Console.WriteLine("발이 미끄러졌습니다.");
-                    Console.WriteLine("체력 -10");
-                    player.Health -= 10;
+                    Console.WriteLine("체력 -100");
+                    player.Health -= 100;
                     break;
                 case 9:
                     Console.WriteLine("바나나 총을 찾았다!");
                     Console.WriteLine($"첫 번째 대상에게 피해 100");
-                    PlayerAttack(monsterTeam[0], 100);
+                    PlayerAttack(monsterTeam[0], 777);
                     break;
                 case 10:
                     Console.WriteLine("!!정상화!!");
