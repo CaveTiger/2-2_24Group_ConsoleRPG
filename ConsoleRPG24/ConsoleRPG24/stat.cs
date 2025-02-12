@@ -1,3 +1,6 @@
+using System;
+using ConsoleRPG24;
+
 namespace ConsoleRPG24
 {
     // 🔹 기본 캐릭터 클래스 (부모 클래스)
@@ -108,12 +111,12 @@ namespace ConsoleRPG24
         private float bonusHealth = 0;  // 추가 체력 저장
 
         // 🔹 기본 생성자 (매개변수 부족한 경우 사용)
-        public Player() : base("Unknown", 0, 0, 100, 100, 5, 0)
+        public Player() : base("Unknown", 0, 0, 100, 1000, 5, 0)
         {
             BaseAtk = 0;
             BaseDefen = 0;
             BaseHealth = 100;
-            Gold = 100;
+            Gold = 1000;
             Mana = 100;
             Inventory = new Inventory();
         }
@@ -125,7 +128,7 @@ namespace ConsoleRPG24
             BaseAtk = baseAtk;
             BaseDefen = baseDefen;
             BaseHealth = maxHealth;
-            Gold = 100;
+            Gold = 1000;
             Mana = 100;
             Inventory = new Inventory();
             SetJobStats(job);
@@ -159,6 +162,23 @@ namespace ConsoleRPG24
                 PrintPlayerEquipItem(item);
                 item.IsEquipped = true;
             }
+
+            if (item.ItemName == "그리웠던 그때 그곳으로")
+            {
+                Atk *= 2; // 🔹 공격력 2배 증가
+                MaxHealth += (int)(MaxHealth * 0.05); // 🔹 체력 5% 증가 (소수점 제외)
+                Health = MaxHealth; // 🔹 체력 풀로 회복
+            }
+            else
+            {
+                Atk += item.Attack;
+                MaxHealth += item.Health;
+                Health = MaxHealth;  // 최대 체력 증가 시 풀 체력 회복
+            }
+
+            item.IsEquipped = true;
+            Console.WriteLine($"{item.ItemName}을(를) 장착했습니다!");
+
         }
 
         internal void UseItem(Item item)
@@ -196,6 +216,24 @@ namespace ConsoleRPG24
                 PrintPlayerUnequipItem(item);
                 item.IsEquipped = false;
             }
+
+            // 🔹 장착 해제 시 원래 능력치로 복구
+            if (item.ItemName == "그리웠던 그때 그곳으로")
+            {
+                Atk /= 2; // 🔹 공격력 원상 복구
+                MaxHealth -= (int)(MaxHealth * 0.05); // 🔹 체력 감소 (소수점 제외)
+                if (Health > MaxHealth) Health = MaxHealth; // 🔹 현재 체력이 최대 체력을 초과하지 않도록 조정
+            }
+            else
+            {
+                Atk -= item.Attack;
+                MaxHealth -= item.Health;
+                if (Health > MaxHealth) Health = MaxHealth;
+            }
+
+            item.IsEquipped = false;
+            Console.WriteLine($"{item.ItemName}을(를) 해제했습니다!");
+
         }
 
         // 🔹 직업 선택 시 스탯 설정
@@ -206,9 +244,9 @@ namespace ConsoleRPG24
             switch (job)
             {
                 case "전사":
-                    Atk = 20;
-                    Defen = 15;
-                    MaxHealth = 150;
+                    Atk = 130;
+                    Defen = 150;
+                    MaxHealth = 1350;
                     Health = MaxHealth;
                     Speed = 5;
                     CritHit = 0.1f;
@@ -217,9 +255,9 @@ namespace ConsoleRPG24
                     break;
 
                 case "마법사":
-                    Atk = 25;
-                    Defen = 5;
-                    MaxHealth = 100;
+                    Atk = 180;
+                    Defen = 100;
+                    MaxHealth = 1150;
                     Health = MaxHealth;
                     Speed = 6;
                     Mana = 200;
@@ -229,9 +267,9 @@ namespace ConsoleRPG24
                     break;
 
                 case "궁수":
-                    Atk = 18;
-                    Defen = 10;
-                    MaxHealth = 120;
+                    Atk = 180;
+                    Defen = 100;
+                    MaxHealth = 1100;
                     Health = MaxHealth;
                     Speed = 7;
                     CritHit = 0.2f;
@@ -240,9 +278,9 @@ namespace ConsoleRPG24
                     break;
 
                 case "암살자":
-                    Atk = 22;
-                    Defen = 8;
-                    MaxHealth = 110;
+                    Atk = 135;
+                    Defen = 100;
+                    MaxHealth = 1000;
                     Health = MaxHealth;
                     Speed = 9;
                     CritHit = 0.3f;
@@ -272,7 +310,9 @@ namespace ConsoleRPG24
 
             if (isCritical)
             {
-                Console.WriteLine("💥 치명타 공격! 💥");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("치명타 공격!");
+                Console.ResetColor();
             }
 
             target.TakeDamage(damage);
@@ -280,7 +320,9 @@ namespace ConsoleRPG24
             // 🔹 공격이 빗나가는지 확인
             if (missChance < target.Miss)  // 대상의 회피 확률 적용
             {
+                Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine($"❌ {target.Name}이(가) 공격을 회피했습니다!");
+                Console.ResetColor();
                 return;  // 공격 실패
             }
         }
@@ -322,18 +364,43 @@ namespace ConsoleRPG24
 
     public class Monster : BaseCharacter
     {
-        public Monster(string name, int atk, int defen, float health, float maxHealth, int speed)
-            : base(name, atk, defen, health, maxHealth, speed, 0) // 🔹 몬스터는 회피 없음 (Miss = 0)
+        public int CritHit { get; private set; }  // 치명타 확률 (%)
+        public float CritDmg { get; private set; }  // 치명타 피해 배율
+        public Monster(string name, int atk, int defen, float health, float maxHealth, int speed, int critHit = 0, float critDmg = 1.5f)
+            : base(name, atk, defen, health, maxHealth, speed, 0) //회피 0
         {
+            CritHit = critHit;
+            CritDmg = critDmg;
+
         }
 
         public override bool IsAlly()
         {
             return false;
         }
+
+        public override void Attack(BaseCharacter target)
+        {
+            Random rand = new Random();
+            int critChance = rand.Next(0, 101);  // 0~100 사이 난수 생성
+
+            bool isCritical = critChance < CritHit;  // 치명타 확률 비교
+            int damage = isCritical ? (int)(Atk * CritDmg) : Atk;  // 치명타 발생 시 배율 적용
+
+            Console.WriteLine($"{Name}이(가) {target.Name}을(를) 공격합니다!");
+
+            if (isCritical)
+            {
+                Console.WriteLine("몬스터의 치명타 공격!");
+            }
+
+            target.TakeDamage(damage);
+        }
     }
 
-    public class Goblin : Monster ///고블린:속도가 빠름
+
+    // ============= 초반 몬스터 (1~15 스테이지) =============
+    public class Goblin : Monster ///고블린:속도가
     {
         public Goblin(string name) : base(name, 110, 100, 250f, 250f, 7) { }
 
@@ -341,28 +408,6 @@ namespace ConsoleRPG24
         {
             Console.WriteLine($"{Name}이 빠르게 공격합니다! (속도 {Speed})");
             target.TakeDamage(Atk);
-        }
-    }
-
-    public class Orc : Monster ///오크:강한 공격력
-    {
-        public Orc(string name) : base(name, 15, 5, 60f, 60f, 4) { }
-
-        public override void Attack(BaseCharacter target)
-        {
-            Console.WriteLine($"{Name}이 강력한 일격을 가합니다!");
-            target.TakeDamage(Atk + 5);
-        }
-    }
-
-    public class Dragon : Monster ///드레곤:강력한 브레스 공격
-    {
-        public Dragon(string name) : base(name, 30, 10, 200f, 200f, 5) { }
-
-        public override void Attack(BaseCharacter target)
-        {
-            Console.WriteLine($"{Name}이 불을 뿜습니다! (광역 공격)");
-            target.TakeDamage(Atk * 2);
         }
     }
 
@@ -508,10 +553,10 @@ namespace ConsoleRPG24
         }
     }
 
-    
 
 
-    
+
+
 }
 
 
