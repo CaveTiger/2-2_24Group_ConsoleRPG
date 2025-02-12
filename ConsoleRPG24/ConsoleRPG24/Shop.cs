@@ -2,7 +2,10 @@
 {
     internal class Shop
     {
+        List<Item> ItemRankcommon = new List<Item>();
 
+        List<Item> ItemRankepic = new List<Item>();
+        List<Item> ItemRanklegend = new List<Item>();
 
 
         public void ShowVillageShop()
