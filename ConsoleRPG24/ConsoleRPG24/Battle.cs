@@ -11,6 +11,8 @@ namespace ConsoleRPG24
         public Stage stage { get; set; }
         public List<Item> itemList { get; set; }
 
+        public Stage battleCount { get; set; }
+
         public BattleSystem(Player player, List<Item> itemList, Stage stage)
         {
             this.player = player;
@@ -251,9 +253,26 @@ namespace ConsoleRPG24
             {
                 Random r = new Random();
                 int spawnCount = r.Next(1, 5);
-                for (int i = 0; i < spawnCount; i++)
+                if (battleCount.battleCount >= 14)
                 {
-                    monsterTeam.Add(RandomMonster());
+                    for (int i = 0; i < spawnCount; i++)
+                    {
+                        monsterTeam.Add(RandomMonsterHigh());
+                    }
+                }
+                else if (battleCount.battleCount > 7 && battleCount.battleCount <= 13)
+                {
+                    for (int i = 0; i < spawnCount; i++)
+                    {
+                        monsterTeam.Add(RandomMonsterMiddle());
+                    }
+                }
+                else 
+                {
+                    for (int i = 0; i < spawnCount; i++)
+                    {
+                        monsterTeam.Add(RandomMonster());
+                    }
                 }
             }// 몬스터를 생성
             bool BattleOn = true;
