@@ -55,12 +55,43 @@ namespace ConsoleRPG24
             }
         }
 
-        // 🔹 사망 시 처리할 메서드
+        // 🔹 사망 시 처리할 메서드 (마을로 이동 추가)
         private void OnDeath()
         {
-            Console.WriteLine("게임이 종료되었습니다!");
-            // 추가적으로 게임 종료 로직을 넣거나, 부활 시스템을 구현 가능
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\n당신은 쓰러졌습니다... ");
+            Console.WriteLine("눈 앞이 깜깜해졌다...");
+            Console.ResetColor();
+            Thread.Sleep(3000);
+
+            // 체력 복구 및 마을로 이동
+            ReviveAtVillage();
         }
+
+        // 🔹 마을로 돌아가는 처리 메서드
+        private void ReviveAtVillage()
+        {
+            Console.Clear();
+            Console.WriteLine("\n마을로 돌아왔습니다... ");
+            Console.WriteLine("운 좋게 마을 사람들이 당신을 구조했습니다.");
+            Console.WriteLine("휴식을 취하며 체력을 회복합니다...");
+            Thread.Sleep(3000);
+
+            // 🔹 체력 및 상태 복구
+            Health = MaxHealth * 0.5f;  // 최대 체력의 50%로 부활
+            IsDead = false;
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"\n체력이 {Health}만큼 회복되었습니다!");
+            Console.WriteLine($"다시 모험을 떠날 준비가 되었습니다!");
+            Console.ResetColor();
+            Thread.Sleep(2000);
+
+            // 🔹 마을 화면으로 이동
+            MainScreen mainScreen = new MainScreen();
+            mainScreen.Village();
+        }
+
 
         // 🔹 배신 이벤트
         public void Betray()
