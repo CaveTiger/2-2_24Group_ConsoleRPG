@@ -18,7 +18,7 @@ namespace ConsoleRPG24
 
         BattleSystem battleSystem;
 
-        int battleCount = 0;
+        public int battleCount = 0;
 
         //열심히 작성 중~~
 
@@ -113,7 +113,18 @@ namespace ConsoleRPG24
         //이 메소드로 던전 전투 시작!!
         public void Start()
         {
-            BattleSystem battleSystem = new BattleSystem(player, itemList, stage);
+            //23. 포도주가 담긴 성배 : 다음 구역 진입시마다 + 최대 체력 2%
+            if (itemList[23].IsOwned && itemList[23].IsEquipped)
+            {
+                player.MaxHealth += (player.BaseHealth * (2 / 100));
+            }
+            //37. 부자의 증표 : 다음 구역 진입시 보유 골드 5% 증가
+            if (itemList[37].IsOwned && itemList[37].IsEquipped)
+            {
+                player.Gold += (player.Gold * (5 / 100));
+            }
+
+                BattleSystem battleSystem = new BattleSystem(player, itemList, stage);
             battleSystem.Battle();
         }
 
@@ -122,8 +133,6 @@ namespace ConsoleRPG24
         //던전 20번 깨는 반복문
         public void DungeonStart()
         {
-
-
             while (true)
             {
                 for (int i = 0; i <= 19; i++)
