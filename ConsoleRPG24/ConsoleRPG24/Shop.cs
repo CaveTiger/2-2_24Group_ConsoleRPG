@@ -2,6 +2,7 @@ namespace ConsoleRPG24
 {
     internal class Shop
     {
+      
 
 
         public void ShowVillageShop()
@@ -34,6 +35,15 @@ namespace ConsoleRPG24
             // Common 등급 아이템 3가지를 랜덤하게 플레이어에게 보여주기
             // (아이템 3개 옵션과 효과 보여주기)
             // 플레이어가 아이템을 택1 해서 구매 -> 인벤토리로 보내주기
+            var commonItems = .Where(item => item.Rank == "Common");
+
+            foreach (var item in itemList)
+            {
+                if (item.Rank == "Common") // Rank가 "Common"인 아이템만 출력
+                {
+                    Console.WriteLine($"- {item.ItemDisplay()} | {item.GetPriceString()}");
+                }
+            }
         }
 
         public void ShowDungeonShop()

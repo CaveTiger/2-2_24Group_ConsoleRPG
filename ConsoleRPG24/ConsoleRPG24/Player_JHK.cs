@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace ConsoleRPG24
 {
@@ -41,7 +37,7 @@ namespace ConsoleRPG24
         }
 
         //아이템을 장착할 경우
-        internal void EquipItem(Item item)
+        internal void EquipItem_JHK(Item item)
         {
             //아이템을 가지고 있는지? (원래는 isOwned로 하려고 했지만 이거도 괜찮은것 같습니다!)
 
@@ -65,7 +61,7 @@ namespace ConsoleRPG24
         }
 
         //아이템을 장착해제할 경우
-        internal void UnequipItem(Item item)
+        internal void UnequipItem_JHK(Item item)
         {
 
             //가지고 있지 않은 경우
