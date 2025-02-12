@@ -111,12 +111,12 @@ namespace ConsoleRPG24
         private float bonusHealth = 0;  // 추가 체력 저장
 
         // 🔹 기본 생성자 (매개변수 부족한 경우 사용)
-        public Player() : base("Unknown", 0, 0, 100, 10000, 5, 0)
+        public Player() : base("Unknown", 0, 0, 100, 1000, 5, 0)
         {
             BaseAtk = 0;
             BaseDefen = 0;
             BaseHealth = 100;
-            Gold = 10000;
+            Gold = 1000;
             Mana = 100;
             Inventory = new Inventory();
         }
@@ -128,7 +128,7 @@ namespace ConsoleRPG24
             BaseAtk = baseAtk;
             BaseDefen = baseDefen;
             BaseHealth = maxHealth;
-            Gold = 10000;
+            Gold = 1000;
             Mana = 100;
             Inventory = new Inventory();
             SetJobStats(job);
@@ -244,9 +244,9 @@ namespace ConsoleRPG24
             switch (job)
             {
                 case "전사":
-                    Atk = 20;
-                    Defen = 15;
-                    MaxHealth = 150;
+                    Atk = 130;
+                    Defen = 150;
+                    MaxHealth = 1350;
                     Health = MaxHealth;
                     Speed = 5;
                     CritHit = 0.1f;
@@ -255,9 +255,9 @@ namespace ConsoleRPG24
                     break;
 
                 case "마법사":
-                    Atk = 25;
-                    Defen = 5;
-                    MaxHealth = 100;
+                    Atk = 180;
+                    Defen = 100;
+                    MaxHealth = 1150;
                     Health = MaxHealth;
                     Speed = 6;
                     Mana = 200;
@@ -267,9 +267,9 @@ namespace ConsoleRPG24
                     break;
 
                 case "궁수":
-                    Atk = 18;
-                    Defen = 10;
-                    MaxHealth = 120;
+                    Atk = 180;
+                    Defen = 100;
+                    MaxHealth = 1100;
                     Health = MaxHealth;
                     Speed = 7;
                     CritHit = 0.2f;
@@ -278,9 +278,9 @@ namespace ConsoleRPG24
                     break;
 
                 case "암살자":
-                    Atk = 22;
-                    Defen = 8;
-                    MaxHealth = 110;
+                    Atk = 135;
+                    Defen = 100;
+                    MaxHealth = 1000;
                     Health = MaxHealth;
                     Speed = 9;
                     CritHit = 0.3f;
@@ -462,16 +462,6 @@ namespace ConsoleRPG24
         }
     }
     // ============= 중반 몬스터 (6~15 스테이지) =============
-    public class Orc : Monster ///오크:강한 공격력
-    {
-        public Orc(string name) : base(name, 10, 5, 45f, 45f, 4) { }
-
-        public override void Attack(BaseCharacter target)
-        {
-            Console.WriteLine($"{Name}이 강력한 일격을 가합니다!");
-            target.TakeDamage(Atk + 5);
-        }
-    }
     public class Orc : Monster ///오크:강한 공격력
     {
         public Orc(string name) : base(name, 10, 5, 45f, 45f, 4) { }
