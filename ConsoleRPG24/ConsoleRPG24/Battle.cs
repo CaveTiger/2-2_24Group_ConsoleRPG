@@ -9,9 +9,16 @@ namespace ConsoleRPG24
     //어느 한쪽이 전멸했으니 보상 혹은 게임오버를 띄워야함
     internal partial class BattleSystem
     {
-        Player player = new Player();
-        Stage stage = new Stage();
-        Inventory inventory = new Inventory();
+        Player player { get; set; }
+        Stage stage { get; set; }
+        List<Item> itemList { get; set; }
+
+        public BattleSystem(Player player, List<Item> items, Stage stage)
+        {
+            this.player = player;
+            this.itemList = itemList;
+            this.stage = stage;
+        }
 
         public Monster RandomMonster()
         {
@@ -122,7 +129,7 @@ namespace ConsoleRPG24
             Console.WriteLine();
             Console.WriteLine("적과 조우했습니다.");
             Console.WriteLine();
-            PlayerDebug();
+            //PlayerDebug();
             Battle();
         }
         public void PlayerDebug()
