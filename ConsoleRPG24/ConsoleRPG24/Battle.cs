@@ -24,7 +24,7 @@ namespace ConsoleRPG24
         public Monster RandomBoss()
         {
             Random random = new Random();
-            int index = random.Next(1, 6);
+            int index = random.Next(2, 3);
             if (index == 1)
             {
                 Goblin goblin = new Goblin("고블린");
@@ -141,8 +141,8 @@ namespace ConsoleRPG24
                     break;
                     case 9:
                         Console.WriteLine("바나나 총을 찾았다!");
-                        Console.WriteLine($"첫 번째 대상에게 피해 {player.Atk *= 3}");
-                        PlayerAttack(monsterTeam[0], player.Atk *= 3);
+                        Console.WriteLine($"첫 번째 대상에게 피해 100");
+                        PlayerAttack(monsterTeam[0], 100);
                     break;
                     case 10:
                         Console.WriteLine("!!정상화!!");
@@ -425,18 +425,22 @@ namespace ConsoleRPG24
                                 monsterTeam[i].Attack(player);
                                 Console.ReadKey();
                             }
-                            else if (pattern == 0)
+                            else if (pattern <= 3)
                             {
                                 Console.WriteLine();
-                                player.TakeDamage(monsterTeam[0].Atk);
-                                Console.WriteLine($"{monsterTeam[0]}이/가 당신을 후려쳤습니다.");
+                                monsterTeam[0].Atk += 1;
+                                Console.WriteLine($"{monsterTeam[0].Name}이/가 분노합니다..");
+                                Console.WriteLine($"공격력이 +1 만큼 올랐습니다.");
                                 Console.ReadKey();
                             }
                             else 
                             {
                                 Console.WriteLine();
-                                player.TakeDamage(monsterTeam[0].Atk);
-                                Console.WriteLine($"{monsterTeam[0]}이/가 당신을 후려쳤습니다.");
+                                int bossHeal = random.Next(40, 101);
+                                monsterTeam[0].Health += bossHeal;
+                                Console.WriteLine($"{monsterTeam[0].Name}이/가 숨을 돌립니다.");
+                                Console.WriteLine($"체력이 {bossHeal}만큼 회복됐습니다.");
+                                Console.WriteLine($"현재 {monsterTeam[0].Name}의 체력은 {monsterTeam[0].Health}/{monsterTeam[0].MaxHealth} 입니다.");
                                 Console.ReadKey();
                             }
                             
