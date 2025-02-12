@@ -133,10 +133,23 @@ namespace ConsoleRPG24
                 {
                     Start();
 
-                    if (player.IsDead)
+                    if (player.IsDead)  // 🔹 플레이어가 죽었는지 확인하고 중단
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("\n플레이어가 사망했습니다... 던전을 종료합니다.");
+                        Console.ResetColor();
+                        Thread.Sleep(3000);
+                        player.OnDeath();  // 🔹 게임 재시작
+                        return;
+                    }
+
+                    Start();
+
+                    if (player.IsDead)  // 🔹 플레이어 사망 여부 확인
                     {
                         return;
                     }
+
 
                     Rewards(player);
 

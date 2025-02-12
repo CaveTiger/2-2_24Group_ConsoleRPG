@@ -47,7 +47,12 @@ namespace ConsoleRPG24
                 Health = 0;
                 IsDead = true;
                 Console.WriteLine($"{Name}가 사망했습니다!");
-                OnDeath(); // 🔹 사망 후 추가 처리
+
+                // 🔹 플레이어일 경우에만 OnDeath() 실행
+                if (this is Player)
+                {
+                    OnDeath();
+                }
             }
             else
             {
@@ -55,41 +60,32 @@ namespace ConsoleRPG24
             }
         }
 
+
         // 🔹 사망 시 처리할 메서드 (마을로 이동 추가)
-        private void OnDeath()
+        public void OnDeath()
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("\n당신은 쓰러졌습니다... ");
+            Console.WriteLine("\n당신은 쓰러졌습니다...");
             Console.WriteLine("눈 앞이 깜깜해졌다...");
             Console.ResetColor();
             Thread.Sleep(3000);
 
-            // 체력 복구 및 마을로 이동
-            ReviveAtVillage();
+            Console.Clear();
+            Console.WriteLine("게임이 종료되었습니다.");
+            Console.WriteLine("다시 시작하려면 [Enter] 키를 누르세요.");
+            Console.ReadLine();  // 🔹 플레이어가 입력할 때까지 대기
+
+            RestartGame();  // 🔹 게임을 처음부터 다시 시작
         }
 
-        // 🔹 마을로 돌아가는 처리 메서드
-        private void ReviveAtVillage()
+        private void RestartGame()
         {
             Console.Clear();
-            Console.WriteLine("\n마을로 돌아왔습니다... ");
-            Console.WriteLine("운 좋게 마을 사람들이 당신을 구조했습니다.");
-            Console.WriteLine("휴식을 취하며 체력을 회복합니다...");
-            Thread.Sleep(3000);
-
-            // 🔹 체력 및 상태 복구
-            Health = MaxHealth * 0.5f;  // 최대 체력의 50%로 부활
-            IsDead = false;
-
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"\n체력이 {Health}만큼 회복되었습니다!");
-            Console.WriteLine($"다시 모험을 떠날 준비가 되었습니다!");
-            Console.ResetColor();
+            Console.WriteLine("게임을 다시 시작합니다...");
             Thread.Sleep(2000);
 
-            // 🔹 마을 화면으로 이동
-            MainScreen mainScreen = new MainScreen();
-            mainScreen.GameStart();
+            MainScreen newGame = new MainScreen();
+            newGame.GameStart();  // 🔹 게임을 처음부터 다시 시작
         }
 
 
@@ -142,12 +138,12 @@ namespace ConsoleRPG24
         private float bonusHealth = 0;  // 추가 체력 저장
 
         // 🔹 기본 생성자 (매개변수 부족한 경우 사용)
-        public Player() : base("Unknown", 0, 0, 100, 1000, 5, 0)
+        public Player() : base("Unknown", 0, 0, 100, 10000, 5, 0)
         {
             BaseAtk = 0;
             BaseDefen = 0;
             BaseHealth = 100;
-            Gold = 1000;
+            Gold = 10000;
             Mana = 100;
             Inventory = new Inventory(this);
         }
@@ -159,7 +155,7 @@ namespace ConsoleRPG24
             BaseAtk = baseAtk;
             BaseDefen = baseDefen;
             BaseHealth = maxHealth;
-            Gold = 1000;
+            Gold = 10000;
             Mana = 100;
             Inventory = new Inventory(this);
             SetJobStats(job);
