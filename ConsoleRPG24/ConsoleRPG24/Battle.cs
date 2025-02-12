@@ -8,10 +8,9 @@ namespace ConsoleRPG24
     {
         
         public Player player { get; set; }
-        public Stage stage { get; set; }
         public List<Item> itemList { get; set; }
 
-        public Stage battleCount { get; set; }
+        public Stage stage { get; set; }
 
         public BattleSystem(Player player, List<Item> itemList, Stage stage)
         {
@@ -253,14 +252,14 @@ namespace ConsoleRPG24
             {
                 Random r = new Random();
                 int spawnCount = r.Next(1, 5);
-                if (battleCount.battleCount >= 14)
+                if (stage.battleCount >= 14)
                 {
                     for (int i = 0; i < spawnCount; i++)
                     {
                         monsterTeam.Add(RandomMonsterHigh());
                     }
                 }
-                else if (battleCount.battleCount > 7 && battleCount.battleCount <= 13)
+                else if (stage.battleCount > 7 && stage.battleCount <= 13)
                 {
                     for (int i = 0; i < spawnCount; i++)
                     {
@@ -434,7 +433,7 @@ namespace ConsoleRPG24
                     BattleOn = false;
                 }
             }
-            stage.Rewards(player, stage);
+            stage.Rewards(player);
         }
 
         public void BossBattle()
@@ -573,9 +572,8 @@ namespace ConsoleRPG24
                     BattleOn = false;
                 }
             }
-            stage.Rewards(player, stage);
+            stage.Rewards(player);
         }
-
 
     }
 }
