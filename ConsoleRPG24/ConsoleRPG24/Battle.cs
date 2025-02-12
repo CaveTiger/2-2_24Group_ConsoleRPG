@@ -11,6 +11,8 @@ namespace ConsoleRPG24
         public Stage stage { get; set; }
         public List<Item> itemList { get; set; }
 
+        public Stage battleCount { get; set; }
+
         public BattleSystem(Player player, List<Item> itemList, Stage stage)
         {
             this.player = player;
@@ -18,40 +20,10 @@ namespace ConsoleRPG24
             this.stage = stage;
         }
 
-        public Monster RandomBoss()
-        {
-            Random random = new Random();
-            int index = random.Next(2, 3);
-            if (index == 1)
-            {
-                Goblin goblin = new Goblin("고블린");
-                return goblin;
-            }
-            else if (index == 2)
-            {
-                Dragon dragon = new Dragon("드래곤");
-                return dragon;
-            }
-            else if (index == 3)
-            {
-                Vampire vampire = new Vampire("뱀파이어");
-                return vampire;
-            }
-            else if (index == 4)
-            {
-                Orc orc = new Orc("오크");
-                return orc;
-            }
-            else
-            {
-                Slime slime = new Slime("슬라임");
-                return slime;
-            }
-        }
         public Monster RandomMonster()
         {
             Random random = new Random();
-            int index = random.Next(1, 6);
+            int index = random.Next(1, 7);
             if (index == 1)
             {
                 Goblin goblin = new Goblin("고블린");
@@ -59,8 +31,89 @@ namespace ConsoleRPG24
             }
             else if (index == 2)
             {
-                Dragon dragon = new Dragon("드래곤");
-                return dragon;
+                Wolf wolf = new Wolf("울프");
+                return wolf;
+            }
+            else if (index == 3)
+            {
+                Zombie zombie = new Zombie("만신창이 좀비");
+                return zombie;
+            }
+            else if (index == 4)
+            {
+                Zombie zombie = new Zombie("좀비");
+                return zombie;
+            }
+            else if (index == 5)
+            {
+                Zombie zombie = new Zombie("팔이 없는 좀비");
+                return zombie;
+            }
+            else if (index == 6)
+            {
+                Slime slime = new Slime("물렁물렁 슬라임");
+                return slime;
+            }
+            else
+            {
+                Slime slime = new Slime("찐득한 슬라임");
+                return slime;
+            }
+        }
+
+        public Monster BossMonster()
+        {
+            Dragon dragon = new Dragon("드래곤");
+            return dragon;
+        }
+        public Monster RandomMonsterMiddle()
+        {
+            Random random = new Random();
+            int index = random.Next(1, 7);
+            if (index == 1)
+            {
+                Goblin goblin = new Goblin("고블린");
+                return goblin;
+            }
+            else if (index == 2)
+            {
+                Wolf wolf = new Wolf("울프");
+                return wolf;
+            }
+            else if (index == 3)
+            {
+                Ghost ghost = new Ghost("고스트");
+                return ghost;
+            }
+            else if (index == 4)
+            {
+                Orc orc = new Orc("오크");
+                return orc;
+            }
+            else if (index == 5)
+            {
+                Minotaur minotaur = new Minotaur("미노타우르스");
+                return minotaur;
+            }
+            else
+            {
+                Zombie zombie = new Zombie("좀비");
+                return zombie;
+            }
+        }
+        public Monster RandomMonsterHigh()
+        {
+            Random random = new Random();
+            int index = random.Next(1, 8);
+            if (index == 1)
+            {
+                Orc orc = new Orc("오크");
+                return orc;
+            }
+            else if (index == 2)
+            {
+                Ghost ghost = new Ghost("고스트");
+                return ghost;
             }
             else if (index == 3)
             {
@@ -69,13 +122,23 @@ namespace ConsoleRPG24
             }
             else if (index == 4)
             {
-                Orc orc = new Orc("오크");
-                return orc;
+                Zombie zombie = new Zombie("좀비");
+                return zombie;
+            }
+            else if (index == 5)
+            {
+                Minotaur minotaur = new Minotaur("미노타우르스");
+                return minotaur;
+            }
+            else if (index == 6)
+            {
+                Golem golem = new Golem("골렘");
+                return golem;
             }
             else
             {
-                Slime slime = new Slime("슬라임");
-                return slime;
+                Lich lich = new Lich("리치");
+                return lich;
             }
         }
         public void ItemLoraderBattleFront(List<Monster> monsterTeam)
@@ -190,9 +253,26 @@ namespace ConsoleRPG24
             {
                 Random r = new Random();
                 int spawnCount = r.Next(1, 5);
-                for (int i = 0; i < spawnCount; i++)
+                if (battleCount.battleCount >= 14)
                 {
-                    monsterTeam.Add(RandomMonster());
+                    for (int i = 0; i < spawnCount; i++)
+                    {
+                        monsterTeam.Add(RandomMonsterHigh());
+                    }
+                }
+                else if (battleCount.battleCount > 7 && battleCount.battleCount <= 13)
+                {
+                    for (int i = 0; i < spawnCount; i++)
+                    {
+                        monsterTeam.Add(RandomMonsterMiddle());
+                    }
+                }
+                else 
+                {
+                    for (int i = 0; i < spawnCount; i++)
+                    {
+                        monsterTeam.Add(RandomMonster());
+                    }
                 }
             }// 몬스터를 생성
             bool BattleOn = true;
@@ -354,7 +434,7 @@ namespace ConsoleRPG24
                     BattleOn = false;
                 }
             }
-            stage.Rewards();
+            stage.Rewards(player, stage);
         }
 
         public void BossBattle()
@@ -370,12 +450,9 @@ namespace ConsoleRPG24
             
             List<Monster> monsterTeam = new List<Monster>();
             {
-                Random r = new Random();
-                int spawnCount = r.Next(1, 2);
-                for (int i = 0; i < spawnCount; i++)
-                {
-                    monsterTeam.Add(RandomMonster());
-                }
+
+                    monsterTeam.Add(BossMonster());
+
             }// 몬스터를 생성
             ApplyEffectBeforeBattle(monsterTeam);
             while (BattleOn == true)
@@ -436,7 +513,7 @@ namespace ConsoleRPG24
                             else 
                             {
                                 Console.WriteLine();
-                                int bossHeal = random.Next(40, 101);
+                                int bossHeal = random.Next(150, 301);
                                 monsterTeam[0].Health += bossHeal;
                                 if(monsterTeam[0].Health > monsterTeam[0].MaxHealth)
                                 {
@@ -496,7 +573,7 @@ namespace ConsoleRPG24
                     BattleOn = false;
                 }
             }
-            stage.Rewards();
+            stage.Rewards(player, stage);
         }
 
 
