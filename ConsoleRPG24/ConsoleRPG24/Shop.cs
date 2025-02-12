@@ -180,7 +180,6 @@ namespace ConsoleRPG24
                         player.Inventory.AddItem(randomThreeItems[itemIndex - 1]);
                         warningType = 0;
                         infoText = $"{randomThreeItems[itemIndex - 1].ItemName} 아이템을 구매하였습니다!";
-                        isBuy = true;
                     }
 
                 }
