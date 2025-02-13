@@ -150,11 +150,10 @@ namespace ConsoleRPG24
             else if (des == 3) { Console.WriteLine("당신은 놀이공원을 돌던 도중 적을 조우했습니다."); }
             else if (des == 4) { Console.WriteLine("당신은 당신은 버려진 마을을 수색하던 도중 궤짝하늘 보고 입맛을 다시며 만져봤습니다.\n이리저리 흔들며 소리내다보니 주변에 있던 적들이 몰려왔습니다."); }
             else if (des == 5) { Console.WriteLine("당신은 농가의 일을 돕던도중 농가를 습격한 몬스터 무리와 마닥뜨렸습니다."); }
-            else if (des == 6) { Console.WriteLine("당신은 숲에 살던 고양이와 놀던중 주변에서 미세한 소리를 듣고 그곳을 찾아가자 웬 생선머리 공주가 도움을 요청해 일단 도웁니다...."); }
+            else if (des == 6) { Console.WriteLine("당신은 숲에 살던 고양이와 놀던중 주변에서 미세한 소리를 듣고 그곳을 찾아가자 \n웬 생선머리 공주가 도움을 요청해 일단 도웁니다...."); }
             else if (des == 7) { Console.WriteLine("당신은 그냥 집에 있고싶었지만 생활비를 더 벌기 위해 일단 나갔다가 적당한곳에서 적을 마주쳤습니다."); }
             else { Console.WriteLine("당신은 용의 둥지 근처에서 서성이다 같이 산책하던 몬스터 무리와 마주쳤습니다."); }
         }
-
         public void RandomEventBattle(Monster target, int damage, List<Monster> monsterTeam)
         {
             Random random = new Random();
@@ -210,7 +209,7 @@ namespace ConsoleRPG24
                     break;
                 case 9:
                     Console.WriteLine("바나나 총을 찾았다!");
-                    Console.WriteLine($"첫 번째 대상에게 피해 100");
+                    Console.WriteLine($"첫 번째 대상에게 피해 777");
                     PlayerAttack(monsterTeam[0], 777);
                     break;
                 case 10:
@@ -222,17 +221,6 @@ namespace ConsoleRPG24
                     Console.WriteLine("꽝");
                     break;
             }
-        }
-
-        public void PlayerDebug()
-        {
-            Console.WriteLine("플레이어 체력을 임시로 설정");
-            player.MaxHealth = float.Parse(Console.ReadLine());
-            player.Health = player.MaxHealth;
-            Console.WriteLine("플레이어 공격력을 임시로 설정");
-            player.Atk = int.Parse(Console.ReadLine());
-            Console.WriteLine("플레이어 방어력을 임시로 설정");
-            player.Defen = int.Parse(Console.ReadLine());
         }
         public void PlayerAttack(Monster target, int damage)
         {
@@ -260,7 +248,6 @@ namespace ConsoleRPG24
             Console.WriteLine("}================================={");
             Console.Write(">>");
             Console.ReadKey();
-            //PlayerDebug();
             bool playerTurn = true;
             List<Monster> monsterTeam = new List<Monster>();
             {
@@ -300,7 +287,7 @@ namespace ConsoleRPG24
                 Console.WriteLine($"이름 : {player.Name}  직업 : {player.Job}");
                 Console.WriteLine($"속도 : {player.Speed}  체력 : {player.Health}/{player.MaxHealth}");
                 Console.WriteLine($"공격력 : {player.Atk}  방어력 : {player.Defen}");
-                Console.WriteLine($"치명타 확률: {Math.Round(player.CritHit * 100)}%  치명타 피해 : {Math.Round(player.CritDmg * 100)}");
+                Console.WriteLine($"치명타 확률 : {Math.Round(player.CritHit * 100)}%  치명타 피해 : {Math.Round(player.CritDmg * 100)}");
                 Console.ResetColor();
                 Console.WriteLine("}================================={");
                 foreach (var number in monsterTeam)
@@ -458,7 +445,6 @@ namespace ConsoleRPG24
             Console.WriteLine();
             Console.WriteLine($"하지만 {player.Name}은/는 용기를 내어 앞으로 나아갔습니다. 저 용을 죽이고 자신을 증명해내기 위해");
             Console.WriteLine();
-            //PlayerDebug();
             
             List<Monster> monsterTeam = new List<Monster>();
             {
@@ -477,6 +463,7 @@ namespace ConsoleRPG24
                 Console.WriteLine($"이름 : {player.Name}  직업 : {player.Job}");
                 Console.WriteLine($"속도 : {player.Speed}  체력 : {player.Health}/{player.MaxHealth}");
                 Console.WriteLine($"공격력 : {player.Atk}  방어력 : {player.Defen}");
+                Console.WriteLine($"치명타 확률 : {Math.Round(player.CritHit * 100)}%  치명타 피해 : {Math.Round(player.CritDmg * 100)}");
                 Console.ResetColor();
                 Console.WriteLine("}================================={");
                 foreach (var number in monsterTeam)
@@ -579,7 +566,7 @@ namespace ConsoleRPG24
                     BattleOn = false;
                 }
             }
-            stage.Rewards(player);
+            stage.GameClear();
         }
 
     }
