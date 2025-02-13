@@ -8,9 +8,7 @@ namespace ConsoleRPG24
     {
         
         public Player player { get; set; }
-        public List<Item> itemList { get; set; } 
-        private Monster enemy;
-
+        public List<Item> itemList { get; set; }
         public Stage stage { get; set; }
 
         public BattleSystem(Player player, List<Item> itemList, Stage stage)
@@ -141,15 +139,26 @@ namespace ConsoleRPG24
                 return lich;
             }
         }
-        public void ItemLoraderBattleFront(List<Monster> monsterTeam)
+        public void RandomEncounter()
         {
-            ApplyEffectBeforeBattle(monsterTeam);
+            Random enc = new Random();
+            int des = enc.Next(0, 9);
+
+            if (des == 0) { Console.WriteLine("당신은 마을 근처에서 버섯을 캐고 있는 중에 적을 만났습니다."); }
+            else if (des == 1) { Console.WriteLine("당신은 유적을 탐험하던도중 뭔가를 발견하고 만졌습니다.\n이윽고 적들이 눈앞에 나타났고 싸움을 준비합니다."); }
+            else if (des == 2) { Console.WriteLine("당신은 어둑한 숲을 돌아다니던중 적을 조우했습니다."); }
+            else if (des == 3) { Console.WriteLine("당신은 놀이공원을 돌던 도중 적을 조우했습니다."); }
+            else if (des == 4) { Console.WriteLine("당신은 당신은 버려진 마을을 수색하던 도중 궤짝하늘 보고 입맛을 다시며 만져봤습니다.\n이리저리 흔들며 소리내다보니 주변에 있던 적들이 몰려왔습니다."); }
+            else if (des == 5) { Console.WriteLine("당신은 농가의 일을 돕던도중 농가를 습격한 몬스터 무리와 마닥뜨렸습니다."); }
+            else if (des == 6) { Console.WriteLine("당신은 숲에 살던 고양이와 놀던중 주변에서 미세한 소리를 듣고 그곳을 찾아가자 웬 생선머리 공주가 도움을 요청해 일단 도웁니다...."); }
+            else if (des == 7) { Console.WriteLine("당신은 그냥 집에 있고싶었지만 생활비를 더 벌기 위해 일단 나갔다가 적당한곳에서 적을 마주쳤습니다."); }
+            else { Console.WriteLine("당신은 용의 둥지 근처에서 서성이다 같이 산책하던 몬스터 무리와 마주쳤습니다."); }
         }
 
         public void RandomEventBattle(Monster target, int damage, List<Monster> monsterTeam)
         {
             Random random = new Random();
-            int REB = random.Next(0, 11);
+            int REB = random.Next(0, 12);
             switch (REB)
             {
                 case 0:
@@ -241,12 +250,16 @@ namespace ConsoleRPG24
             }
         }
 
-        public void Battle()
+        public void Battle(Player player, List<Item> itemList)
         {
             Console.Clear();
+            Console.WriteLine("}================================={");
             Console.WriteLine();
-            Console.WriteLine("적과 조우했습니다.");
+            RandomEncounter();
             Console.WriteLine();
+            Console.WriteLine("}================================={");
+            Console.Write(">>");
+            Console.ReadKey();
             //PlayerDebug();
             bool playerTurn = true;
             List<Monster> monsterTeam = new List<Monster>();
@@ -287,6 +300,7 @@ namespace ConsoleRPG24
                 Console.WriteLine($"이름 : {player.Name}  직업 : {player.Job}");
                 Console.WriteLine($"속도 : {player.Speed}  체력 : {player.Health}/{player.MaxHealth}");
                 Console.WriteLine($"공격력 : {player.Atk}  방어력 : {player.Defen}");
+                Console.WriteLine($"치명타 확률 : {player.CritHit}  치명타 피해 : {player.CritHit}");
                 Console.ResetColor();
                 Console.WriteLine("}================================={");
                 foreach (var number in monsterTeam)
@@ -326,8 +340,8 @@ namespace ConsoleRPG24
                             {
                                 Console.WriteLine("}================================={");
                                 Console.WriteLine("당신의 턴입니다.");
-                                Console.WriteLine("}======================================={");
-                                Console.WriteLine("|1. 공격 | 2. 스킬 | 3. 아이템 | 4. ??? | ");
+                                Console.WriteLine("}================================={");
+                                Console.WriteLine("|1. 공격 | 2. ??? | ");
                                 string input = Console.ReadLine();
                                 switch (input)
                                 {
@@ -401,12 +415,6 @@ namespace ConsoleRPG24
                                         }
                                         break;
                                     case "2":
-                                        playerTurn = false;
-                                        break;
-                                    case "3":
-                                        playerTurn = false;
-                                        break;
-                                    case "4":
                                         RandomEventBattle(monsterTeam[0], player.Atk, monsterTeam);
                                         playerTurn = false;
                                         break;
@@ -445,6 +453,10 @@ namespace ConsoleRPG24
             Console.Clear();
             Console.WriteLine();
             Console.WriteLine("압도적인 힘을 느끼며 상대를 조우했습니다.");
+            Console.WriteLine();
+            Console.WriteLine("콧김에서 불꽃이 이르며 사나운 눈으로 당신을 보는 용의 형상에 몸에 떨림이 멈추지 않습니다.");
+            Console.WriteLine();
+            Console.WriteLine($"하지만 {player.Name}은/는 용기를 내어 앞으로 나아갔습니다. 저 용을 죽이고 자신을 증명해내기 위해");
             Console.WriteLine();
             //PlayerDebug();
             
@@ -534,8 +546,8 @@ namespace ConsoleRPG24
                             {
                                 Console.WriteLine("}================================={");
                                 Console.WriteLine("당신의 턴입니다.");
-                                Console.WriteLine("}======================================={");
-                                Console.WriteLine("|1. 공격 | 2. 스킬 | 3. 아이템 | 4. ??? | ");
+                                Console.WriteLine("}================================={");
+                                Console.WriteLine("|1. 공격 | 2. ??? | ");
                                 string input = Console.ReadLine();
                                 switch (input)
                                 {
@@ -545,12 +557,6 @@ namespace ConsoleRPG24
                                                     playerTurn = false;
                                         break;            
                                     case "2":
-                                        playerTurn = false;
-                                        break;
-                                    case "3":
-                                        playerTurn = false;
-                                        break;
-                                    case "4":
                                         RandomEventBattle(monsterTeam[0], player.Atk, monsterTeam);
                                         playerTurn = false;
                                         break;
