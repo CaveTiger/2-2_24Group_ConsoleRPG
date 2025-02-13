@@ -5,7 +5,7 @@ using System.Threading.Tasks.Dataflow;
 
 namespace ConsoleRPG24
 {
-    
+
     internal partial class MainScreen
     {
         List<Item> itemList = new List<Item>();
@@ -14,7 +14,7 @@ namespace ConsoleRPG24
         private int totalDraws = 0;  // 🔹 총 뽑기 횟수
         private List<Item> obtainedItems = new List<Item>();  // 🔹 중복 방지를 위한 획득 아이템 리스트
 
-        public static MainScreen instance; 
+        public static MainScreen instance;
 
         public void GameStart()
         {
@@ -34,6 +34,7 @@ namespace ConsoleRPG24
             Thread.Sleep(1000);
             Console.WriteLine(new string('-', 30));
             Console.WriteLine(new string('=', 40));
+            Console.WriteLine(new string('=', 40));
             Thread.Sleep(1500);
             Console.WriteLine();
             Console.WriteLine("당신은 눈을 떴다.");
@@ -51,10 +52,9 @@ namespace ConsoleRPG24
             Console.WriteLine($"그래. 당신의 이름은 {player.Name}(이)다.");
             Thread.Sleep(2000);
 
-
             while (true)
             {
-                
+
 
                 string input;
 
@@ -103,7 +103,13 @@ namespace ConsoleRPG24
             Console.WriteLine($"당신의 직업은 {player.Job}(이)다.");
             Thread.Sleep(2000);
 
+            Villige();
 
+        }
+
+
+        public void Villige()
+        {
             while (true)
             {
                 Console.Clear();
@@ -154,8 +160,10 @@ namespace ConsoleRPG24
                         Console.WriteLine("올바른 숫자를 입력해 주십시오.");
                         continue;
                 }
+
             }
         }
+
 
 
         public void StatusScreen()
@@ -243,6 +251,7 @@ namespace ConsoleRPG24
                 }
             }
         }
+
 
         private void GachaSystem()
         {
@@ -395,10 +404,11 @@ namespace ConsoleRPG24
 
         private void PrintRainbowText(string text)
         {
-            ConsoleColor[] rainbowColors = {
-    ConsoleColor.Red, ConsoleColor.Yellow, ConsoleColor.Green,
-    ConsoleColor.Cyan, ConsoleColor.Blue, ConsoleColor.Magenta
-};
+            ConsoleColor[] rainbowColors =
+                {
+                    ConsoleColor.Red, ConsoleColor.Yellow, ConsoleColor.Green,
+                    ConsoleColor.Cyan, ConsoleColor.Blue, ConsoleColor.Magenta
+                };
 
             for (int i = 0; i < text.Length; i++)
             {
@@ -422,7 +432,7 @@ namespace ConsoleRPG24
         public void DungeonScreen()
         {
             Console.Clear();
-            Stage stage = new Stage(player,itemList);
+            Stage stage = new Stage(player, itemList);
             stage.DungeonStart();
         }
     }
