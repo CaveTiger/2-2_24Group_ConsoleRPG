@@ -2,6 +2,7 @@
 
 namespace ConsoleRPG24
 {
+    //기본적으로 조건에서 아이템을 다 모았을 경우는 제외시킴(시스템상 그럴 수 없음)
     internal class Shop
     {
         Player player = new Player();
@@ -47,12 +48,6 @@ namespace ConsoleRPG24
         public void DisplayShopItems()
         {
 
-            //43. 광대의 상자 : 상점 내 아이템 수량 1 감소, 대신 상점 진입시 랜덤 아이템 획득
-            if (itemList[43].IsEquipped && itemList[43].IsOwned)
-            {
-                player.Inventory.AddItem(RandomItem());
-            }
-
             int warningType = 0;                //경고 종류
             string infoText = "";               //안내문 내용
 
@@ -65,11 +60,7 @@ namespace ConsoleRPG24
                 {
                     randomThreeItems.Add(RandomItem());
                 }
-                //43. 광대의 상자 : 상점 내 아이템 수량 1 감소, 대신 상점 진입시 랜덤 아이템 획득
-                if (!(itemList[43].IsEquipped && itemList[43].IsOwned))
-                {
-                    randomThreeItems.Add(RandomItem());
-                }
+                randomThreeItems.Add(RandomItem());
                 randomThreeItems.Add(RandomItem());
                 randomThreeItems.Add(RandomItem());
                 if (randomThreeItems.Count() == randomThreeItems.Distinct().Count())
@@ -81,6 +72,7 @@ namespace ConsoleRPG24
             //아이템 전시
             while (true)
             {
+                Thread.Sleep(500); 
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("==================[ 상 점 ]==================");
