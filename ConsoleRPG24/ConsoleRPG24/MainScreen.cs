@@ -105,6 +105,60 @@ namespace ConsoleRPG24
 
             Villige();
 
+            // 🔹 플레이어가 null이면 새로 생성
+            if (player == null)
+            {
+                player = new Player();
+            }
+
+            InitItem();
+
+            Console.WriteLine("게임을 시작합니다...");
+            Thread.Sleep(1000);
+
+            Console.Clear();
+            Console.WriteLine($"환영합니다, {player.Name}({player.Job})님!");
+            Thread.Sleep(1500);
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("무엇을 할까?");
+                Console.WriteLine("1. 상태 보기");
+                Console.WriteLine("2. 인벤토리");
+                Console.WriteLine("3. 마을");
+                Console.WriteLine("0. 던전 입장");
+                Console.Write(">> ");
+
+                string chooseNum = Console.ReadLine();
+
+                switch (chooseNum)
+                {
+                    case "1":
+                        if (player != null)  // 🔹 플레이어가 null인지 체크
+                        {
+                            StatusScreen();
+                        }
+                        else
+                        {
+                            Console.WriteLine("플레이어 데이터가 초기화되지 않았습니다!");
+                        }
+                        break;
+                    case "2":
+                        InventoryScreen();
+                        break;
+                    case "3":
+                        Village();
+                        break;
+                    case "0":
+                        DungeonScreen();
+                        break;
+                    default:
+                        Console.WriteLine("올바른 숫자를 입력해 주십시오.");
+                        continue;
+                }
+            }
+
         }
 
 

@@ -65,28 +65,64 @@ namespace ConsoleRPG24
         public void OnDeath()
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("\n당신은 쓰러졌습니다...");
+            Console.WriteLine("\n당신은 쓰러졌습니다... ");
             Console.WriteLine("눈 앞이 깜깜해졌다...");
             Console.ResetColor();
             Thread.Sleep(3000);
 
             Console.Clear();
-            Console.WriteLine("게임이 종료되었습니다.");
-            Console.WriteLine("다시 시작하려면 [Enter] 키를 누르세요.");
-            Console.ReadLine();  // 🔹 플레이어가 입력할 때까지 대기
-
-            RestartGame();  // 🔹 게임을 처음부터 다시 시작
-        }
-
-        private void RestartGame()
-        {
-            Console.Clear();
-            Console.WriteLine("게임을 다시 시작합니다...");
+            Console.WriteLine("\n깨어났다...");
             Thread.Sleep(2000);
 
-            MainScreen newGame = new MainScreen();
-            newGame.Villige();  // 🔹 게임을 처음부터 다시 시작
+            // 🔹 플레이어를 새로 생성 (초기화)
+            MainScreen.instance.player = new Player();
+
+            // 🔹 올바른 직업을 선택할 때까지 반복
+            string jobChoice = "";
+            while (true)
+            {
+                Console.WriteLine("당신의 직업을 선택하세요.");
+                Console.WriteLine("1. 전사");
+                Console.WriteLine("2. 마법사");
+                Console.WriteLine("3. 궁수");
+                Console.WriteLine("4. 암살자");
+                Console.Write(">> ");
+                jobChoice = Console.ReadLine();
+
+                if (jobChoice == "1")
+                {
+                    MainScreen.instance.player.SetJobStats("전사");
+                    break;
+                }
+                else if (jobChoice == "2")
+                {
+                    MainScreen.instance.player.SetJobStats("마법사");
+                    break;
+                }
+                else if (jobChoice == "3")
+                {
+                    MainScreen.instance.player.SetJobStats("궁수");
+                    break;
+                }
+                else if (jobChoice == "4")
+                {
+                    MainScreen.instance.player.SetJobStats("암살자");
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("잘못된 입력입니다. 다시 선택해주세요.");
+                    Thread.Sleep(1000);
+                }
+            }
+
+            Console.WriteLine($"새로운 직업 {MainScreen.instance.player.Job}(으)로 다시 시작합니다!");
+            Thread.Sleep(2000);
+
+            // 🔹 게임 시작 화면으로 이동
+            MainScreen.instance.Villige();
         }
+
 
 
         // 🔹 배신 이벤트
@@ -272,7 +308,7 @@ namespace ConsoleRPG24
             {
                 case "전사":
                     Atk = 130;
-                    Defen = 125;
+                    Defen = 80;
                     MaxHealth = 850;
                     Health = MaxHealth;
                     Speed = 5;
@@ -283,7 +319,7 @@ namespace ConsoleRPG24
 
                 case "마법사":
                     Atk = 180;
-                    Defen = 100;
+                    Defen = 70;
                     MaxHealth = 650;
                     Health = MaxHealth;
                     Speed = 6;
@@ -295,7 +331,7 @@ namespace ConsoleRPG24
 
                 case "궁수":
                     Atk = 180;
-                    Defen = 100;
+                    Defen = 70;
                     MaxHealth = 600;
                     Health = MaxHealth;
                     Speed = 7;
@@ -306,7 +342,7 @@ namespace ConsoleRPG24
 
                 case "암살자":
                     Atk = 135;
-                    Defen = 100;
+                    Defen = 80;
                     MaxHealth = 750;
                     Health = MaxHealth;
                     Speed = 9;
