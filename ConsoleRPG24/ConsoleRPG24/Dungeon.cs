@@ -160,7 +160,7 @@ namespace ConsoleRPG24
                     if (battleCount == 20)
                     {
                         BattleSystem battleSystem = new BattleSystem(player, itemList, this);
-                        battleSystem.BossBattle();
+                        battleSystem.BossBattle(player, itemList);
                     }
 
                     if (battleCount % 5 == 0)

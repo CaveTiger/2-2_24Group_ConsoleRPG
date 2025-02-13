@@ -432,7 +432,7 @@ namespace ConsoleRPG24
             stage.Rewards(player);
         }
 
-        public void BossBattle()
+        public void BossBattle(Player player, List<Item> itemList)
         {
             bool playerTurn = true;
             bool BattleOn = true;
