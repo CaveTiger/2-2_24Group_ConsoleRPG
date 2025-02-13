@@ -300,7 +300,7 @@ namespace ConsoleRPG24
                 Console.WriteLine($"이름 : {player.Name}  직업 : {player.Job}");
                 Console.WriteLine($"속도 : {player.Speed}  체력 : {player.Health}/{player.MaxHealth}");
                 Console.WriteLine($"공격력 : {player.Atk}  방어력 : {player.Defen}");
-                Console.WriteLine($"치명타 확률 : {player.CritHit}  치명타 피해 : {player.CritHit}");
+                Console.WriteLine($"치명타 확률: {Math.Round(player.CritHit * 100)}%  치명타 피해 : {Math.Round(player.CritDmg * 100)}");
                 Console.ResetColor();
                 Console.WriteLine("}================================={");
                 foreach (var number in monsterTeam)

@@ -312,7 +312,7 @@ namespace ConsoleRPG24
                     MaxHealth = 850;
                     Health = MaxHealth;
                     Speed = 5;
-                    CritHit = 0.1f;
+                    CritHit = 0.25f;
                     CritDmg = 1.5f;
                     Skill = "강력한 일격!";
                     break;
@@ -324,7 +324,7 @@ namespace ConsoleRPG24
                     Health = MaxHealth;
                     Speed = 6;
                     Mana = 200;
-                    CritHit = 0.15f;
+                    CritHit = 0.25f;
                     CritDmg = 1.8f;
                     Skill = "파이어 볼!";
                     break;
@@ -335,7 +335,7 @@ namespace ConsoleRPG24
                     MaxHealth = 600;
                     Health = MaxHealth;
                     Speed = 7;
-                    CritHit = 0.2f;
+                    CritHit = 0.35f;
                     CritDmg = 2.0f;
                     Skill = "관통의 화살!";
                     break;
@@ -346,7 +346,7 @@ namespace ConsoleRPG24
                     MaxHealth = 750;
                     Health = MaxHealth;
                     Speed = 9;
-                    CritHit = 0.3f;
+                    CritHit = 0.35f;
                     CritDmg = 2.5f;
                     Skill = "그림자 일격!";
                     break;
