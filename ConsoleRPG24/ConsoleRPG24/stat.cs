@@ -85,7 +85,7 @@ namespace ConsoleRPG24
             Thread.Sleep(2000);
 
             MainScreen newGame = new MainScreen();
-            newGame.GameStart();  // 🔹 게임을 처음부터 다시 시작
+            newGame.Villige();  // 🔹 게임을 처음부터 다시 시작
         }
 
 
@@ -272,7 +272,7 @@ namespace ConsoleRPG24
             {
                 case "전사":
                     Atk = 130;
-                    Defen = 150;
+                    Defen = 125;
                     MaxHealth = 850;
                     Health = MaxHealth;
                     Speed = 5;
@@ -431,7 +431,7 @@ namespace ConsoleRPG24
     // ============= 초반 몬스터 (1~15 스테이지) =============
     public class Goblin : Monster ///고블린:속도가
     {
-        public Goblin(string name) : base(name, 120, 100, 250f, 250f, 7) { }
+        public Goblin(string name) : base(name, 120, 50, 250f, 250f, 7) { }
 
         public override void Attack(BaseCharacter target)
         {
@@ -444,7 +444,7 @@ namespace ConsoleRPG24
     {
         public static List<Slime> SlimeList = new List<Slime>();
 
-        public Slime(string name) : base(name, 115, 100, 200f, 200f, 2) { }
+        public Slime(string name) : base(name, 115, 50, 200f, 200f, 2) { }
 
         // 🔹 BaseCharacter의 TakeDamage()를 override하여 분열 기능 추가
         public override void TakeDamage(int damage)
@@ -477,7 +477,7 @@ namespace ConsoleRPG24
     {
         private bool hasRevived = false;
 
-        public Zombie(string name) : base(name, 120, 70, 300f, 300f, 2) { }
+        public Zombie(string name) : base(name, 120, 40, 300f, 300f, 2) { }
 
         public override void TakeDamage(int damage)
         {
@@ -493,7 +493,7 @@ namespace ConsoleRPG24
     // ============= 중반 몬스터 (6~15 스테이지) =============
     public class Orc : Monster ///오크:강한 공격력
     {
-        public Orc(string name) : base(name, 175, 110, 450f, 450f, 4) { }
+        public Orc(string name) : base(name, 175, 80, 450f, 450f, 4) { }
 
         public override void Attack(BaseCharacter target)
         {
