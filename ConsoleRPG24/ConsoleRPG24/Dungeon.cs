@@ -83,28 +83,29 @@ namespace ConsoleRPG24
                 {
                     player.Inventory.Inven.Add(itemList[index1]);
 
-                    Console.WriteLine($"{itemList[index1]}(을)를 획득했다!");
+                    Console.WriteLine($"{itemList[index1].ItemName}(을)를 획득했다!");
                 }
 
                 else
                 {
                     player.Inventory.Inven.Add(itemList[index1]);
 
-                    Console.WriteLine($"{itemList[index2]}(을)를 획득했다!");
+                    Console.WriteLine($"{itemList[index2].ItemName}(을)를 획득했다!");
                 }
             }
 
-            battleSystem.Battle();
+            Console.ReadLine();
+
+            battleSystem.Battle(player, itemList);
 
         }
-
-        //열심히 작성 중~
-        //rewards에서는 보상만,,,
+        //rewards에서는 보상만 나온다
 
 
         //이 메소드로 던전 전투 시작!!
         public void Start()
         {
+
             //23. 포도주가 담긴 성배 : 다음 구역 진입시마다 + 최대 체력 2%
             if (itemList[23].IsOwned && itemList[23].IsEquipped)
             {
@@ -118,8 +119,8 @@ namespace ConsoleRPG24
 
             battleCount++;
 
-            BattleSystem battleSystem = new BattleSystem(player, itemList, this);
-            battleSystem.Battle();
+            battleSystem = new BattleSystem(player, itemList, this);
+            battleSystem.Battle(player, itemList);
         }
 
 
