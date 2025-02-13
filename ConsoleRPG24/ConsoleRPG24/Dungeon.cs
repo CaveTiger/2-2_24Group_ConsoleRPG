@@ -29,9 +29,11 @@ namespace ConsoleRPG24
         //
         public void Rewards(Player player)
         {
+            Console.Clear();
+
             if (MainScreen.instance.player.IsDead)
 
-                Console.WriteLine($"스테이지 클리어! 적을 물리쳤다!");
+            Console.WriteLine($"스테이지 클리어! 적을 물리쳤다!");
             Console.WriteLine("전리품으로써 골드 혹은 아이템을 보상으로 얻을 수 있다.");
             Console.WriteLine();
             Console.WriteLine("1. 골드를 얻는다");
